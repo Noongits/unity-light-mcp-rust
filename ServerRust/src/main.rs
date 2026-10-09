@@ -700,7 +700,7 @@ async fn http(args: Args) -> Result<()> {
     let janitor_abort = janitor.abort_handle();
     axum::serve(listener, router)
         .with_graceful_shutdown(async move {
-            let _ = tokio::signal::ctrl_c().await;
+            wait_for_shutdown_signal(tokio::signal::ctrl_c()).await;
             shutdown_app.shutting_down.store(true, Ordering::Release);
             janitor_abort.abort();
             shutdown_app.local_hub.shutdown();
@@ -806,8 +806,40 @@ async fn main() -> Result<()> {
     result
 }
 
+// A GUI-launched Windows process may have no console signal source. Registration
+// failure is not a shutdown request: the owning Unity process can still stop it.
+async fn wait_for_shutdown_signal(signal: impl std::future::Future<Output = std::io::Result<()>>) {
+    if let Err(error) = signal.await {
+        tracing::warn!(%error, "Console shutdown signal unavailable; continuing to serve");
+        std::future::pending::<()>().await;
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    #[tokio::test]
+    async fn unavailable_console_signal_does_not_stop_http_server() {
+        let signal = std::future::ready(Err(std::io::Error::new(
+            std::io::ErrorKind::Unsupported,
+            "no console",
+        )));
+        assert!(
+            tokio::time::timeout(Duration::from_millis(20), wait_for_shutdown_signal(signal),)
+                .await
+                .is_err()
+        );
+    }
+
+    #[tokio::test]
+    async fn actual_console_signal_allows_shutdown() {
+        tokio::time::timeout(
+            Duration::from_secs(1),
+            wait_for_shutdown_signal(std::future::ready(Ok(()))),
+        )
+        .await
+        .expect("a received signal should initiate shutdown");
+    }
+
     use super::*;
     struct Hanging;
     #[async_trait::async_trait]
