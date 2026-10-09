@@ -1,0 +1,59 @@
+[
+  {
+    "tool": "set_active_instance",
+    "args": {
+      "instance": "unity-mcp-independent-review@987fb840"
+    },
+    "result": {
+      "data": {
+        "instance": "unity-mcp-independent-review@987fb840",
+        "session_id": "stdio"
+      },
+      "message": "Active instance set to unity-mcp-independent-review@987fb840",
+      "success": true
+    }
+  },
+  {
+    "tool": "refresh_unity",
+    "args": {
+      "mode": "force",
+      "scope": "all",
+      "compile": "request",
+      "wait_for_ready": false
+    },
+    "result": {
+      "data": {
+        "compile_requested": true,
+        "compile_started": null,
+        "hint": "If Unity enters compilation/domain reload, poll the mcpforunity://editor/state resource until data.advice.ready_for_tools is true.",
+        "refresh_triggered": true,
+        "resulting_state": "idle"
+      },
+      "message": "Refresh requested.",
+      "success": true
+    }
+  },
+  {
+    "tool": "execute_custom_tool",
+    "args": {
+      "tool_name": "runtime_compilation",
+      "parameters": {
+        "action": "execute_with_roslyn",
+        "class_name": "IndependentGenerated",
+        "code": "using UnityEngine; public class IndependentGenerated { public static void Run(GameObject host) { Debug.Log(\"Independent synthetic Roslyn execution\"); } }"
+      }
+    },
+    "result": {
+      "data": {
+        "attached_as_component": false,
+        "class_name": "IndependentGenerated",
+        "diagnostics": "Compilation OK.",
+        "method_name": "Run",
+        "target_object": "compiler_host"
+      },
+      "error": null,
+      "message": "Code compiled and executed successfully",
+      "success": true
+    }
+  }
+]

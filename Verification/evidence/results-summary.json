@@ -1,0 +1,49 @@
+{
+  "editmode": {
+    "id": "2",
+    "testcasecount": "1626",
+    "result": "Skipped:Ignored",
+    "total": "1626",
+    "passed": "1552",
+    "failed": "0",
+    "inconclusive": "0",
+    "skipped": "74",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-09 15:44:39Z",
+    "end-time": "2026-10-09 15:45:24Z",
+    "duration": "45.0148989"
+  },
+  "playmode": {
+    "id": "2",
+    "testcasecount": "5",
+    "result": "Passed",
+    "total": "5",
+    "passed": "5",
+    "failed": "0",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-09 15:25:55Z",
+    "end-time": "2026-10-09 15:25:55Z",
+    "duration": "0.1200938"
+  },
+  "editmode_explicit_inherited": 59,
+  "editmode_runtime_ignored": 15,
+  "rust": {
+    "library": 134,
+    "binary": 8,
+    "stdio_groups": 9,
+    "http_groups": 7,
+    "stress_groups": 7
+  },
+  "python": {
+    "passed": 1239,
+    "skipped": 18
+  },
+  "original_files_unchanged": 2309,
+  "modified_input_files": 64
+}

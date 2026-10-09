@@ -1,0 +1,277 @@
+[
+  {
+    "name": "cameras",
+    "uri": "mcpforunity://scene/cameras",
+    "description": "List all cameras in the scene (Unity Camera + CinemachineCamera) with status. Includes Brain state, Cinemachine camera priorities, pipeline components, follow/lookAt targets, and Unity Camera info.\n\nURI: mcpforunity://scene/cameras",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "custom_tools",
+    "uri": "mcpforunity://custom-tools",
+    "description": "Lists custom tools available for the active Unity project.\n\nURI: mcpforunity://custom-tools",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "editor_active_tool",
+    "uri": "mcpforunity://editor/active-tool",
+    "description": "Currently active editor tool (Move, Rotate, Scale, etc.) and transform handle settings.\n\nURI: mcpforunity://editor/active-tool",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "editor_prefab_stage",
+    "uri": "mcpforunity://editor/prefab-stage",
+    "description": "Current prefab editing context if a prefab is open in isolation mode. Returns isOpen=false if no prefab is being edited.\n\nURI: mcpforunity://editor/prefab-stage",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "editor_selection",
+    "uri": "mcpforunity://editor/selection",
+    "description": "Detailed information about currently selected objects in the editor, including GameObjects, assets, and their properties.\n\nURI: mcpforunity://editor/selection",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "editor_state",
+    "uri": "mcpforunity://editor/state",
+    "description": "Canonical editor readiness snapshot. Includes advice and server-computed staleness.\n\nURI: mcpforunity://editor/state",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "editor_windows",
+    "uri": "mcpforunity://editor/windows",
+    "description": "All currently open editor windows with their titles, types, positions, and focus state.\n\nURI: mcpforunity://editor/windows",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "gameobject",
+    "uriTemplate": "mcpforunity://scene/gameobject/{instance_id}",
+    "description": "Get detailed information about a single GameObject by instance ID. Returns name, tag, layer, active state, transform data, parent/children IDs, and component type list (no full component properties).\n\nURI: mcpforunity://scene/gameobject/{instance_id}",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "gameobject_api",
+    "uri": "mcpforunity://scene/gameobject-api",
+    "description": "Documentation for GameObject resources. Use find_gameobjects tool to get instance IDs, then access resources below.\n\nURI: mcpforunity://scene/gameobject-api",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "gameobject_component",
+    "uriTemplate": "mcpforunity://scene/gameobject/{instance_id}/component/{component_name}",
+    "description": "Get a specific component on a GameObject by type name. Returns the fully serialized component with all properties.\n\nURI: mcpforunity://scene/gameobject/{instance_id}/component/{component_name}",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "gameobject_components",
+    "uriTemplate": "mcpforunity://scene/gameobject/{instance_id}/components",
+    "description": "Get all components on a GameObject with full property serialization. Supports pagination with pageSize and cursor parameters.\n\nURI: mcpforunity://scene/gameobject/{instance_id}/components",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "get_tests",
+    "uri": "mcpforunity://tests",
+    "description": "Provides the first page of Unity tests (default 50 items). For filtering or pagination, use the run_tests tool instead.\n\nURI: mcpforunity://tests",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "get_tests_for_mode",
+    "uriTemplate": "mcpforunity://tests/{mode}",
+    "description": "Provides the first page of tests for a specific mode (EditMode or PlayMode). For filtering or pagination, use the run_tests tool instead.\n\nURI: mcpforunity://tests/{mode}",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "menu_items",
+    "uri": "mcpforunity://menu-items",
+    "description": "Provides a list of all menu items.\n\nURI: mcpforunity://menu-items",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "prefab_api",
+    "uri": "mcpforunity://prefab-api",
+    "description": "Documentation for Prefab resources. Use manage_asset action=search filterType=Prefab to find prefabs, then access resources below.\n\nURI: mcpforunity://prefab-api",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "prefab_hierarchy",
+    "uriTemplate": "mcpforunity://prefab/{encoded_path}/hierarchy",
+    "description": "Get the full hierarchy of a prefab with nested prefab information. Returns all GameObjects with their components and nesting depth.\n\nURI: mcpforunity://prefab/{encoded_path}/hierarchy",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "prefab_info",
+    "uriTemplate": "mcpforunity://prefab/{encoded_path}",
+    "description": "Get detailed information about a prefab asset by URL-encoded path. Returns prefab type, root object name, component types, child count, and variant info.\n\nURI: mcpforunity://prefab/{encoded_path}",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "project_info",
+    "uri": "mcpforunity://project/info",
+    "description": "Static project information including root path, Unity version, and platform. This data rarely changes.\n\nURI: mcpforunity://project/info",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "project_layers",
+    "uri": "mcpforunity://project/layers",
+    "description": "All layers defined in the project's TagManager with their indices (0-31). Read this before using add_layer or remove_layer tools.\n\nURI: mcpforunity://project/layers",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "project_tags",
+    "uri": "mcpforunity://project/tags",
+    "description": "All tags defined in the project's TagManager. Read this before using add_tag or remove_tag tools.\n\nURI: mcpforunity://project/tags",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "renderer_features",
+    "uri": "mcpforunity://pipeline/renderer-features",
+    "description": "Lists all URP renderer features on the active renderer with type, name, and active state.",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "rendering_stats",
+    "uri": "mcpforunity://rendering/stats",
+    "description": "Snapshot of rendering performance statistics (draw calls, batches, triangles, frame time, etc.).",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "tool_groups",
+    "uri": "mcpforunity://tool-groups",
+    "description": "Available tool groups and their tools. Use manage_tools to activate/deactivate groups per session.\n\nURI: mcpforunity://tool-groups",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "unity_instances",
+    "uri": "mcpforunity://instances",
+    "description": "Lists all running Unity Editor instances with their details.\n\nURI: mcpforunity://instances",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  },
+  {
+    "name": "volumes",
+    "uri": "mcpforunity://scene/volumes",
+    "description": "Lists all Volume components in the active scene with their profiles, effects, and settings.",
+    "mimeType": "text/plain",
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    }
+  }
+]

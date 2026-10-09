@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.0467699">
+  <test-suite type="TestSuite" id="1000" name="unity-mcp-independent-review" fullname="unity-mcp-independent-review" runstate="Runnable" testcasecount="1622" result="Failed" site="Child" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.046770" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2853" name="MCPForUnityTests.EditMode.dll" fullname="/private/tmp/unity-mcp-independent-review/Library/ScriptAssemblies/MCPForUnityTests.EditMode.dll" runstate="Runnable" testcasecount="1622" result="Failed" site="Child" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.039444" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="66851" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2862" name="MCPForUnityTests" fullname="MCPForUnityTests" runstate="Runnable" testcasecount="1549" result="Failed" site="Child" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.034785" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2863" name="Editor" fullname="MCPForUnityTests.Editor" runstate="Runnable" testcasecount="1549" result="Failed" site="Child" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.031103" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2870" name="Services" fullname="MCPForUnityTests.Editor.Services" runstate="Runnable" testcasecount="377" result="Failed" site="Child" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.021779" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1961" name="CrossModeLifecycleRegressionTests" fullname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests" classname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.017793" total="2" passed="1" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1963" name="AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart" fullname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart" methodname="AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart" classname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests" runstate="Runnable" seed="492959354" result="Passed" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.009392" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+              <test-case id="1962" name="BridgeStop_DuringOtherModeRetirement_MustCancelPendingStart" fullname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.BridgeStop_DuringOtherModeRetirement_MustCancelPendingStart" methodname="BridgeStop_DuringOtherModeRetirement_MustCancelPendingStart" classname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests" runstate="Runnable" seed="447331089" result="Failed" start-time="2026-10-09 15:16:05Z" end-time="2026-10-09 15:16:05Z" duration="0.003359" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  stop retires the preflight start request
+  Expected: False
+  But was:  True
+]]></message>
+                  <stack-trace><![CDATA[at MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests+<BridgeStop_DuringOtherModeRetirement_MustCancelPendingStart>d__1.MoveNext () [0x001b4] in /private/tmp/unity-mcp-independent-review/Assets/Tests/EditMode/Services/CrossModeLifecycleRegressionTests.cs:50
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0003a] in ./Library/PackageCache/com.unity.test-framework@bd7f943e9647/UnityEngine.TestRunner/NUnitExtensions/Attributes/TestEnumerator.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/reviewer/Library/Application Support/DefaultCompany/unity-mcp-independent-review/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

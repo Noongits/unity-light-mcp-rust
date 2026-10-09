@@ -1,0 +1,216 @@
+{
+  "mcpforunity://scene/gameobject-api": {
+    "success": true,
+    "message": null,
+    "error": null,
+    "data": {
+      "overview": "GameObject resources provide read-only access to Unity scene objects.",
+      "workflow": [
+        "1. Use find_gameobjects tool to search for GameObjects and get instance IDs",
+        "2. Use the instance ID to access detailed data via resources below"
+      ],
+      "best_practices": [
+        "⚡ Use batch_execute for multiple operations: Combine create/modify/component calls into one batch_execute call for 10-100x better performance",
+        "Example: Creating 5 cubes → 1 batch_execute with 5 manage_gameobject commands instead of 5 separate calls",
+        "Example: Adding components to 3 objects → 1 batch_execute with 3 manage_components commands"
+      ],
+      "resources": {
+        "mcpforunity://scene/gameobject/{instance_id}": {
+          "description": "Get basic GameObject data (name, tag, layer, transform, component type list)",
+          "example": "mcpforunity://scene/gameobject/-81840",
+          "returns": [
+            "instanceID",
+            "name",
+            "tag",
+            "layer",
+            "transform",
+            "componentTypes",
+            "path",
+            "parent",
+            "children"
+          ]
+        },
+        "mcpforunity://scene/gameobject/{instance_id}/components": {
+          "description": "Get all components with full property serialization (paginated)",
+          "example": "mcpforunity://scene/gameobject/-81840/components",
+          "parameters": {
+            "page_size": "Number of components per page (default: 25)",
+            "cursor": "Pagination offset (default: 0)",
+            "include_properties": "Include full property data (default: true)"
+          }
+        },
+        "mcpforunity://scene/gameobject/{instance_id}/component/{component_name}": {
+          "description": "Get a single component by type name with full properties",
+          "example": "mcpforunity://scene/gameobject/-81840/component/Camera",
+          "note": "Use the component type name (e.g., 'Camera', 'Rigidbody', 'Transform')"
+        }
+      },
+      "related_tools": {
+        "find_gameobjects": "Search for GameObjects by name, tag, layer, component, or path",
+        "manage_components": "Add, remove, or modify components on GameObjects",
+        "manage_gameobject": "Create, modify, or delete GameObjects"
+      }
+    },
+    "hint": null
+  },
+  "mcpforunity://prefab-api": {
+    "success": true,
+    "message": null,
+    "error": null,
+    "data": {
+      "overview": "Prefab resources provide read-only access to Unity prefab assets.",
+      "workflow": [
+        "1. Use manage_asset action=search filterType=Prefab to find prefabs",
+        "2. Use the asset path to access detailed data via resources below",
+        "3. Use manage_prefabs action=open_prefab_stage / save_prefab_stage / close_prefab_stage for prefab editing UI transitions"
+      ],
+      "path_encoding": {
+        "note": "Prefab paths must be URL-encoded when used in resource URIs",
+        "example": "Assets/Prefabs/MyPrefab.prefab -> Assets%2FPrefabs%2FMyPrefab.prefab"
+      },
+      "resources": {
+        "mcpforunity://prefab/{encoded_path}": {
+          "description": "Get prefab asset info (type, root name, components, variant info)",
+          "example": "mcpforunity://prefab/Assets%2FPrefabs%2FPlayer.prefab",
+          "returns": [
+            "assetPath",
+            "guid",
+            "prefabType",
+            "rootObjectName",
+            "rootComponentTypes",
+            "childCount",
+            "isVariant",
+            "parentPrefab"
+          ]
+        },
+        "mcpforunity://prefab/{encoded_path}/hierarchy": {
+          "description": "Get full prefab hierarchy with nested prefab information",
+          "example": "mcpforunity://prefab/Assets%2FPrefabs%2FPlayer.prefab/hierarchy",
+          "returns": [
+            "prefabPath",
+            "total",
+            "items (with name, instanceId, path, componentTypes, prefab nesting info)"
+          ]
+        },
+        "mcpforunity://editor/prefab-stage": {
+          "description": "Get info about the currently open prefab stage (if any)",
+          "returns": [
+            "isOpen",
+            "assetPath",
+            "prefabRootName",
+            "mode",
+            "isDirty"
+          ]
+        }
+      },
+      "related_tools": {
+        "manage_editor": "Editor controls (play/pause/stop, active tool, tags/layers, package deploy/restore)",
+        "manage_prefabs": "Prefab stage lifecycle (open/save/close) and headless prefab inspection/modification",
+        "manage_asset": "Search for prefab assets, get asset info",
+        "manage_gameobject": "Modify GameObjects in open prefab stage",
+        "manage_components": "Add/remove/modify components on prefab GameObjects"
+      }
+    },
+    "hint": null
+  },
+  "mcpforunity://tool-groups": {
+    "groups": [
+      {
+        "name": "asset_gen",
+        "description": "Local 3D model file import and Blender Bridge",
+        "default_enabled": false,
+        "tools": [
+          "blender_bridge",
+          "import_model_file"
+        ],
+        "tool_count": 2
+      },
+      {
+        "name": "core",
+        "description": "Essential scene, script, asset & editor tools (always on by default)",
+        "default_enabled": true,
+        "tools": [
+          "batch_execute",
+          "execute_menu_item",
+          "find_gameobjects",
+          "find_in_file",
+          "inspect_prefab",
+          "manage_asset",
+          "manage_build",
+          "manage_camera",
+          "manage_components",
+          "manage_editor",
+          "manage_gameobject",
+          "manage_graphics",
+          "manage_material",
+          "manage_physics",
+          "manage_prefabs",
+          "manage_scene",
+          "refresh_unity",
+          "apply_text_edits",
+          "create_script",
+          "delete_script",
+          "validate_script",
+          "manage_script",
+          "get_sha",
+          "read_console",
+          "script_apply_edits"
+        ],
+        "tool_count": 25
+      },
+      {
+        "name": "docs",
+        "description": "Unity API reflection",
+        "default_enabled": false,
+        "tools": [
+          "unity_reflect"
+        ],
+        "tool_count": 1
+      },
+      {
+        "name": "scripting_ext",
+        "description": "ScriptableObject management",
+        "default_enabled": false,
+        "tools": [
+          "execute_code",
+          "manage_scriptable_object"
+        ],
+        "tool_count": 2
+      },
+      {
+        "name": "testing",
+        "description": "Test runner & async test jobs",
+        "default_enabled": false,
+        "tools": [
+          "run_tests",
+          "get_test_job"
+        ],
+        "tool_count": 2
+      },
+      {
+        "name": "ui",
+        "description": "UI Toolkit (UXML, USS, UIDocument)",
+        "default_enabled": false,
+        "tools": [
+          "manage_ui"
+        ],
+        "tool_count": 1
+      },
+      {
+        "name": "vfx",
+        "description": "Shaders & procedural textures",
+        "default_enabled": false,
+        "tools": [
+          "manage_shader",
+          "manage_texture"
+        ],
+        "tool_count": 2
+      }
+    ],
+    "total_groups": 7,
+    "default_enabled": [
+      "core"
+    ],
+    "usage": "Call manage_tools(action='activate', group='<name>') to enable a group."
+  }
+}

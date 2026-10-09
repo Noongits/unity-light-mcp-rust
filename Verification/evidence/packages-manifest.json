@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "com.coplaydev.unity-mcp": "file:/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity",
+    "com.unity.ai.navigation": "2.0.14",
+    "com.unity.cinemachine": "3.1.6",
+    "com.unity.multiplayer.center": "1.0.1",
+    "com.unity.render-pipelines.universal": "17.3.0",
+    "com.unity.test-framework": "1.6.0",
+    "com.unity.timeline": "1.8.13",
+    "com.unity.ugui": "2.0.0",
+    "com.unity.modules.accessibility": "1.0.0",
+    "com.unity.modules.adaptiveperformance": "1.0.0",
+    "com.unity.modules.vectorgraphics": "1.0.0",
+    "com.unity.asset-store-tools": "file:/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/TestProjects/AssetStoreUploads/Packages/com.unity.asset-store-tools"
+  }
+}

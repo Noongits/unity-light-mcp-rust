@@ -1,0 +1,381 @@
+using System;
+using NUnit.Framework;
+using MCPForUnity.Editor.Services;
+using MCPForUnity.Editor.Constants;
+using UnityEditor;
+
+namespace MCPForUnityTests.Editor.Services
+{
+    /// <summary>
+    /// Unit tests for EditorConfigurationCache.
+    /// </summary>
+    [TestFixture]
+    public class EditorConfigurationCacheTests : TransportPreferenceTestBase
+    {
+        private bool _originalUseHttpTransport;
+        private bool _originalDebugLogs;
+        private string _originalUvxPath;
+        private bool _hadDebugLogs;
+        private bool _hadUvxPath;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _hadDebugLogs = EditorPrefs.HasKey(EditorPrefKeys.DebugLogs);
+            _hadUvxPath = EditorPrefs.HasKey(EditorPrefKeys.UvxPathOverride);
+            // Save original values
+            _originalUseHttpTransport = EditorPrefs.GetBool(EditorPrefKeys.UseHttpTransport, true);
+            _originalDebugLogs = EditorPrefs.GetBool(EditorPrefKeys.DebugLogs, false);
+            _originalUvxPath = EditorPrefs.GetString(EditorPrefKeys.UvxPathOverride, string.Empty);
+
+            // Refresh cache to ensure clean state
+            EditorConfigurationCache.Instance.Refresh();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            // Restore original values
+            EditorPrefs.SetBool(EditorPrefKeys.UseHttpTransport, _originalUseHttpTransport);
+            if (_hadDebugLogs) EditorPrefs.SetBool(EditorPrefKeys.DebugLogs, _originalDebugLogs);
+            else EditorPrefs.DeleteKey(EditorPrefKeys.DebugLogs);
+            if (_hadUvxPath) EditorPrefs.SetString(EditorPrefKeys.UvxPathOverride, _originalUvxPath);
+            else EditorPrefs.DeleteKey(EditorPrefKeys.UvxPathOverride);
+
+            // Refresh cache
+            EditorConfigurationCache.Instance.Refresh();
+        }
+
+        #region Singleton Tests
+
+        [Test]
+        public void Instance_ReturnsSameInstance()
+        {
+            // Act
+            var instance1 = EditorConfigurationCache.Instance;
+            var instance2 = EditorConfigurationCache.Instance;
+
+            // Assert
+            Assert.AreSame(instance1, instance2, "Should return the same singleton instance");
+        }
+
+        [Test]
+        public void Instance_IsNotNull()
+        {
+            // Assert
+            Assert.IsNotNull(EditorConfigurationCache.Instance);
+        }
+
+        #endregion
+
+        #region Read Tests
+
+        [Test]
+        public void UseHttpTransport_ReturnsEditorPrefsValue()
+        {
+            // Arrange
+            EditorPrefs.SetBool(EditorPrefKeys.UseHttpTransport, true);
+            EditorConfigurationCache.Instance.Refresh();
+
+            // Assert
+            Assert.IsTrue(EditorConfigurationCache.Instance.UseHttpTransport);
+
+            // Arrange - change value
+            EditorPrefs.SetBool(EditorPrefKeys.UseHttpTransport, false);
+            EditorConfigurationCache.Instance.Refresh();
+
+            // Assert
+            Assert.IsFalse(EditorConfigurationCache.Instance.UseHttpTransport);
+        }
+
+        [Test]
+        public void DebugLogs_ReturnsEditorPrefsValue()
+        {
+            // Arrange
+            EditorPrefs.SetBool(EditorPrefKeys.DebugLogs, true);
+            EditorConfigurationCache.Instance.Refresh();
+
+            // Assert
+            Assert.IsTrue(EditorConfigurationCache.Instance.DebugLogs);
+        }
+
+        [Test]
+        public void UvxPathOverride_ReturnsEditorPrefsValue()
+        {
+            // Arrange
+            string testPath = "/custom/path/to/uvx";
+            EditorPrefs.SetString(EditorPrefKeys.UvxPathOverride, testPath);
+            EditorConfigurationCache.Instance.Refresh();
+
+            // Assert
+            Assert.AreEqual(testPath, EditorConfigurationCache.Instance.UvxPathOverride);
+        }
+
+        #endregion
+
+        #region Write Tests
+
+        [Test]
+        public void SetUseHttpTransport_UpdatesCacheAndEditorPrefs()
+        {
+            // Arrange
+            bool initialValue = EditorConfigurationCache.Instance.UseHttpTransport;
+            bool newValue = !initialValue;
+
+            // Act
+            EditorConfigurationCache.Instance.SetUseHttpTransport(newValue);
+
+            // Assert - cache is updated
+            Assert.AreEqual(newValue, EditorConfigurationCache.Instance.UseHttpTransport);
+
+            // Assert - EditorPrefs is updated
+            Assert.AreEqual(newValue, EditorPrefs.GetBool(EditorPrefKeys.UseHttpTransport, !newValue));
+        }
+
+        [Test]
+        public void SetDebugLogs_UpdatesCacheAndEditorPrefs()
+        {
+            // Act
+            EditorConfigurationCache.Instance.SetDebugLogs(true);
+
+            // Assert
+            Assert.IsTrue(EditorConfigurationCache.Instance.DebugLogs);
+            Assert.IsTrue(EditorPrefs.GetBool(EditorPrefKeys.DebugLogs, false));
+        }
+
+        [Test]
+        public void SetUvxPathOverride_UpdatesCacheAndEditorPrefs()
+        {
+            // Arrange
+            string testPath = "/test/uvx/path";
+
+            // Act
+            EditorConfigurationCache.Instance.SetUvxPathOverride(testPath);
+
+            // Assert
+            Assert.AreEqual(testPath, EditorConfigurationCache.Instance.UvxPathOverride);
+            Assert.AreEqual(testPath, EditorPrefs.GetString(EditorPrefKeys.UvxPathOverride, string.Empty));
+        }
+
+        [Test]
+        public void SetUvxPathOverride_NullBecomesEmptyString()
+        {
+            // Act
+            EditorConfigurationCache.Instance.SetUvxPathOverride(null);
+
+            // Assert
+            Assert.AreEqual(string.Empty, EditorConfigurationCache.Instance.UvxPathOverride);
+        }
+
+        #endregion
+
+        #region Change Notification Tests
+
+        [Test]
+        public void SetUseHttpTransport_FiresOnConfigurationChanged()
+        {
+            // Arrange
+            string changedKey = null;
+            Action<string> handler = key => changedKey = key;
+            EditorConfigurationCache.Instance.OnConfigurationChanged += handler;
+            try
+            {
+                bool initialValue = EditorConfigurationCache.Instance.UseHttpTransport;
+
+                // Act
+                EditorConfigurationCache.Instance.SetUseHttpTransport(!initialValue);
+
+                // Assert
+                Assert.AreEqual(nameof(EditorConfigurationCache.UseHttpTransport), changedKey);
+
+            }
+            finally
+            {
+                EditorConfigurationCache.Instance.OnConfigurationChanged -= handler;
+            }
+        }
+
+        [Test]
+        public void SetSameValue_DoesNotFireOnConfigurationChanged()
+        {
+            // Arrange
+            int eventCount = 0;
+            Action<string> handler = key => eventCount++;
+            EditorConfigurationCache.Instance.OnConfigurationChanged += handler;
+            try
+            {
+                bool currentValue = EditorConfigurationCache.Instance.UseHttpTransport;
+
+                // Act - set same value
+                EditorConfigurationCache.Instance.SetUseHttpTransport(currentValue);
+
+                // Assert - no event fired
+                Assert.AreEqual(0, eventCount, "Should not fire event when value doesn't change");
+
+            }
+            finally
+            {
+                EditorConfigurationCache.Instance.OnConfigurationChanged -= handler;
+            }
+        }
+
+        #endregion
+
+        #region InvalidateKey Tests
+
+        [Test]
+        public void InvalidateKey_RefreshesSingleValue()
+        {
+            // Arrange
+            EditorConfigurationCache.Instance.SetDebugLogs(false);
+            Assert.IsFalse(EditorConfigurationCache.Instance.DebugLogs);
+
+            // Directly modify EditorPrefs (simulating external change)
+            EditorPrefs.SetBool(EditorPrefKeys.DebugLogs, true);
+
+            // Act
+            EditorConfigurationCache.Instance.InvalidateKey(nameof(EditorConfigurationCache.DebugLogs));
+
+            // Assert
+            Assert.IsTrue(EditorConfigurationCache.Instance.DebugLogs);
+        }
+
+        [Test]
+        public void InvalidateKey_FiresOnConfigurationChanged()
+        {
+            // Arrange
+            string changedKey = null;
+            Action<string> handler = key => changedKey = key;
+            EditorConfigurationCache.Instance.OnConfigurationChanged += handler;
+            try
+            {
+
+                // Act
+                EditorConfigurationCache.Instance.InvalidateKey(nameof(EditorConfigurationCache.DebugLogs));
+
+                // Assert
+                Assert.AreEqual(nameof(EditorConfigurationCache.DebugLogs), changedKey);
+
+            }
+            finally
+            {
+                EditorConfigurationCache.Instance.OnConfigurationChanged -= handler;
+            }
+        }
+
+        #endregion
+
+        #region Refresh Tests
+
+        [Test]
+        public void Refresh_UpdatesAllCachedValues()
+        {
+            // Arrange - directly set EditorPrefs
+            EditorPrefs.SetBool(EditorPrefKeys.UseHttpTransport, false);
+            EditorPrefs.SetBool(EditorPrefKeys.DebugLogs, true);
+            EditorPrefs.SetString(EditorPrefKeys.UvxPathOverride, "/refreshed/path");
+
+            // Act
+            EditorConfigurationCache.Instance.Refresh();
+
+            // Assert
+            Assert.IsFalse(EditorConfigurationCache.Instance.UseHttpTransport);
+            Assert.IsTrue(EditorConfigurationCache.Instance.DebugLogs);
+            Assert.AreEqual("/refreshed/path", EditorConfigurationCache.Instance.UvxPathOverride);
+        }
+
+        #endregion
+
+        #region Session Pin Tests
+
+        private sealed class TransportPreferenceScopeProbe : TransportPreferenceTestBase { }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void ConfigurationFixture_RestoresSessionPinAndHttpPreference(int pinState)
+        {
+            string key = EditorConfigurationCache.SessionKeyForceStdio;
+            if (pinState == 0)
+                SessionState.EraseBool(key);
+            else
+                SessionState.SetBool(key, pinState == 2);
+            EditorPrefs.SetBool(EditorPrefKeys.UseHttpTransport, false);
+            EditorConfigurationCache.Instance.Refresh();
+
+            var scope = new TransportPreferenceScopeProbe();
+            scope.SuspendSessionTransportOverride();
+            try
+            {
+                EditorConfigurationCache.Instance.SetUseHttpTransport(true);
+                Assert.IsTrue(EditorConfigurationCache.Instance.UseHttpTransport,
+                    "The HTTP branch must be testable even when the resident harness pinned stdio.");
+            }
+            finally
+            {
+                scope.RestoreSessionTransportOverride();
+            }
+
+            Assert.AreEqual(pinState == 2, SessionState.GetBool(key, false));
+            Assert.AreEqual(pinState != 1, SessionState.GetBool(key, true),
+                "A missing pin must remain missing rather than become an explicit false.");
+            Assert.IsFalse(EditorPrefs.GetBool(EditorPrefKeys.UseHttpTransport, true),
+                "Fixture cleanup must also restore the persisted transport preference.");
+            Assert.IsFalse(EditorConfigurationCache.Instance.UseHttpTransport);
+        }
+
+        [Test]
+        public void PinStdioForSession_OverridesHttpPreference_WithoutWritingEditorPrefs()
+        {
+            EditorPrefs.SetBool(EditorPrefKeys.UseHttpTransport, true);
+            EditorConfigurationCache.Instance.Refresh();
+            Assert.IsTrue(EditorConfigurationCache.Instance.UseHttpTransport);
+
+            EditorConfigurationCache.Instance.PinStdioForSession();
+
+            Assert.IsFalse(EditorConfigurationCache.Instance.UseHttpTransport);
+            Assert.IsTrue(EditorPrefs.GetBool(EditorPrefKeys.UseHttpTransport, false),
+                "The pin must not rewrite the developer's persisted transport preference");
+        }
+
+        [Test]
+        public void PinStdioForSession_SurvivesRefresh()
+        {
+            // Refresh() is what a fresh cache instance runs after a domain reload; the pin lives
+            // in SessionState precisely so it survives that.
+            EditorPrefs.SetBool(EditorPrefKeys.UseHttpTransport, true);
+            EditorConfigurationCache.Instance.PinStdioForSession();
+
+            EditorConfigurationCache.Instance.Refresh();
+
+            Assert.IsTrue(SessionState.GetBool(EditorConfigurationCache.SessionKeyForceStdio, false));
+            Assert.IsFalse(EditorConfigurationCache.Instance.UseHttpTransport);
+        }
+
+        [Test]
+        public void UnpinStdioForSession_RestoresPreferenceAndNotifies()
+        {
+            EditorPrefs.SetBool(EditorPrefKeys.UseHttpTransport, true);
+            EditorConfigurationCache.Instance.Refresh();
+            EditorConfigurationCache.Instance.PinStdioForSession();
+
+            string changedKey = null;
+            void Handler(string key) => changedKey = key;
+            EditorConfigurationCache.Instance.OnConfigurationChanged += Handler;
+            try
+            {
+                EditorConfigurationCache.Instance.UnpinStdioForSession();
+            }
+            finally
+            {
+                EditorConfigurationCache.Instance.OnConfigurationChanged -= Handler;
+            }
+
+            Assert.AreEqual(nameof(EditorConfigurationCache.UseHttpTransport), changedKey);
+            Assert.IsTrue(EditorConfigurationCache.Instance.UseHttpTransport);
+            Assert.IsFalse(SessionState.GetBool(EditorConfigurationCache.SessionKeyForceStdio, false));
+        }
+
+        #endregion
+    }
+}

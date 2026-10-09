@@ -1,0 +1,687 @@
+[
+  {
+    "tool": "create_script",
+    "args": {
+      "path": "Assets/Foo.cs",
+      "contents": "class Foo {}",
+      "namespace": "Game",
+      "script_type": "C#"
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "create",
+          "name": "Foo",
+          "path": "Assets",
+          "namespace": "Game",
+          "scriptType": "C#",
+          "encodedContents": "Y2xhc3MgRm9vIHt9",
+          "contentsEncoded": true
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {}
+    }
+  },
+  {
+    "tool": "delete_script",
+    "args": {
+      "uri": "file:///work/Assets/Foo.cs"
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "delete",
+          "name": "Foo",
+          "path": "Assets"
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {}
+    }
+  },
+  {
+    "tool": "validate_script",
+    "args": {
+      "uri": "Assets/Foo.cs",
+      "include_diagnostics": true
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "validate",
+          "name": "Foo",
+          "path": "Assets",
+          "level": "basic"
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "data": {
+        "diagnostics": [
+          {
+            "severity": "Warning"
+          },
+          {
+            "severity": "fatal"
+          }
+        ],
+        "summary": {
+          "warnings": 1,
+          "errors": 1
+        }
+      }
+    }
+  },
+  {
+    "tool": "get_sha",
+    "args": {
+      "uri": "Assets/Foo.cs"
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "get_sha",
+          "name": "Foo",
+          "path": "Assets"
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "data": {
+        "sha256": "before",
+        "lengthBytes": 42
+      }
+    }
+  },
+  {
+    "tool": "manage_script",
+    "args": {
+      "action": "read",
+      "name": "Foo",
+      "path": "Assets"
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "read",
+          "name": "Foo",
+          "path": "Assets"
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "Operation successful.",
+      "data": {
+        "contents": "class Foo {\n int old = 1;\n void M() {}\n}\n"
+      }
+    }
+  },
+  {
+    "tool": "apply_text_edits",
+    "args": {
+      "uri": "Assets/Foo.cs",
+      "edits": [
+        {
+          "range": [
+            12,
+            15
+          ],
+          "text": "x"
+        }
+      ],
+      "precondition_sha256": "a"
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "read",
+          "name": "Foo",
+          "path": "Assets"
+        },
+        "fixture-instance"
+      ],
+      [
+        "manage_script",
+        {
+          "action": "apply_text_edits",
+          "name": "Foo",
+          "path": "Assets",
+          "edits": [
+            {
+              "newText": "x",
+              "startLine": 2,
+              "startCol": 1,
+              "endLine": 2,
+              "endCol": 4
+            }
+          ],
+          "precondition_sha256": "a",
+          "options": {}
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {
+        "normalizedEdits": [
+          {
+            "newText": "x",
+            "startLine": 2,
+            "startCol": 1,
+            "endLine": 2,
+            "endCol": 4
+          }
+        ]
+      }
+    }
+  },
+  {
+    "tool": "apply_text_edits",
+    "args": {
+      "uri": "Assets/Foo.cs",
+      "edits": [
+        {
+          "startLine": 0,
+          "startCol": 0,
+          "endLine": 0,
+          "endCol": 0,
+          "newText": "x"
+        }
+      ]
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "apply_text_edits",
+          "name": "Foo",
+          "path": "Assets",
+          "edits": [
+            {
+              "startLine": 1,
+              "startCol": 1,
+              "endLine": 1,
+              "endCol": 1,
+              "newText": "x"
+            }
+          ],
+          "options": {}
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {
+        "normalizedEdits": [
+          {
+            "startLine": 1,
+            "startCol": 1,
+            "endLine": 1,
+            "endCol": 1,
+            "newText": "x"
+          }
+        ],
+        "warnings": [
+          "zero_based_explicit_fields_normalized"
+        ]
+      }
+    }
+  },
+  {
+    "tool": "apply_text_edits",
+    "args": {
+      "uri": "Assets/Foo.cs",
+      "edits": [
+        {
+          "startLine": 0,
+          "startCol": 0,
+          "endLine": 0,
+          "endCol": 0,
+          "newText": "x"
+        }
+      ],
+      "strict": true
+    },
+    "calls": [],
+    "result": {
+      "success": false,
+      "code": "zero_based_explicit_fields",
+      "message": "Explicit line/col fields are 1-based; received zero-based.",
+      "data": {
+        "normalizedEdits": [
+          {
+            "startLine": 0,
+            "startCol": 0,
+            "endLine": 0,
+            "endCol": 0,
+            "newText": "x"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "tool": "script_apply_edits",
+    "args": {
+      "name": "Foo",
+      "path": "Assets",
+      "edits": [
+        {
+          "replace_method": {
+            "method": "M",
+            "content": "void M(){return;}"
+          }
+        }
+      ]
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "get_sha",
+          "name": "Foo",
+          "path": "Assets"
+        },
+        "fixture-instance"
+      ],
+      [
+        "manage_script",
+        {
+          "action": "edit",
+          "name": "Foo",
+          "path": "Assets",
+          "namespace": null,
+          "scriptType": "MonoBehaviour",
+          "edits": [
+            {
+              "op": "replace_method",
+              "methodName": "M",
+              "replacement": "void M(){return;}",
+              "className": "Foo"
+            }
+          ],
+          "options": {
+            "refresh": "immediate"
+          }
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {
+        "normalizedEdits": [
+          {
+            "op": "replace_method",
+            "methodName": "M",
+            "replacement": "void M(){return;}",
+            "className": "Foo"
+          }
+        ],
+        "routing": "structured"
+      }
+    }
+  },
+  {
+    "tool": "script_apply_edits",
+    "args": {
+      "name": "Foo",
+      "path": "Assets",
+      "edits": [
+        {
+          "op": "delete_method"
+        }
+      ]
+    },
+    "calls": [],
+    "result": {
+      "success": false,
+      "code": "missing_field",
+      "message": "delete_method requires 'methodName'.",
+      "data": {
+        "expected": {
+          "op": "delete_method",
+          "required": [
+            "className",
+            "methodName"
+          ]
+        },
+        "rewrite_suggestion": {
+          "edits[0].methodName": "PrintSeries"
+        },
+        "normalizedEdits": [
+          {
+            "op": "delete_method",
+            "className": "Foo"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "tool": "script_apply_edits",
+    "args": {
+      "name": "Foo",
+      "path": "Assets",
+      "edits": [
+        {
+          "op": "anchor_insert",
+          "after_method": "M",
+          "text": "void N(){}"
+        }
+      ]
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "get_sha",
+          "name": "Foo",
+          "path": "Assets"
+        },
+        "fixture-instance"
+      ],
+      [
+        "manage_script",
+        {
+          "action": "edit",
+          "name": "Foo",
+          "path": "Assets",
+          "namespace": null,
+          "scriptType": "MonoBehaviour",
+          "edits": [
+            {
+              "op": "insert_method",
+              "text": "void N(){}",
+              "afterMethodName": "M",
+              "replacement": "void N(){}",
+              "className": "Foo"
+            }
+          ],
+          "options": {
+            "refresh": "immediate"
+          }
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {
+        "normalizedEdits": [
+          {
+            "op": "insert_method",
+            "text": "void N(){}",
+            "afterMethodName": "M",
+            "replacement": "void N(){}",
+            "className": "Foo"
+          }
+        ],
+        "routing": "structured"
+      }
+    }
+  },
+  {
+    "tool": "script_apply_edits",
+    "args": {
+      "name": "Foo",
+      "path": "Assets",
+      "edits": [
+        {
+          "op": "anchor_replace",
+          "anchor": "int old",
+          "text": "int new"
+        }
+      ]
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "get_sha",
+          "name": "Foo",
+          "path": "Assets"
+        },
+        "fixture-instance"
+      ],
+      [
+        "manage_script",
+        {
+          "action": "edit",
+          "name": "Foo",
+          "path": "Assets",
+          "namespace": null,
+          "scriptType": "MonoBehaviour",
+          "edits": [
+            {
+              "op": "anchor_replace",
+              "anchor": "int old",
+              "text": "int new"
+            }
+          ],
+          "options": {
+            "refresh": "immediate"
+          }
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {
+        "normalizedEdits": [
+          {
+            "op": "anchor_replace",
+            "anchor": "int old",
+            "text": "int new"
+          }
+        ],
+        "routing": "structured"
+      }
+    }
+  },
+  {
+    "tool": "script_apply_edits",
+    "args": {
+      "name": "Foo",
+      "path": "Assets",
+      "edits": [
+        {
+          "op": "regex_replace",
+          "pattern": "old",
+          "text": "new"
+        }
+      ]
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "read",
+          "name": "Foo",
+          "path": "Assets",
+          "namespace": null,
+          "scriptType": "MonoBehaviour"
+        },
+        "fixture-instance"
+      ],
+      [
+        "manage_script",
+        {
+          "action": "apply_text_edits",
+          "name": "Foo",
+          "path": "Assets",
+          "namespace": null,
+          "scriptType": "MonoBehaviour",
+          "edits": [
+            {
+              "startLine": 2,
+              "startCol": 6,
+              "endLine": 2,
+              "endCol": 9,
+              "newText": "new"
+            }
+          ],
+          "precondition_sha256": "a7c7fa64144d1f74e7477dd092a496acc948faf2af2b4bb745b94f78ffa814ee",
+          "options": {
+            "refresh": "debounced",
+            "validate": "standard",
+            "applyMode": "sequential"
+          }
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {
+        "normalizedEdits": [
+          {
+            "op": "regex_replace",
+            "pattern": "old",
+            "text": "new",
+            "replacement": "new"
+          }
+        ],
+        "routing": "text"
+      }
+    }
+  },
+  {
+    "tool": "script_apply_edits",
+    "args": {
+      "name": "Foo",
+      "path": "Assets",
+      "edits": [
+        {
+          "op": "text_replace",
+          "startLine": 2,
+          "startCol": 2,
+          "endLine": 2,
+          "endCol": 5,
+          "text": "var"
+        }
+      ]
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "read",
+          "name": "Foo",
+          "path": "Assets",
+          "namespace": null,
+          "scriptType": "MonoBehaviour"
+        },
+        "fixture-instance"
+      ],
+      [
+        "manage_script",
+        {
+          "action": "apply_text_edits",
+          "name": "Foo",
+          "path": "Assets",
+          "namespace": null,
+          "scriptType": "MonoBehaviour",
+          "edits": [
+            {
+              "startLine": 2,
+              "startCol": 2,
+              "endLine": 2,
+              "endCol": 5,
+              "newText": "var"
+            }
+          ],
+          "precondition_sha256": "a7c7fa64144d1f74e7477dd092a496acc948faf2af2b4bb745b94f78ffa814ee",
+          "options": {
+            "refresh": "debounced",
+            "validate": "standard",
+            "applyMode": "sequential"
+          }
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "message": "ok",
+      "data": {
+        "normalizedEdits": [
+          {
+            "op": "replace_range",
+            "startLine": 2,
+            "startCol": 2,
+            "endLine": 2,
+            "endCol": 5,
+            "text": "var"
+          }
+        ],
+        "routing": "text"
+      }
+    }
+  },
+  {
+    "tool": "find_in_file",
+    "args": {
+      "uri": "Assets/Foo.cs",
+      "pattern": "(?<=int )old",
+      "ignore_case": "false"
+    },
+    "calls": [
+      [
+        "manage_script",
+        {
+          "action": "read",
+          "name": "Foo",
+          "path": "Assets"
+        },
+        "fixture-instance"
+      ]
+    ],
+    "result": {
+      "success": true,
+      "data": {
+        "matches": [
+          {
+            "line": 2,
+            "content": "int old = 1;",
+            "match": "old",
+            "start": 17,
+            "end": 20
+          }
+        ],
+        "count": 1,
+        "total_matches": 1
+      }
+    }
+  }
+]

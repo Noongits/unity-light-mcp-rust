@@ -1,0 +1,32 @@
+[
+  {
+    "name": "MCPForUnityTests.PlayMode.PlayModeBasicTests.Component_AddAndRemove_InPlayMode",
+    "runState": "Runnable",
+    "explicit": false,
+    "skipReason": null
+  },
+  {
+    "name": "MCPForUnityTests.PlayMode.PlayModeBasicTests.Coroutine_CanYieldMultipleTimes",
+    "runState": "Runnable",
+    "explicit": false,
+    "skipReason": null
+  },
+  {
+    "name": "MCPForUnityTests.PlayMode.PlayModeBasicTests.GameObjectCreation_InPlayMode_Succeeds",
+    "runState": "Runnable",
+    "explicit": false,
+    "skipReason": null
+  },
+  {
+    "name": "MCPForUnityTests.PlayMode.PlayModeBasicTests.MultipleFrames_ProgressCorrectly",
+    "runState": "Runnable",
+    "explicit": false,
+    "skipReason": null
+  },
+  {
+    "name": "MCPForUnityTests.PlayMode.PlayModeBasicTests.WaitForSeconds_CompletesAfterDelay",
+    "runState": "Runnable",
+    "explicit": false,
+    "skipReason": null
+  }
+]

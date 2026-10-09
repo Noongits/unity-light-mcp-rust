@@ -1,0 +1,152 @@
+{
+  "commands": {
+    "Python": [
+      "/tmp/unity-contract-venv/bin/python",
+      "/workspace/shared/unity-mcp-light/Server/src/main.py",
+      "--transport",
+      "stdio",
+      "--project-scoped-tools"
+    ],
+    "Rust": [
+      "/workspace/shared/unity-mcp-light/ServerRust/target/release/unity-mcp-light",
+      "--transport",
+      "stdio",
+      "--project-scoped-tools"
+    ]
+  },
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "results": [
+    {
+      "name": "Python",
+      "trial": 0,
+      "startup_ms": 1328.8677359996655,
+      "tool_count": 38,
+      "memory_MiB": {
+        "Rss": 86.87890625,
+        "Pss": 84.3427734375,
+        "Private_Clean": 1.76171875,
+        "Private_Dirty": 81.11328125
+      },
+      "latency": {
+        "ping": {
+          "median_ms": 0.5506524998963869,
+          "p95_ms": 0.7194079998953384
+        },
+        "tools/list": {
+          "median_ms": 8.617634999609436,
+          "p95_ms": 8.617634999609436
+        }
+      }
+    },
+    {
+      "name": "Rust",
+      "trial": 0,
+      "startup_ms": 4.696570000305655,
+      "tool_count": 38,
+      "memory_MiB": {
+        "Rss": 9.06640625,
+        "Pss": 8.21875,
+        "Private_Clean": 4.2890625,
+        "Private_Dirty": 3.91015625
+      },
+      "latency": {
+        "ping": {
+          "median_ms": 0.13887149998481618,
+          "p95_ms": 0.3394639998077764
+        },
+        "tools/list": {
+          "median_ms": 506.6181049996885,
+          "p95_ms": 506.6181049996885
+        }
+      }
+    },
+    {
+      "name": "Python",
+      "trial": 1,
+      "startup_ms": 1039.6639069995217,
+      "tool_count": 38,
+      "memory_MiB": {
+        "Rss": 87.31640625,
+        "Pss": 84.7587890625,
+        "Private_Clean": 1.72265625,
+        "Private_Dirty": 81.546875
+      },
+      "latency": {
+        "ping": {
+          "median_ms": 0.5139929999131709,
+          "p95_ms": 0.70171199968172
+        },
+        "tools/list": {
+          "median_ms": 5.477009999594884,
+          "p95_ms": 5.477009999594884
+        }
+      }
+    },
+    {
+      "name": "Rust",
+      "trial": 1,
+      "startup_ms": 3.215122999790765,
+      "tool_count": 38,
+      "memory_MiB": {
+        "Rss": 8.9921875,
+        "Pss": 8.14453125,
+        "Private_Clean": 4.2265625,
+        "Private_Dirty": 3.8984375
+      },
+      "latency": {
+        "ping": {
+          "median_ms": 0.06247249984880909,
+          "p95_ms": 0.1310540001213667
+        },
+        "tools/list": {
+          "median_ms": 506.276978000642,
+          "p95_ms": 506.276978000642
+        }
+      }
+    },
+    {
+      "name": "Python",
+      "trial": 2,
+      "startup_ms": 988.1488480004919,
+      "tool_count": 38,
+      "memory_MiB": {
+        "Rss": 86.7109375,
+        "Pss": 84.1533203125,
+        "Private_Clean": 1.72265625,
+        "Private_Dirty": 80.94140625
+      },
+      "latency": {
+        "ping": {
+          "median_ms": 0.38224200034164824,
+          "p95_ms": 0.5745230000684387
+        },
+        "tools/list": {
+          "median_ms": 5.4185930002859095,
+          "p95_ms": 5.4185930002859095
+        }
+      }
+    },
+    {
+      "name": "Rust",
+      "trial": 2,
+      "startup_ms": 3.2736740004111198,
+      "tool_count": 38,
+      "memory_MiB": {
+        "Rss": 8.9921875,
+        "Pss": 8.14453125,
+        "Private_Clean": 4.2265625,
+        "Private_Dirty": 3.8984375
+      },
+      "latency": {
+        "ping": {
+          "median_ms": 0.07516600044255028,
+          "p95_ms": 0.1680389996181475
+        },
+        "tools/list": {
+          "median_ms": 506.4815650002856,
+          "p95_ms": 506.4815650002856
+        }
+      }
+    }
+  ]
+}

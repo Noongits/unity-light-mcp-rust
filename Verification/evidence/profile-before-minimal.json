@@ -1,0 +1,159 @@
+{
+  "unity": "6000.3.23f1",
+  "graphicsDevice": "Metal",
+  "gpu": "Apple M4",
+  "samples": [
+    {
+      "existingSettings": false,
+      "before": {
+        "renderTextures": 0,
+        "texture2Ds": 112,
+        "renderTextureNativeBytes": 0,
+        "texture2DNativeBytes": 34823706,
+        "gfxDriverBytes": 30513433,
+        "panelAssets": 0,
+        "renderTextureAssets": 0
+      },
+      "firstResponse": {
+        "success": true,
+        "message": "UI render saved to 'Captures/profile-before-minimal-images/ui-render-20261009-175314.png' (no visible content detected).",
+        "data": {
+          "path": "Captures/profile-before-minimal-images/ui-render-20261009-175314.png",
+          "fullPath": "/private/tmp/unity-mcp-profile-clean/Captures/profile-before-minimal-images/ui-render-20261009-175314.png",
+          "width": 64,
+          "height": 64,
+          "hasContent": false,
+          "note": "Rendering with temporary panel settings is synchronous and may be blank. Attach the UXML to a persistent UIDocument and render by target for a capture across editor frames.",
+          "sourceAsset": "Assets/__IndependentProfile/Probe.uxml"
+        }
+      },
+      "after100": {
+        "renderTextures": 0,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 0,
+        "texture2DNativeBytes": 35264058,
+        "gfxDriverBytes": 30722345,
+        "panelAssets": 0,
+        "renderTextureAssets": 0
+      },
+      "successes": 100,
+      "contentResponses": 0,
+      "redPixelSamples": 0,
+      "resizeResponse": {
+        "success": true,
+        "message": "UI render saved to 'Captures/profile-before-minimal-images/ui-render-20261009-175315-50.png' (no visible content detected).",
+        "data": {
+          "path": "Captures/profile-before-minimal-images/ui-render-20261009-175315-50.png",
+          "fullPath": "/private/tmp/unity-mcp-profile-clean/Captures/profile-before-minimal-images/ui-render-20261009-175315-50.png",
+          "width": 96,
+          "height": 64,
+          "hasContent": false,
+          "note": "Rendering with temporary panel settings is synchronous and may be blank. Attach the UXML to a persistent UIDocument and render by target for a capture across editor frames.",
+          "sourceAsset": "Assets/__IndependentProfile/Probe.uxml"
+        }
+      },
+      "failureResponse": {
+        "success": false,
+        "code": "The file '/private/tmp/unity-mcp-profile-clean/Captures/profile-before-minimal-images/blocked' already exists.",
+        "error": "The file '/private/tmp/unity-mcp-profile-clean/Captures/profile-before-minimal-images/blocked' already exists.",
+        "data": {
+          "stackTrace": "  at System.IO.FileSystem.CreateDirectory (System.String fullPath) [0x00191] in <4ac0ee785b7843ea944af6fc649f4ee5>:0 \n  at System.IO.Directory.CreateDirectory (System.String path) [0x0002c] in <4ac0ee785b7843ea944af6fc649f4ee5>:0 \n  at MCPForUnity.Editor.Tools.ManageUI.RenderUI (Newtonsoft.Json.Linq.JObject params) [0x0075b] in /Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity/Editor/Tools/ManageUI.cs:1189 \n  at MCPForUnity.Editor.Tools.ManageUI.HandleCommand (Newtonsoft.Json.Linq.JObject params) [0x002a2] in /Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity/Editor/Tools/ManageUI.cs:117 "
+        }
+      },
+      "afterCleanup": {
+        "renderTextures": 0,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 0,
+        "texture2DNativeBytes": 35264058,
+        "gfxDriverBytes": 30722345,
+        "panelAssets": 0,
+        "renderTextureAssets": 0
+      },
+      "userTargetSurvives": true
+    },
+    {
+      "existingSettings": true,
+      "before": {
+        "renderTextures": 1,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 2068,
+        "texture2DNativeBytes": 35264058,
+        "gfxDriverBytes": 30723229,
+        "panelAssets": 1,
+        "renderTextureAssets": 0
+      },
+      "firstResponse": {
+        "success": true,
+        "message": "RenderTexture assigned to PanelSettings. Call render_ui again to capture the rendered content.",
+        "data": {
+          "path": "Captures/profile-before-minimal-images/ui-render-20261009-175315-51.png",
+          "fullPath": "/private/tmp/unity-mcp-profile-clean/Captures/profile-before-minimal-images/ui-render-20261009-175315-51.png",
+          "width": 64,
+          "height": 64,
+          "hasContent": false,
+          "note": "RenderTexture was just assigned to PanelSettings. Call render_ui again to capture the rendered UI.",
+          "sourceAsset": "Assets/__IndependentProfile/Probe.uxml"
+        }
+      },
+      "after100": {
+        "renderTextures": 2,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 40116,
+        "texture2DNativeBytes": 35264058,
+        "gfxDriverBytes": 30760093,
+        "panelAssets": 1,
+        "renderTextureAssets": 1
+      },
+      "successes": 100,
+      "contentResponses": 0,
+      "redPixelSamples": 0,
+      "resizeResponse": {
+        "success": true,
+        "message": "RenderTexture assigned to PanelSettings. Call render_ui again to capture the rendered content.",
+        "data": {
+          "path": "Captures/profile-before-minimal-images/ui-render-20261009-175315-151.png",
+          "fullPath": "/private/tmp/unity-mcp-profile-clean/Captures/profile-before-minimal-images/ui-render-20261009-175315-151.png",
+          "width": 96,
+          "height": 64,
+          "hasContent": false,
+          "note": "RenderTexture was just assigned to PanelSettings. Call render_ui again to capture the rendered UI.",
+          "sourceAsset": "Assets/__IndependentProfile/Probe.uxml"
+        }
+      },
+      "failureResponse": {
+        "success": false,
+        "code": "The file '/private/tmp/unity-mcp-profile-clean/Captures/profile-before-minimal-images/blocked' already exists.",
+        "error": "The file '/private/tmp/unity-mcp-profile-clean/Captures/profile-before-minimal-images/blocked' already exists.",
+        "data": {
+          "stackTrace": "  at System.IO.FileSystem.CreateDirectory (System.String fullPath) [0x00191] in <4ac0ee785b7843ea944af6fc649f4ee5>:0 \n  at System.IO.Directory.CreateDirectory (System.String path) [0x0002c] in <4ac0ee785b7843ea944af6fc649f4ee5>:0 \n  at MCPForUnity.Editor.Tools.ManageUI.RenderUI (Newtonsoft.Json.Linq.JObject params) [0x0075b] in /Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity/Editor/Tools/ManageUI.cs:1189 \n  at MCPForUnity.Editor.Tools.ManageUI.HandleCommand (Newtonsoft.Json.Linq.JObject params) [0x002a2] in /Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity/Editor/Tools/ManageUI.cs:117 "
+        }
+      },
+      "afterCleanup": {
+        "renderTextures": 1,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 2068,
+        "texture2DNativeBytes": 35264058,
+        "gfxDriverBytes": 30723229,
+        "panelAssets": 1,
+        "renderTextureAssets": 0
+      },
+      "userTargetSurvives": true
+    }
+  ],
+  "panelAPI": [
+    "Void GetPlayerPanelsByRenderMode(System.Collections.Generic.List`1[UnityEngine.UIElements.BaseRuntimePanel], System.Collections.Generic.List`1[UnityEngine.UIElements.BaseRuntimePanel])",
+    "Void RenderOffscreenPanels()",
+    "Void RepaintPanel(UnityEngine.UIElements.BaseRuntimePanel)",
+    "Void RenderPanel(UnityEngine.UIElements.BaseRuntimePanel, Boolean)",
+    "Void BeginRenderOverlays(Int32)",
+    "Void RenderOverlaysBeforePriority(Int32, Single)",
+    "Void EndRenderOverlays(Int32)",
+    "Void RepaintPanels(Boolean)",
+    "Boolean get_autoUpdateEventSystem()",
+    "Void set_autoUpdateEventSystem(Boolean)",
+    "Void UpdatePanels()",
+    "Void UpdateEventSystem()",
+    "Void EnableRenderingAndInputCallbacks()",
+    "Void DisableRenderingAndInputCallbacks()"
+  ]
+}

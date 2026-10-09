@@ -1,0 +1,876 @@
+[
+  {
+    "tool": "find_gameobjects",
+    "arguments": {
+      "search_term": "Cube",
+      "page_size": "10",
+      "include_inactive": "false"
+    },
+    "calls": [
+      {
+        "command": "find_gameobjects",
+        "params": {
+          "searchMethod": "by_name",
+          "searchTerm": "Cube",
+          "includeInactive": false,
+          "pageSize": 10,
+          "cursor": 0
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_gameobject",
+    "arguments": {
+      "action": "create",
+      "name": "Cube",
+      "position": "[1, 2, 3]",
+      "set_active": "false"
+    },
+    "calls": [
+      {
+        "command": "manage_gameobject",
+        "params": {
+          "action": "create",
+          "name": "Cube",
+          "position": [
+            1.0,
+            2.0,
+            3.0
+          ],
+          "setActive": false,
+          "world_space": true
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_gameobject",
+    "arguments": {
+      "action": "modify",
+      "target": "Cube",
+      "is_static": "true",
+      "component_properties": "{\"Transform\":{\"localScale\":[2,2,2]}}"
+    },
+    "calls": [
+      {
+        "command": "manage_gameobject",
+        "params": {
+          "action": "modify",
+          "target": "Cube",
+          "isStatic": true,
+          "componentProperties": {
+            "Transform": {
+              "localScale": [
+                2,
+                2,
+                2
+              ]
+            }
+          },
+          "world_space": true
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_scene",
+    "arguments": {
+      "action": "get_hierarchy",
+      "page_size": "20",
+      "cursor": "2",
+      "include_transform": "true"
+    },
+    "calls": [
+      {
+        "command": "manage_scene",
+        "params": {
+          "action": "get_hierarchy",
+          "pageSize": 20,
+          "cursor": 2,
+          "includeTransform": true
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_scene",
+    "arguments": {
+      "action": "load",
+      "name": "Main",
+      "additive": "true"
+    },
+    "calls": [
+      {
+        "command": "manage_scene",
+        "params": {
+          "action": "load",
+          "name": "Main",
+          "additive": true
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_asset",
+    "arguments": {
+      "action": "search",
+      "path": "Assets",
+      "page_size": "10",
+      "page_number": "2"
+    },
+    "calls": [
+      {
+        "command": "manage_asset",
+        "params": {
+          "action": "search",
+          "path": "Assets",
+          "generatePreview": false,
+          "pageSize": 10,
+          "pageNumber": 2
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_asset",
+    "arguments": {
+      "action": "modify",
+      "path": "Assets/Test.mat",
+      "properties": "{\"foo\":true}"
+    },
+    "calls": [
+      {
+        "command": "manage_asset",
+        "params": {
+          "action": "modify",
+          "path": "Assets/Test.mat",
+          "properties": {
+            "foo": true
+          },
+          "generatePreview": false
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_components",
+    "arguments": {
+      "action": "add",
+      "target": "Cube",
+      "component_type": "Rigidbody"
+    },
+    "calls": [
+      {
+        "command": "manage_components",
+        "params": {
+          "action": "add",
+          "target": "Cube",
+          "componentType": "Rigidbody"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_components",
+    "arguments": {
+      "action": "set_property",
+      "target": "Cube",
+      "component_type": "Rigidbody",
+      "property": "mass",
+      "value": "2"
+    },
+    "calls": [
+      {
+        "command": "manage_components",
+        "params": {
+          "action": "set_property",
+          "target": "Cube",
+          "componentType": "Rigidbody",
+          "property": "mass",
+          "value": "2"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_editor",
+    "arguments": {
+      "action": "add_tag",
+      "tag_name": "Enemy"
+    },
+    "calls": [
+      {
+        "command": "manage_editor",
+        "params": {
+          "action": "add_tag",
+          "tagName": "Enemy"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_camera",
+    "arguments": {
+      "action": "list_cameras"
+    },
+    "calls": [
+      {
+        "command": "manage_camera",
+        "params": {
+          "action": "list_cameras"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_graphics",
+    "arguments": {
+      "action": "skybox_set_fog",
+      "fog_enabled": true,
+      "fog_density": 0.01
+    },
+    "calls": [
+      {
+        "command": "manage_graphics",
+        "params": {
+          "action": "skybox_set_fog",
+          "fog_enabled": true,
+          "fog_density": 0.01
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_physics",
+    "arguments": {
+      "action": "get_settings",
+      "dimension": "3d"
+    },
+    "calls": [
+      {
+        "command": "manage_physics",
+        "params": {
+          "action": "get_settings",
+          "dimension": "3d"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_material",
+    "arguments": {
+      "action": "set_material_color",
+      "material_path": "Assets/Test.mat",
+      "color": [
+        1,
+        0,
+        0,
+        1
+      ]
+    },
+    "calls": [
+      {
+        "command": "manage_material",
+        "params": {
+          "action": "set_material_color",
+          "materialPath": "Assets/Test.mat",
+          "color": [
+            1.0,
+            0.0,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_shader",
+    "arguments": {
+      "action": "read",
+      "name": "Test",
+      "path": "Assets"
+    },
+    "calls": [
+      {
+        "command": "manage_shader",
+        "params": {
+          "action": "read",
+          "name": "Test",
+          "path": "Assets"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_texture",
+    "arguments": {
+      "action": "create",
+      "path": "Assets/Test.png",
+      "width": "16",
+      "height": "16",
+      "fill_color": "[255,0,0,255]"
+    },
+    "calls": [
+      {
+        "command": "manage_texture",
+        "params": {
+          "action": "create",
+          "path": "Assets/Test.png",
+          "width": 16,
+          "height": 16,
+          "fillColor": [
+            255,
+            0,
+            0,
+            255
+          ]
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_prefabs",
+    "arguments": {
+      "action": "get_info",
+      "prefab_path": "Assets/Test.prefab"
+    },
+    "calls": [
+      {
+        "command": "manage_prefabs",
+        "params": {
+          "action": "get_info",
+          "prefabPath": "Assets/Test.prefab"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_ui",
+    "arguments": {
+      "action": "get_visual_tree",
+      "target": "UIDocument",
+      "max_depth": "3"
+    },
+    "calls": [
+      {
+        "command": "manage_ui",
+        "params": {
+          "action": "get_visual_tree",
+          "target": "UIDocument",
+          "maxDepth": 3
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "read_console",
+    "arguments": {
+      "count": "5",
+      "include_stacktrace": "false"
+    },
+    "calls": [
+      {
+        "command": "read_console",
+        "params": {
+          "action": "get",
+          "types": [
+            "error"
+          ],
+          "count": 5,
+          "format": "plain",
+          "includeStacktrace": false
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "execute_menu_item",
+    "arguments": {
+      "menu_path": "Window/General/Console"
+    },
+    "calls": [
+      {
+        "command": "execute_menu_item",
+        "params": {
+          "menuPath": "Window/General/Console"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "unity_reflect",
+    "arguments": {
+      "action": "get_type",
+      "class_name": "UnityEngine.GameObject"
+    },
+    "calls": [
+      {
+        "command": "unity_reflect",
+        "params": {
+          "action": "get_type",
+          "class_name": "UnityEngine.GameObject"
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_scene",
+    "arguments": {
+      "action": "get_hierarchy",
+      "name": "Main",
+      "path": "Scenes/Main",
+      "build_index": "1",
+      "scene_view_target": -12,
+      "parent": "Root",
+      "page_size": "25",
+      "cursor": "5",
+      "max_nodes": "50",
+      "max_depth": "3",
+      "max_children_per_node": "10",
+      "include_transform": "false",
+      "scene_name": "Other",
+      "scene_path": "Assets/Other.unity",
+      "target": -42,
+      "remove_scene": "false",
+      "additive": "true",
+      "template": "3d_basic",
+      "auto_repair": "true"
+    },
+    "calls": [
+      {
+        "command": "manage_scene",
+        "params": {
+          "action": "get_hierarchy",
+          "name": "Main",
+          "path": "Scenes/Main",
+          "buildIndex": 1,
+          "sceneViewTarget": -12,
+          "parent": "Root",
+          "pageSize": 25,
+          "cursor": 5,
+          "maxNodes": 50,
+          "maxDepth": 3,
+          "maxChildrenPerNode": 10,
+          "includeTransform": false,
+          "sceneName": "Other",
+          "scenePath": "Assets/Other.unity",
+          "target": -42,
+          "removeScene": false,
+          "additive": true,
+          "template": "3d_basic",
+          "autoRepair": true
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_camera",
+    "arguments": {
+      "action": "screenshot",
+      "target": "Main Camera",
+      "search_method": "by_name",
+      "properties": "{\"fov\":45}",
+      "screenshot_file_name": "capture.png",
+      "screenshot_super_size": "2",
+      "camera": "Main Camera",
+      "include_image": "false",
+      "max_resolution": "512",
+      "capture_source": "game_view",
+      "batch": "orbit",
+      "view_target": [
+        1,
+        2,
+        3
+      ],
+      "view_position": "[3,2,1]",
+      "view_rotation": "[0,90,0]",
+      "orbit_angles": "8",
+      "orbit_elevations": "[0,30,-15]",
+      "orbit_distance": "5.5",
+      "orbit_fov": "60",
+      "output_folder": "Captures"
+    },
+    "calls": [
+      {
+        "command": "manage_camera",
+        "params": {
+          "action": "screenshot",
+          "properties": "{\"fov\":45}",
+          "target": "Main Camera",
+          "searchMethod": "by_name",
+          "fileName": "capture.png",
+          "outputFolder": "Captures",
+          "superSize": 2,
+          "camera": "Main Camera",
+          "includeImage": false,
+          "maxResolution": 512,
+          "captureSource": "game_view",
+          "batch": "orbit",
+          "viewTarget": [
+            1.0,
+            2.0,
+            3.0
+          ],
+          "orbitAngles": 8,
+          "orbitElevations": [
+            0,
+            30,
+            -15
+          ],
+          "orbitDistance": 5.5,
+          "orbitFov": 60.0,
+          "viewPosition": [
+            3.0,
+            2.0,
+            1.0
+          ],
+          "viewRotation": [
+            0.0,
+            90.0,
+            0.0
+          ]
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_prefabs",
+    "arguments": {
+      "action": "modify_contents",
+      "prefab_path": "Assets/Test.prefab",
+      "target": "Root",
+      "allow_overwrite": true,
+      "search_inactive": false,
+      "unlink_if_instance": true,
+      "position": {
+        "x": 1,
+        "y": 2,
+        "z": 3
+      },
+      "rotation": "[0,90,0]",
+      "scale": [
+        2,
+        2,
+        2
+      ],
+      "name": "Renamed",
+      "tag": "Enemy",
+      "layer": "Default",
+      "set_active": false,
+      "parent": "Parent",
+      "components_to_add": [
+        "Rigidbody"
+      ],
+      "components_to_remove": [
+        "BoxCollider"
+      ],
+      "create_child": {
+        "name": "Child",
+        "primitive_type": "Cube"
+      },
+      "delete_child": [
+        "Old",
+        "Root/Other"
+      ],
+      "component_properties": {
+        "Rigidbody": {
+          "mass": 5
+        }
+      }
+    },
+    "calls": [
+      {
+        "command": "manage_prefabs",
+        "params": {
+          "action": "modify_contents",
+          "prefabPath": "Assets/Test.prefab",
+          "target": "Root",
+          "allowOverwrite": true,
+          "searchInactive": false,
+          "unlinkIfInstance": true,
+          "position": [
+            1.0,
+            2.0,
+            3.0
+          ],
+          "rotation": [
+            0.0,
+            90.0,
+            0.0
+          ],
+          "scale": [
+            2.0,
+            2.0,
+            2.0
+          ],
+          "name": "Renamed",
+          "tag": "Enemy",
+          "layer": "Default",
+          "setActive": false,
+          "parent": "Parent",
+          "componentsToAdd": [
+            "Rigidbody"
+          ],
+          "componentsToRemove": [
+            "BoxCollider"
+          ],
+          "componentProperties": {
+            "Rigidbody": {
+              "mass": 5
+            }
+          },
+          "createChild": {
+            "name": "Child",
+            "primitive_type": "Cube"
+          },
+          "deleteChild": [
+            "Old",
+            "Root/Other"
+          ]
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_texture",
+    "arguments": {
+      "action": "create",
+      "path": "Assets/Test.png",
+      "width": 16,
+      "height": 32,
+      "fill_color": "#FF0080",
+      "pattern": "checkerboard",
+      "palette": "[[255,0,0,255],[0,255,0,255]]",
+      "pattern_size": 4,
+      "gradient_type": "linear",
+      "gradient_angle": 90,
+      "noise_scale": 0.1,
+      "octaves": 3,
+      "set_pixels": {
+        "x": 0,
+        "y": 0,
+        "width": 1,
+        "height": 1,
+        "color": [
+          1,
+          0,
+          0,
+          1
+        ]
+      },
+      "as_sprite": {
+        "pivot": [
+          0.5,
+          0.5
+        ],
+        "pixels_per_unit": 100
+      },
+      "import_settings": {
+        "texture_type": "sprite",
+        "filter_mode": "point"
+      }
+    },
+    "calls": [
+      {
+        "command": "manage_texture",
+        "params": {
+          "action": "create",
+          "path": "Assets/Test.png",
+          "width": 16,
+          "height": 32,
+          "fillColor": [
+            255,
+            0,
+            128,
+            255
+          ],
+          "pattern": "checkerboard",
+          "palette": [
+            [
+              255,
+              0,
+              0,
+              255
+            ],
+            [
+              0,
+              255,
+              0,
+              255
+            ]
+          ],
+          "patternSize": 4,
+          "gradientType": "linear",
+          "gradientAngle": 90.0,
+          "noiseScale": 0.1,
+          "octaves": 3,
+          "setPixels": {
+            "x": 0,
+            "y": 0,
+            "width": 1,
+            "height": 1,
+            "color": [
+              255,
+              0,
+              0,
+              255
+            ]
+          },
+          "spriteSettings": {
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "pixelsPerUnit": 100.0
+          },
+          "importSettings": {
+            "textureType": "Sprite",
+            "filterMode": "Point"
+          }
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_texture",
+    "arguments": {
+      "action": "create_sprite",
+      "path": "Assets/Sprite.png",
+      "as_sprite": true,
+      "fill_color": {
+        "r": 1.0,
+        "g": 0.5,
+        "b": 0.0
+      }
+    },
+    "calls": [
+      {
+        "command": "manage_texture",
+        "params": {
+          "action": "create_sprite",
+          "path": "Assets/Sprite.png",
+          "width": 64,
+          "height": 64,
+          "fillColor": [
+            255,
+            128,
+            0,
+            255
+          ],
+          "spriteSettings": {
+            "pivot": [
+              0.5,
+              0.5
+            ],
+            "pixelsPerUnit": 100
+          }
+        }
+      }
+    ],
+    "valid": true
+  },
+  {
+    "tool": "manage_ui",
+    "arguments": {
+      "action": "get_visual_tree",
+      "path": "Assets/UI.uxml",
+      "contents": "<ui:UXML/>",
+      "target": "UI",
+      "source_asset": "Assets/UI.uxml",
+      "panel_settings": "Assets/Panel.asset",
+      "sort_order": "2",
+      "scale_mode": "scale_with_screen_size",
+      "reference_resolution": [
+        1920,
+        1080
+      ],
+      "settings": {
+        "scale": 1
+      },
+      "max_depth": "4",
+      "width": "800",
+      "height": "600",
+      "include_image": "false",
+      "max_resolution": "512",
+      "screenshot_file_name": "ui.png",
+      "output_folder": "Captures",
+      "stylesheet": "Assets/UI.uss",
+      "filter_type": "Button",
+      "page_size": "20",
+      "page_number": "2",
+      "element_name": "Button",
+      "text": "Hello",
+      "add_classes": [
+        "primary"
+      ],
+      "remove_classes": [
+        "old"
+      ],
+      "toggle_classes": [
+        "active"
+      ],
+      "style": {
+        "color": "red"
+      },
+      "enabled": "false",
+      "visible": "true",
+      "tooltip": "Help"
+    },
+    "calls": [],
+    "valid": false,
+    "validation_error": "2 validation errors for call[manage_ui]\nscale_mode\n  Input should be 'ConstantPixelSize', 'ConstantPhysicalSize' or 'ScaleWithScreenSize' [type=literal_error, input_value='scale_with_screen_size', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.12/v/literal_error\nreference_resolution\n  Input should be a valid dictionary [type=dict_type, input_value=[1920, 1080], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.12/v/dict_type"
+  },
+  {
+    "tool": "manage_material",
+    "arguments": {
+      "action": "set_material_color",
+      "material_path": "Assets/Test.mat",
+      "property": "_BaseColor",
+      "color": "[1, 0.5, 0, 1]"
+    },
+    "calls": [
+      {
+        "command": "manage_material",
+        "params": {
+          "action": "set_material_color",
+          "materialPath": "Assets/Test.mat",
+          "property": "_BaseColor",
+          "color": [
+            1.0,
+            0.5,
+            0.0,
+            1.0
+          ]
+        }
+      }
+    ],
+    "valid": true
+  }
+]

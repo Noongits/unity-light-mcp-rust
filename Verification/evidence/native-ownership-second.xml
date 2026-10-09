@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Failed(Child)" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.5726333">
+  <test-suite type="TestSuite" id="1000" name="unity-mcp-independent-review" fullname="unity-mcp-independent-review" runstate="Runnable" testcasecount="1620" result="Failed" site="Child" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.572633" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="2849" name="MCPForUnityTests.EditMode.dll" fullname="/private/tmp/unity-mcp-independent-review/Library/ScriptAssemblies/MCPForUnityTests.EditMode.dll" runstate="Runnable" testcasecount="1620" result="Failed" site="Child" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.559975" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="64356" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="2858" name="MCPForUnityTests" fullname="MCPForUnityTests" runstate="Runnable" testcasecount="1547" result="Failed" site="Child" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.550026" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="2859" name="Editor" fullname="MCPForUnityTests.Editor" runstate="Runnable" testcasecount="1547" result="Failed" site="Child" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.541410" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="2863" name="Tools" fullname="MCPForUnityTests.Editor.Tools" runstate="Runnable" testcasecount="688" result="Failed" site="Child" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.521702" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="1830" name="RendererFeatureOwnershipRegressionTests" fullname="MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests" classname="MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:05Z" duration="0.175674" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1831" name="AddAndRemoveFeature_UndoRestoresOwnedSubAsset_AndPreservesUnrelatedDirtyMaterial" fullname="MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests.AddAndRemoveFeature_UndoRestoresOwnedSubAsset_AndPreservesUnrelatedDirtyMaterial" methodname="AddAndRemoveFeature_UndoRestoresOwnedSubAsset_AndPreservesUnrelatedDirtyMaterial" classname="MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests" runstate="Runnable" seed="1630042683" result="Failed" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:05Z" duration="0.167704" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests.AddAndRemoveFeature_UndoRestoresOwnedSubAsset_AndPreservesUnrelatedDirtyMaterial () [0x002b5] in /private/tmp/unity-mcp-independent-review/Assets/Tests/EditMode/Tools/RendererFeatureOwnershipRegressionTests.cs:52
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1832" name="ResourceBatchThreeTimelineTests" fullname="MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests" classname="MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests" runstate="Runnable" testcasecount="22" result="Failed" site="Child" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:05Z" duration="0.040297" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="1856" name="PersistVolumeEffect_MakesEffectAnOwnedSubAsset" fullname="MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests.PersistVolumeEffect_MakesEffectAnOwnedSubAsset" methodname="PersistVolumeEffect_MakesEffectAnOwnedSubAsset" classname="MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests" runstate="Runnable" seed="1731907243" result="Failed" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:05Z" duration="0.035182" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <failure>
+                  <message><![CDATA[  persistent=True ownerPath=Assets/__ResourceBatchThree_a4b26ba8540942db8d2cdadbf7667b48.asset effectPath=Assets/__ResourceBatchThree_a4b26ba8540942db8d2cdadbf7667b48.asset allAssets=2
+  Expected: True
+  But was:  False
+]]></message>
+                  <stack-trace><![CDATA[at MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests.PersistVolumeEffect_MakesEffectAnOwnedSubAsset () [0x0005f] in /private/tmp/unity-mcp-independent-review/Assets/Tests/EditMode/Tools/ResourceBatchThreeTimelineTests.cs:212
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1903" name="ValidatorSceneRestorationRegressionTests" fullname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" classname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.287226" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1906" name="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes" fullname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests.Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes" classname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.286658" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1904" name="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes(False)" fullname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests.Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes(False)" methodname="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes" classname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" runstate="Runnable" seed="1435333251" result="Passed" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:05Z" duration="0.146937" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1905" name="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes(True)" fullname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests.Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes(True)" methodname="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes" classname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" runstate="Runnable" seed="191874488" result="Passed" start-time="2026-10-09 15:03:05Z" end-time="2026-10-09 15:03:06Z" duration="0.139272" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/reviewer/Library/Application Support/DefaultCompany/unity-mcp-independent-review/TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,121 @@
+{
+  "unity": "6000.3.23f1",
+  "graphicsDevice": "Metal",
+  "gpu": "Apple M4",
+  "samples": [
+    {
+      "existingSettings": false,
+      "before": {
+        "renderTextures": 0,
+        "texture2Ds": 167,
+        "renderTextureNativeBytes": 0,
+        "texture2DNativeBytes": 41897418,
+        "gfxDriverBytes": 34087461,
+        "panelAssets": 1,
+        "renderTextureAssets": 0
+      },
+      "firstResponse": {
+        "success": false,
+        "code": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures').",
+        "error": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures')."
+      },
+      "after100": {
+        "renderTextures": 0,
+        "texture2Ds": 167,
+        "renderTextureNativeBytes": 0,
+        "texture2DNativeBytes": 41897418,
+        "gfxDriverBytes": 34087461,
+        "panelAssets": 1,
+        "renderTextureAssets": 0
+      },
+      "successes": 0,
+      "contentResponses": 0,
+      "redPixelSamples": 0,
+      "resizeResponse": {
+        "success": false,
+        "code": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures').",
+        "error": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures')."
+      },
+      "failureResponse": {
+        "success": false,
+        "code": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images/blocked' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images/blocked'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures').",
+        "error": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images/blocked' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images/blocked'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures')."
+      },
+      "afterCleanup": {
+        "renderTextures": 0,
+        "texture2Ds": 167,
+        "renderTextureNativeBytes": 0,
+        "texture2DNativeBytes": 41897418,
+        "gfxDriverBytes": 34087461,
+        "panelAssets": 1,
+        "renderTextureAssets": 0
+      },
+      "userTargetSurvives": true
+    },
+    {
+      "existingSettings": true,
+      "before": {
+        "renderTextures": 1,
+        "texture2Ds": 191,
+        "renderTextureNativeBytes": 2068,
+        "texture2DNativeBytes": 42338282,
+        "gfxDriverBytes": 34297257,
+        "panelAssets": 2,
+        "renderTextureAssets": 0
+      },
+      "firstResponse": {
+        "success": false,
+        "code": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures').",
+        "error": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures')."
+      },
+      "after100": {
+        "renderTextures": 1,
+        "texture2Ds": 191,
+        "renderTextureNativeBytes": 2068,
+        "texture2DNativeBytes": 42338282,
+        "gfxDriverBytes": 34297257,
+        "panelAssets": 2,
+        "renderTextureAssets": 0
+      },
+      "successes": 0,
+      "contentResponses": 0,
+      "redPixelSamples": 0,
+      "resizeResponse": {
+        "success": false,
+        "code": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures').",
+        "error": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures')."
+      },
+      "failureResponse": {
+        "success": false,
+        "code": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images/blocked' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images/blocked'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures').",
+        "error": "Screenshot folder '/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images/blocked' resolves outside the Unity project root ('/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/profile-before-images/blocked'). Use a project-relative path (e.g. 'Assets/Screenshots' or 'Captures')."
+      },
+      "afterCleanup": {
+        "renderTextures": 1,
+        "texture2Ds": 191,
+        "renderTextureNativeBytes": 2068,
+        "texture2DNativeBytes": 42338282,
+        "gfxDriverBytes": 34297257,
+        "panelAssets": 2,
+        "renderTextureAssets": 0
+      },
+      "userTargetSurvives": true
+    }
+  ],
+  "panelAPI": [
+    "Void GetPlayerPanelsByRenderMode(System.Collections.Generic.List`1[UnityEngine.UIElements.BaseRuntimePanel], System.Collections.Generic.List`1[UnityEngine.UIElements.BaseRuntimePanel])",
+    "Void RenderOffscreenPanels()",
+    "Void RepaintPanel(UnityEngine.UIElements.BaseRuntimePanel)",
+    "Void RenderPanel(UnityEngine.UIElements.BaseRuntimePanel, Boolean)",
+    "Void BeginRenderOverlays(Int32)",
+    "Void RenderOverlaysBeforePriority(Int32, Single)",
+    "Void EndRenderOverlays(Int32)",
+    "Void RepaintPanels(Boolean)",
+    "Boolean get_autoUpdateEventSystem()",
+    "Void set_autoUpdateEventSystem(Boolean)",
+    "Void UpdatePanels()",
+    "Void UpdateEventSystem()",
+    "Void EnableRenderingAndInputCallbacks()",
+    "Void DisableRenderingAndInputCallbacks()"
+  ]
+}

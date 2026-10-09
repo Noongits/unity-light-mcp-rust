@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-09 15:15:37Z" end-time="2026-10-09 15:15:37Z" duration="0.0906764">
+  <test-suite type="TestSuite" id="1000" name="unity-mcp-independent-review" fullname="unity-mcp-independent-review" runstate="Runnable" testcasecount="1621" result="Passed" start-time="2026-10-09 15:15:37Z" end-time="2026-10-09 15:15:37Z" duration="0.090676" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2852" name="MCPForUnityTests.EditMode.dll" fullname="/private/tmp/unity-mcp-independent-review/Library/ScriptAssemblies/MCPForUnityTests.EditMode.dll" runstate="Runnable" testcasecount="1621" result="Passed" start-time="2026-10-09 15:15:37Z" end-time="2026-10-09 15:15:37Z" duration="0.077407" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="66527" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2861" name="MCPForUnityTests" fullname="MCPForUnityTests" runstate="Runnable" testcasecount="1548" result="Passed" start-time="2026-10-09 15:15:37Z" end-time="2026-10-09 15:15:37Z" duration="0.070008" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2862" name="Editor" fullname="MCPForUnityTests.Editor" runstate="Runnable" testcasecount="1548" result="Passed" start-time="2026-10-09 15:15:37Z" end-time="2026-10-09 15:15:37Z" duration="0.059310" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2869" name="Services" fullname="MCPForUnityTests.Editor.Services" runstate="Runnable" testcasecount="376" result="Passed" start-time="2026-10-09 15:15:37Z" end-time="2026-10-09 15:15:37Z" duration="0.034146" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1961" name="CrossModeLifecycleRegressionTests" fullname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests" classname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-09 15:15:37Z" end-time="2026-10-09 15:15:37Z" duration="0.014828" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1962" name="AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart" fullname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart" methodname="AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart" classname="MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests" runstate="Runnable" seed="1097131846" result="Passed" start-time="2026-10-09 15:15:37Z" end-time="2026-10-09 15:15:37Z" duration="0.009136" asserts="0">
+                <properties>
+                  <property name="_JOINTYPE" value="UnityCombinatorial" />
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+                <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/reviewer/Library/Application Support/DefaultCompany/unity-mcp-independent-review/TestResults.xml
+]]></output>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

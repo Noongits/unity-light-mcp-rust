@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.6277096">
+  <test-suite type="TestSuite" id="1000" name="unity-mcp-independent-review" fullname="unity-mcp-independent-review" runstate="Runnable" testcasecount="1620" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.627710" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="EditMode" />
+    </properties>
+    <test-suite type="Assembly" id="2849" name="MCPForUnityTests.EditMode.dll" fullname="/private/tmp/unity-mcp-independent-review/Library/ScriptAssemblies/MCPForUnityTests.EditMode.dll" runstate="Runnable" testcasecount="1620" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.612839" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="64459" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+        <property name="EditorOnly" value="True" />
+      </properties>
+      <test-suite type="TestSuite" id="2858" name="MCPForUnityTests" fullname="MCPForUnityTests" runstate="Runnable" testcasecount="1547" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.583530" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="2859" name="Editor" fullname="MCPForUnityTests.Editor" runstate="Runnable" testcasecount="1547" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.571585" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="2863" name="Tools" fullname="MCPForUnityTests.Editor.Tools" runstate="Runnable" testcasecount="688" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.551691" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestFixture" id="1830" name="RendererFeatureOwnershipRegressionTests" fullname="MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests" classname="MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests" runstate="Runnable" testcasecount="1" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.183422" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1831" name="AddAndRemoveFeature_UndoRestoresOwnedSubAsset_AndPreservesUnrelatedDirtyMaterial" fullname="MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests.AddAndRemoveFeature_UndoRestoresOwnedSubAsset_AndPreservesUnrelatedDirtyMaterial" methodname="AddAndRemoveFeature_UndoRestoresOwnedSubAsset_AndPreservesUnrelatedDirtyMaterial" classname="MCPForUnityTests.Editor.Tools.RendererFeatureOwnershipRegressionTests" runstate="Runnable" seed="264333273" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.178613" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1832" name="ResourceBatchThreeTimelineTests" fullname="MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests" classname="MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests" runstate="Runnable" testcasecount="22" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.061251" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="1856" name="PersistVolumeEffect_MakesEffectAnOwnedSubAsset" fullname="MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests.PersistVolumeEffect_MakesEffectAnOwnedSubAsset" methodname="PersistVolumeEffect_MakesEffectAnOwnedSubAsset" classname="MCPForUnityTests.Editor.Tools.ResourceBatchThreeTimelineTests" runstate="Runnable" seed="147656554" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.056122" asserts="0">
+                <properties>
+                  <property name="retryIteration" value="0" />
+                  <property name="repeatIteration" value="0" />
+                </properties>
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="1903" name="ValidatorSceneRestorationRegressionTests" fullname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" classname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.290796" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="ParameterizedMethod" id="1906" name="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes" fullname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests.Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes" classname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.290183" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="1904" name="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes(False)" fullname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests.Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes(False)" methodname="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes" classname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" runstate="Runnable" seed="1162929836" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.147786" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                </test-case>
+                <test-case id="1905" name="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes(True)" fullname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests.Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes(True)" methodname="Scan_DisposalPreservesDirtyUntitledAndAdditiveScenes" classname="MCPForUnityTests.Editor.Tools.ValidatorSceneRestorationRegressionTests" runstate="Runnable" seed="1763502252" result="Passed" start-time="2026-10-09 15:04:57Z" end-time="2026-10-09 15:04:57Z" duration="0.141919" asserts="0">
+                  <properties>
+                    <property name="retryIteration" value="0" />
+                    <property name="repeatIteration" value="0" />
+                  </properties>
+                  <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/reviewer/Library/Application Support/DefaultCompany/unity-mcp-independent-review/TestResults.xml
+]]></output>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

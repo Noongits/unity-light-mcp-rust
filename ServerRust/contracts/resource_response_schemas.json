@@ -1,0 +1,2846 @@
+{
+  "mcpforunity://editor/state": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://editor/active-tool": {
+    "$defs": {
+      "ActiveToolData": {
+        "description": "Active tool data fields.",
+        "properties": {
+          "activeTool": {
+            "default": "",
+            "title": "Activetool",
+            "type": "string"
+          },
+          "isCustom": {
+            "default": false,
+            "title": "Iscustom",
+            "type": "boolean"
+          },
+          "pivotMode": {
+            "default": "",
+            "title": "Pivotmode",
+            "type": "string"
+          },
+          "pivotRotation": {
+            "default": "",
+            "title": "Pivotrotation",
+            "type": "string"
+          },
+          "handleRotation": {
+            "$ref": "#/$defs/Vector3",
+            "default": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            }
+          },
+          "handlePosition": {
+            "$ref": "#/$defs/Vector3",
+            "default": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0
+            }
+          }
+        },
+        "title": "ActiveToolData",
+        "type": "object"
+      },
+      "Vector3": {
+        "description": "3D vector.",
+        "properties": {
+          "x": {
+            "default": 0.0,
+            "title": "X",
+            "type": "number"
+          },
+          "y": {
+            "default": 0.0,
+            "title": "Y",
+            "type": "number"
+          },
+          "z": {
+            "default": 0.0,
+            "title": "Z",
+            "type": "number"
+          }
+        },
+        "title": "Vector3",
+        "type": "object"
+      }
+    },
+    "description": "Information about the currently active editor tool.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "$ref": "#/$defs/ActiveToolData",
+        "default": {
+          "activeTool": "",
+          "isCustom": false,
+          "pivotMode": "",
+          "pivotRotation": "",
+          "handleRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "handlePosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          }
+        }
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "ActiveToolResponse",
+    "type": "object"
+  },
+  "mcpforunity://scene/cameras": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://custom-tools": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://scene/gameobject-api": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://scene/gameobject/{instance_id}": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://scene/gameobject/{instance_id}/components": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://scene/gameobject/{instance_id}/component/{component_name}": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://project/layers": {
+    "description": "Dictionary of layer indices to layer names.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "additionalProperties": {
+          "type": "string"
+        },
+        "default": {},
+        "title": "Data",
+        "type": "object"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "LayersResponse",
+    "type": "object"
+  },
+  "mcpforunity://menu-items": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "default": [],
+        "items": {
+          "type": "string"
+        },
+        "title": "Data",
+        "type": "array"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "GetMenuItemsResponse",
+    "type": "object"
+  },
+  "mcpforunity://prefab-api": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://prefab/{encoded_path}": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://prefab/{encoded_path}/hierarchy": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://editor/prefab-stage": {
+    "$defs": {
+      "PrefabStageData": {
+        "description": "Prefab stage data fields.",
+        "properties": {
+          "isOpen": {
+            "default": false,
+            "title": "Isopen",
+            "type": "boolean"
+          },
+          "assetPath": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Assetpath"
+          },
+          "prefabRootName": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Prefabrootname"
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Mode"
+          },
+          "isDirty": {
+            "default": false,
+            "title": "Isdirty",
+            "type": "boolean"
+          }
+        },
+        "title": "PrefabStageData",
+        "type": "object"
+      }
+    },
+    "description": "Information about the current prefab editing context.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "$ref": "#/$defs/PrefabStageData",
+        "default": {
+          "isOpen": false,
+          "assetPath": null,
+          "prefabRootName": null,
+          "mode": null,
+          "isDirty": false
+        }
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "PrefabStageResponse",
+    "type": "object"
+  },
+  "mcpforunity://project/info": {
+    "$defs": {
+      "ProjectInfoData": {
+        "description": "Project info data fields.",
+        "properties": {
+          "projectRoot": {
+            "default": "",
+            "title": "Projectroot",
+            "type": "string"
+          },
+          "projectName": {
+            "default": "",
+            "title": "Projectname",
+            "type": "string"
+          },
+          "unityVersion": {
+            "default": "",
+            "title": "Unityversion",
+            "type": "string"
+          },
+          "platform": {
+            "default": "",
+            "title": "Platform",
+            "type": "string"
+          },
+          "assetsPath": {
+            "default": "",
+            "title": "Assetspath",
+            "type": "string"
+          }
+        },
+        "title": "ProjectInfoData",
+        "type": "object"
+      }
+    },
+    "description": "Static project configuration information.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "$ref": "#/$defs/ProjectInfoData",
+        "default": {
+          "projectRoot": "",
+          "projectName": "",
+          "unityVersion": "",
+          "platform": "",
+          "assetsPath": ""
+        }
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "ProjectInfoResponse",
+    "type": "object"
+  },
+  "mcpforunity://pipeline/renderer-features": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://rendering/stats": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://editor/selection": {
+    "$defs": {
+      "SelectionData": {
+        "description": "Selection data fields.",
+        "properties": {
+          "activeObject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Activeobject"
+          },
+          "activeGameObject": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Activegameobject"
+          },
+          "activeTransform": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Activetransform"
+          },
+          "activeInstanceID": {
+            "default": 0,
+            "title": "Activeinstanceid",
+            "type": "integer"
+          },
+          "count": {
+            "default": 0,
+            "title": "Count",
+            "type": "integer"
+          },
+          "objects": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/SelectionObjectInfo"
+            },
+            "title": "Objects",
+            "type": "array"
+          },
+          "gameObjects": {
+            "default": [],
+            "items": {
+              "$ref": "#/$defs/SelectionGameObjectInfo"
+            },
+            "title": "Gameobjects",
+            "type": "array"
+          },
+          "assetGUIDs": {
+            "default": [],
+            "items": {
+              "type": "string"
+            },
+            "title": "Assetguids",
+            "type": "array"
+          }
+        },
+        "title": "SelectionData",
+        "type": "object"
+      },
+      "SelectionGameObjectInfo": {
+        "description": "Information about a selected GameObject.",
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Name"
+          },
+          "instanceID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Instanceid"
+          }
+        },
+        "title": "SelectionGameObjectInfo",
+        "type": "object"
+      },
+      "SelectionObjectInfo": {
+        "description": "Information about a selected object.",
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Name"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Type"
+          },
+          "instanceID": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Instanceid"
+          }
+        },
+        "title": "SelectionObjectInfo",
+        "type": "object"
+      }
+    },
+    "description": "Detailed information about the current editor selection.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "$ref": "#/$defs/SelectionData",
+        "default": {
+          "activeObject": null,
+          "activeGameObject": null,
+          "activeTransform": null,
+          "activeInstanceID": 0,
+          "count": 0,
+          "objects": [],
+          "gameObjects": [],
+          "assetGUIDs": []
+        }
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "SelectionResponse",
+    "type": "object"
+  },
+  "mcpforunity://project/tags": {
+    "description": "List of all tags in the project.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Data",
+        "type": "array"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "TagsResponse",
+    "type": "object"
+  },
+  "mcpforunity://tests": {
+    "$defs": {
+      "PaginatedTestsData": {
+        "description": "Paginated test results.",
+        "properties": {
+          "items": {
+            "description": "Tests on current page",
+            "items": {
+              "$ref": "#/$defs/TestItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "cursor": {
+            "description": "Current page cursor (0-based)",
+            "title": "Cursor",
+            "type": "integer"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Next page cursor, null if last page",
+            "title": "Nextcursor"
+          },
+          "totalCount": {
+            "description": "Total number of tests across all pages",
+            "title": "Totalcount",
+            "type": "integer"
+          },
+          "pageSize": {
+            "description": "Number of items per page",
+            "title": "Pagesize",
+            "type": "integer"
+          },
+          "hasMore": {
+            "description": "Whether there are more items after this page",
+            "title": "Hasmore",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "cursor",
+          "totalCount",
+          "pageSize",
+          "hasMore"
+        ],
+        "title": "PaginatedTestsData",
+        "type": "object"
+      },
+      "TestItem": {
+        "properties": {
+          "name": {
+            "description": "The name of the test.",
+            "title": "Name",
+            "type": "string"
+          },
+          "full_name": {
+            "description": "The full name of the test.",
+            "title": "Full Name",
+            "type": "string"
+          },
+          "mode": {
+            "description": "The mode the test is for.",
+            "enum": [
+              "EditMode",
+              "PlayMode"
+            ],
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "full_name",
+          "mode"
+        ],
+        "title": "TestItem",
+        "type": "object"
+      }
+    },
+    "description": "Response containing paginated test data.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "$ref": "#/$defs/PaginatedTestsData",
+        "description": "Paginated test data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success",
+      "data"
+    ],
+    "title": "GetTestsResponse",
+    "type": "object"
+  },
+  "mcpforunity://tests/{mode}": {
+    "$defs": {
+      "PaginatedTestsData": {
+        "description": "Paginated test results.",
+        "properties": {
+          "items": {
+            "description": "Tests on current page",
+            "items": {
+              "$ref": "#/$defs/TestItem"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "cursor": {
+            "description": "Current page cursor (0-based)",
+            "title": "Cursor",
+            "type": "integer"
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Next page cursor, null if last page",
+            "title": "Nextcursor"
+          },
+          "totalCount": {
+            "description": "Total number of tests across all pages",
+            "title": "Totalcount",
+            "type": "integer"
+          },
+          "pageSize": {
+            "description": "Number of items per page",
+            "title": "Pagesize",
+            "type": "integer"
+          },
+          "hasMore": {
+            "description": "Whether there are more items after this page",
+            "title": "Hasmore",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "items",
+          "cursor",
+          "totalCount",
+          "pageSize",
+          "hasMore"
+        ],
+        "title": "PaginatedTestsData",
+        "type": "object"
+      },
+      "TestItem": {
+        "properties": {
+          "name": {
+            "description": "The name of the test.",
+            "title": "Name",
+            "type": "string"
+          },
+          "full_name": {
+            "description": "The full name of the test.",
+            "title": "Full Name",
+            "type": "string"
+          },
+          "mode": {
+            "description": "The mode the test is for.",
+            "enum": [
+              "EditMode",
+              "PlayMode"
+            ],
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "full_name",
+          "mode"
+        ],
+        "title": "TestItem",
+        "type": "object"
+      }
+    },
+    "description": "Response containing paginated test data.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "$ref": "#/$defs/PaginatedTestsData",
+        "description": "Paginated test data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success",
+      "data"
+    ],
+    "title": "GetTestsResponse",
+    "type": "object"
+  },
+  "mcpforunity://tool-groups": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://instances": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://scene/volumes": {
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "anyOf": [
+          {},
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Data"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "MCPResponse",
+    "type": "object"
+  },
+  "mcpforunity://editor/windows": {
+    "$defs": {
+      "WindowInfo": {
+        "description": "Information about an editor window.",
+        "properties": {
+          "title": {
+            "default": "",
+            "title": "Title",
+            "type": "string"
+          },
+          "typeName": {
+            "default": "",
+            "title": "Typename",
+            "type": "string"
+          },
+          "isFocused": {
+            "default": false,
+            "title": "Isfocused",
+            "type": "boolean"
+          },
+          "position": {
+            "$ref": "#/$defs/WindowPosition",
+            "default": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 0.0,
+              "height": 0.0
+            }
+          },
+          "instanceID": {
+            "default": 0,
+            "title": "Instanceid",
+            "type": "integer"
+          }
+        },
+        "title": "WindowInfo",
+        "type": "object"
+      },
+      "WindowPosition": {
+        "description": "Window position and size.",
+        "properties": {
+          "x": {
+            "default": 0.0,
+            "title": "X",
+            "type": "number"
+          },
+          "y": {
+            "default": 0.0,
+            "title": "Y",
+            "type": "number"
+          },
+          "width": {
+            "default": 0.0,
+            "title": "Width",
+            "type": "number"
+          },
+          "height": {
+            "default": 0.0,
+            "title": "Height",
+            "type": "number"
+          }
+        },
+        "title": "WindowPosition",
+        "type": "object"
+      }
+    },
+    "description": "List of all open editor windows.",
+    "properties": {
+      "success": {
+        "title": "Success",
+        "type": "boolean"
+      },
+      "message": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Message"
+      },
+      "error": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Error"
+      },
+      "data": {
+        "default": [],
+        "items": {
+          "$ref": "#/$defs/WindowInfo"
+        },
+        "title": "Data",
+        "type": "array"
+      },
+      "hint": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Hint"
+      }
+    },
+    "required": [
+      "success"
+    ],
+    "title": "WindowsResponse",
+    "type": "object"
+  },
+  "editor_state_data": {
+    "$defs": {
+      "EditorStateActiveScene": {
+        "properties": {
+          "path": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Path"
+          },
+          "guid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Guid"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Name"
+          }
+        },
+        "title": "EditorStateActiveScene",
+        "type": "object"
+      },
+      "EditorStateActivity": {
+        "properties": {
+          "phase": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Phase"
+          },
+          "since_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Since Unix Ms"
+          },
+          "reasons": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Reasons"
+          }
+        },
+        "title": "EditorStateActivity",
+        "type": "object"
+      },
+      "EditorStateAdvice": {
+        "properties": {
+          "ready_for_tools": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Ready For Tools"
+          },
+          "blocking_reasons": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Blocking Reasons"
+          },
+          "recommended_retry_after_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Recommended Retry After Ms"
+          },
+          "recommended_next_action": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Recommended Next Action"
+          }
+        },
+        "title": "EditorStateAdvice",
+        "type": "object"
+      },
+      "EditorStateAssets": {
+        "properties": {
+          "is_updating": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Updating"
+          },
+          "external_changes_dirty": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "External Changes Dirty"
+          },
+          "external_changes_last_seen_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "External Changes Last Seen Unix Ms"
+          },
+          "external_changes_dirty_since_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "External Changes Dirty Since Unix Ms"
+          },
+          "external_changes_last_cleared_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "External Changes Last Cleared Unix Ms"
+          },
+          "refresh": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/EditorStateRefresh"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "title": "EditorStateAssets",
+        "type": "object"
+      },
+      "EditorStateCompilation": {
+        "properties": {
+          "is_compiling": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Compiling"
+          },
+          "is_domain_reload_pending": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Domain Reload Pending"
+          },
+          "last_compile_started_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Last Compile Started Unix Ms"
+          },
+          "last_compile_finished_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Last Compile Finished Unix Ms"
+          },
+          "last_domain_reload_before_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Last Domain Reload Before Unix Ms"
+          },
+          "last_domain_reload_after_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Last Domain Reload After Unix Ms"
+          }
+        },
+        "title": "EditorStateCompilation",
+        "type": "object"
+      },
+      "EditorStateEditor": {
+        "properties": {
+          "is_focused": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Focused"
+          },
+          "play_mode": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/EditorStatePlayMode"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
+          "active_scene": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/EditorStateActiveScene"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "title": "EditorStateEditor",
+        "type": "object"
+      },
+      "EditorStateLastRun": {
+        "properties": {
+          "finished_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Finished Unix Ms"
+          },
+          "result": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Result"
+          },
+          "counts": {
+            "anyOf": [
+              {},
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Counts"
+          }
+        },
+        "title": "EditorStateLastRun",
+        "type": "object"
+      },
+      "EditorStatePlayMode": {
+        "properties": {
+          "is_playing": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Playing"
+          },
+          "is_paused": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Paused"
+          },
+          "is_changing": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Changing"
+          }
+        },
+        "title": "EditorStatePlayMode",
+        "type": "object"
+      },
+      "EditorStateRefresh": {
+        "properties": {
+          "is_refresh_in_progress": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Refresh In Progress"
+          },
+          "last_refresh_requested_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Last Refresh Requested Unix Ms"
+          },
+          "last_refresh_finished_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Last Refresh Finished Unix Ms"
+          }
+        },
+        "title": "EditorStateRefresh",
+        "type": "object"
+      },
+      "EditorStateSettings": {
+        "properties": {
+          "batch_execute_max_commands": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Batch Execute Max Commands"
+          }
+        },
+        "title": "EditorStateSettings",
+        "type": "object"
+      },
+      "EditorStateStaleness": {
+        "properties": {
+          "age_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Age Ms"
+          },
+          "is_stale": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Stale"
+          }
+        },
+        "title": "EditorStateStaleness",
+        "type": "object"
+      },
+      "EditorStateTests": {
+        "properties": {
+          "is_running": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Running"
+          },
+          "mode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Mode"
+          },
+          "current_job_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Current Job Id"
+          },
+          "started_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Started Unix Ms"
+          },
+          "started_by": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Started By"
+          },
+          "last_run": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/EditorStateLastRun"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          }
+        },
+        "title": "EditorStateTests",
+        "type": "object"
+      },
+      "EditorStateTransport": {
+        "properties": {
+          "unity_bridge_connected": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Unity Bridge Connected"
+          },
+          "last_message_unix_ms": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Last Message Unix Ms"
+          }
+        },
+        "title": "EditorStateTransport",
+        "type": "object"
+      },
+      "EditorStateUnity": {
+        "properties": {
+          "instance_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Instance Id"
+          },
+          "unity_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Unity Version"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Project Id"
+          },
+          "platform": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Platform"
+          },
+          "is_batch_mode": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Is Batch Mode"
+          }
+        },
+        "title": "EditorStateUnity",
+        "type": "object"
+      }
+    },
+    "properties": {
+      "schema_version": {
+        "title": "Schema Version",
+        "type": "string"
+      },
+      "observed_at_unix_ms": {
+        "title": "Observed At Unix Ms",
+        "type": "integer"
+      },
+      "sequence": {
+        "title": "Sequence",
+        "type": "integer"
+      },
+      "unity": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateUnity"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "editor": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateEditor"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "activity": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateActivity"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "compilation": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateCompilation"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "assets": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateAssets"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "tests": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateTests"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "transport": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateTransport"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "settings": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateSettings"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "advice": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateAdvice"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      },
+      "staleness": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/EditorStateStaleness"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null
+      }
+    },
+    "required": [
+      "schema_version",
+      "observed_at_unix_ms",
+      "sequence"
+    ],
+    "title": "EditorStateData",
+    "type": "object"
+  }
+}

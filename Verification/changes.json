@@ -1,0 +1,322 @@
+[
+  {
+    "path": "CSHARP_FULL_REVIEW.md",
+    "status": "modified"
+  },
+  {
+    "path": "CSHARP_REVIEW_COVERAGE.md",
+    "status": "modified"
+  },
+  {
+    "path": "CSHARP_STATIC_VALIDATION.md",
+    "status": "modified"
+  },
+  {
+    "path": "FULL_PACKAGE.md",
+    "status": "modified"
+  },
+  {
+    "path": "ServerRust/VALIDATION.md",
+    "status": "modified"
+  },
+  {
+    "path": "website/package-lock.json",
+    "status": "modified"
+  },
+  {
+    "path": "website/docusaurus.config.js",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/CameraOverrideOwnershipTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ResourceBatchThreeTimelineTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/NativeTextureLifetimeTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManageGameObjectDeleteTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/BuildSaveBeforeBuildTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/TailAuditSceneScope.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManageUIAuditRegressionTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManageGraphicsTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManageUITests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManagePrefabsOwnershipRegressionTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/OwnedSceneTestScope.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/GameObjectComponentHelpersErrorTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManageGameObjectCreateTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManageGameObjectModifyTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManagePhysicsTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/InspectPrefabTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ManageSceneReplacementSafetyTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ScriptToolsBatch2AuditTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ScriptToolsTimelineRegressionTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/AssetGen/KeyMaterialTimelineSafetyTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/AssetGen/OpenRouterModelCatalogTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/AssetGen/AssetGenProvidersTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/AssetGen/FalModelCatalogTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/AssetGen/GameplayBatchOneTimelineRegressionTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/AssetGen/AssetGenJobManagerTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/AssetGen/AssetGenModelCatalogTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Services/TransportLifecycleOwnershipTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Services/TransportCommandDispatcherTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Services/ConnectionUiGenerationTests.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Windows/Characterization/Windows_Characterization.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/AssetStoreUploads/Packages/com.unity.asset-store-tools/Editor/Utility/ASToolsUpdater.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/AssetStoreUploads/Packages/com.unity.asset-store-tools/Editor/Validator/Scripts/Services/Validation/SceneUtilityService.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/AssetStoreUploads/Packages/com.unity.asset-store-tools/Editor/Validator/Scripts/Services/Validation/Abstractions/ISceneUtilityService.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/AssetStoreUploads/Packages/com.unity.asset-store-tools/Editor/Validator/Scripts/Test Methods/UnityPackage/CheckDemoScenes.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/AssetStoreUploads/Packages/com.unity.asset-store-tools/Editor/Validator/Scripts/Test Methods/Generic/CheckParticleSystems.cs",
+    "status": "modified"
+  },
+  {
+    "path": "TestProjects/AssetStoreUploads/Packages/com.unity.asset-store-tools/Editor/Validator/Scripts/Test Methods/Generic/CheckMissingComponentsinScenes.cs",
+    "status": "modified"
+  },
+  {
+    "path": "CustomTools/RoslynRuntimeCompilation/ManageRuntimeCompilation.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Tools/ManageUI.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Tools/ManageScript.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Tools/ManageMaterial.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Helpers/PortManager.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Services/StdioBridgeReloadHandler.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Services/HttpAutoStartHandler.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Services/BridgeControlService.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Services/HttpBridgeReloadHandler.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Services/Transport/TransportManager.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Windows/Components/Connection/McpConnectionSection.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Security/SecureKeyStore/EncryptedFileKeyStore.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Tools/GameObjects/ManageGameObjectCommon.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Tools/Physics/PhysicsValidationOps.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Tools/Physics/PhysicsSettingsOps.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Tools/Graphics/VolumeOps.cs",
+    "status": "modified"
+  },
+  {
+    "path": "MCPForUnity/Editor/Tools/Graphics/RendererFeatureOps.cs",
+    "status": "modified"
+  },
+  {
+    "path": "ServerRust/tests/cleanup_stress.py",
+    "status": "modified"
+  },
+  {
+    "path": "ServerRust/tests/README.md",
+    "status": "modified"
+  },
+  {
+    "path": "ServerRust/tests/contract_stdio.py",
+    "status": "modified"
+  },
+  {
+    "path": "ServerRust/src/protocol.rs",
+    "status": "modified"
+  },
+  {
+    "path": "INDEPENDENT_REVIEW.md",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ValidatorSceneRestorationRegressionTests.cs.meta",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ResourceBatchThreeHolder.cs.meta",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/PlayModeCaptureLifecycleRegressionTests.cs.meta",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ValidatorSceneRestorationRegressionTests.cs",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/TestSceneFactory.cs",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/PlayModeCaptureLifecycleRegressionTests.cs",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/RendererFeatureOwnershipRegressionTests.cs",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/RendererFeatureOwnershipRegressionTests.cs.meta",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/ResourceBatchThreeHolder.cs",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Tools/TestSceneFactory.cs.meta",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Helpers/HelperTimelineAuditRegressionTests.cs.meta",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Services/AutoStartGenerationRegressionTests.cs",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Services/CrossModeLifecycleRegressionTests.cs",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Services/CrossModeLifecycleRegressionTests.cs.meta",
+    "status": "added"
+  },
+  {
+    "path": "TestProjects/UnityMCPTests/Assets/Tests/EditMode/Services/AutoStartGenerationRegressionTests.cs.meta",
+    "status": "added"
+  }
+]

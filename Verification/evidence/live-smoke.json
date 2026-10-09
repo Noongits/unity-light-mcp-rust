@@ -1,0 +1,1580 @@
+[
+  {
+    "step": "initialize",
+    "result": {
+      "_meta": null,
+      "protocolVersion": "2025-11-25",
+      "capabilities": {
+        "experimental": null,
+        "logging": {},
+        "prompts": {
+          "listChanged": false
+        },
+        "resources": {
+          "subscribe": null,
+          "listChanged": false
+        },
+        "tools": {
+          "listChanged": true
+        },
+        "completions": null,
+        "extensions": null,
+        "tasks": null
+      },
+      "serverInfo": {
+        "name": "unity-mcp-light",
+        "title": null,
+        "version": "0.1.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "instructions": "\nThis server provides tools to interact with the Unity Game Engine Editor.\n\nI have a dynamic tool system. Always check the mcpforunity://custom-tools resource first to see what special capabilities are available for the current project.\n\nTargeting Unity instances:\n- Use the resource mcpforunity://instances to list active Unity sessions (Name@hash).\n- When multiple instances are connected, call set_active_instance with the exact Name@hash before using tools/resources to pin routing for the whole session. The server will error if multiple are connected and no active instance is set.\n- Alternatively, pass unity_instance as a parameter on any individual tool call to route just that call (e.g. unity_instance=\"MyGame@abc123\", unity_instance=\"abc\" for a hash prefix, or unity_instance=\"6401\" for a port number in stdio mode). This does not change the session default.\n\nImportant Workflows:\n\nResources vs Tools:\n- Use RESOURCES to read editor state (mcpforunity://editor/state, mcpforunity://project/info, mcpforunity://project/tags, mcpforunity://tests, etc)\n- Use TOOLS to perform actions and mutations (manage_editor for play mode control, tag/layer management, etc)\n- Always check related resources before modifying the engine state with tools\n\nReading resources (read this before using ANY resource named below):\n- Resources are addressed by URI, never by name. A resource's name and URI are NOT interchangeable: names use underscores (e.g. editor_state) while URIs use slashes (e.g. mcpforunity://editor/state). Do NOT build a URI by swapping separators in the name \u2014 you will 404.\n- These instructions always spell resources as full mcpforunity:// URIs \u2014 read one exactly as written. If you only have a name (from resources/list or another tool's output), look its URI up in resources/list rather than guessing it.\n- Resource payloads are wrapped: the content lives under a top-level `data` object, so field paths are `data.<section>.<field>` (e.g. `data.advice.ready_for_tools`), not bare top-level fields.\n- The mcpforunity:// URI names the resource, not the server. Some clients take a separate server key on a resource read \u2014 in Codex, tools are exposed as mcp__unity-mcp-light__* but resources/read wants server: \"unity-mcp-light\". If a read fails with an unknown-server error, list resources first and use the key exactly as returned.\n\nScript Management:\n- After creating or modifying scripts (by your own tools or the `manage_script` tool) use `read_console` to check for compilation errors before proceeding\n- Only after successful compilation can new components/types be used\n- You can poll mcpforunity://editor/state and read `data.compilation.is_compiling` to check if the domain reload is complete, or `data.advice.ready_for_tools` for overall readiness\n\nScene Setup:\n- Always include a Camera and main Light (Directional Light) in new scenes\n- Create prefabs with `manage_asset` for reusable GameObjects\n- Use `manage_scene` to load, save, and query scene information\n\nPath Conventions:\n- Unless specified otherwise, all paths are relative to the project's `Assets/` folder\n- Use forward slashes (/) in paths for cross-platform compatibility\n\nConsole Monitoring:\n- Check `read_console` regularly to catch errors and compilation status (it returns errors only unless you ask for warnings)\n- Filter by log type (Error, Warning, Log) to focus on specific issues\n\nMenu Items:\n- Use `execute_menu_item` when you have read the mcpforunity://menu-items resource\n- This lets you interact with Unity's menu system and third-party tools\n\nUnity API Verification (requires 'docs' tool group):\n- When the 'docs' tool group is active, use `unity_reflect` to verify Unity API details before answering questions or writing C# code. LLM training data frequently contains incorrect, outdated, or hallucinated Unity APIs.\n- BEFORE answering Unity API questions: search the project's assets (`manage_asset`) and reflect the API (`unity_reflect`) to verify. Do NOT rely on training data alone.\n- Common hallucination areas: shaders and materials (always search assets for actual shader names), package-specific APIs (Input System, Cinemachine, ProBuilder, NavMesh, URP/HDRP), and APIs that changed between Unity versions.\n- Workflow: `unity_reflect search` \u2192 `unity_reflect get_type` \u2192 `unity_reflect get_member`.\n- For shader/material questions: use `manage_asset(action=\"search\", filter_type=\"Shader\")` to find actual shaders in the project before recommending one.\n\nPayload sizing & paging (important):\n- Many Unity queries can return very large JSON. Prefer **paged + summary-first** calls.\n- `manage_scene(action=\"get_hierarchy\")`:\n  - Use `page_size` + `cursor` and follow `next_cursor` until null.\n  - `page_size` is **items per page**; recommended starting point: **50**.\n- `manage_gameobject(action=\"get_components\")`:\n  - Start with `include_properties=false` (metadata-only) and small `page_size` (e.g. **10-25**).\n  - Only request `include_properties=true` when needed; keep `page_size` small (e.g. **3-10**) to bound payloads.\n- `manage_asset(action=\"search\")`:\n  - Use paging (`page_size`, `page_number`) and keep `page_size` modest (e.g. **25-50**) to avoid token-heavy responses.\n  - Keep `generate_preview=false` unless you explicitly need thumbnails (previews may include large base64 payloads).\n"
+    }
+  },
+  {
+    "step": "set_active_instance",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"instance\":\"unity-mcp-independent-review@987fb840\",\"session_id\":\"stdio\"},\"message\":\"Active instance set to unity-mcp-independent-review@987fb840\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "data": {
+          "instance": "unity-mcp-independent-review@987fb840",
+          "session_id": "stdio"
+        },
+        "message": "Active instance set to unity-mcp-independent-review@987fb840",
+        "success": true
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "project/info",
+    "result": {
+      "_meta": null,
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "contents": [
+        {
+          "uri": "mcpforunity://project/info",
+          "mimeType": "text/plain",
+          "_meta": null,
+          "text": "{\"data\":{\"assetsPath\":\"/private/tmp/unity-mcp-independent-review/Assets\",\"platform\":\"StandaloneOSX\",\"projectName\":\"unity-mcp-independent-review\",\"projectRoot\":\"/private/tmp/unity-mcp-independent-review\",\"unityVersion\":\"6000.3.23f1\"},\"error\":null,\"hint\":null,\"message\":\"Retrieved project info.\",\"success\":true}"
+        }
+      ],
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "tools/list",
+    "result": {
+      "count": 38
+    }
+  },
+  {
+    "step": "editor/state",
+    "result": {
+      "_meta": null,
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "contents": [
+        {
+          "uri": "mcpforunity://editor/state",
+          "mimeType": "text/plain",
+          "_meta": null,
+          "text": "{\"data\":{\"activity\":{\"phase\":\"idle\",\"reasons\":[\"tick\"],\"since_unix_ms\":1791560235993},\"advice\":{\"blocking_reasons\":[],\"ready_for_tools\":true,\"recommended_next_action\":\"none\",\"recommended_retry_after_ms\":0},\"assets\":{\"external_changes_dirty\":false,\"external_changes_dirty_since_unix_ms\":null,\"external_changes_last_cleared_unix_ms\":null,\"external_changes_last_seen_unix_ms\":null,\"is_updating\":false,\"refresh\":{\"is_refresh_in_progress\":false,\"last_refresh_finished_unix_ms\":null,\"last_refresh_requested_unix_ms\":null}},\"compilation\":{\"is_compiling\":false,\"is_domain_reload_pending\":false,\"last_compile_finished_unix_ms\":1791560235043,\"last_compile_started_unix_ms\":1791560234801,\"last_domain_reload_after_unix_ms\":1791560235933,\"last_domain_reload_before_unix_ms\":null},\"editor\":{\"active_scene\":{\"guid\":null,\"name\":\"\",\"path\":null},\"is_focused\":true,\"play_mode\":{\"is_changing\":false,\"is_paused\":false,\"is_playing\":false}},\"observed_at_unix_ms\":1791560299035,\"schema_version\":\"unity-mcp/editor_state@2\",\"sequence\":66,\"settings\":{\"batch_execute_max_commands\":25},\"staleness\":{\"age_ms\":949,\"is_stale\":false},\"tests\":{\"current_job_id\":null,\"is_running\":false,\"last_run\":null,\"mode\":null,\"started_by\":\"unknown\",\"started_unix_ms\":null},\"transport\":{\"last_message_unix_ms\":null,\"unity_bridge_connected\":null},\"unity\":{\"instance_id\":\"unity-mcp-independent-review@987fb840\",\"is_batch_mode\":true,\"platform\":\"OSXEditor\",\"project_id\":null,\"unity_version\":\"6000.3.23f1\"}},\"error\":null,\"hint\":null,\"message\":\"Retrieved editor state.\",\"success\":true}"
+        }
+      ],
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "script_boundary_check",
+    "result": {
+      "preservedOtherMethod": true,
+      "contents": "using UnityEngine; public class IndependentSmoke : MonoBehaviour {public int Value(){ return 2; } public int Other(){ return 7; } }"
+    }
+  },
+  {
+    "step": "failed_compile_refresh",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"compile_requested\":true,\"compile_started\":null,\"hint\":\"If Unity enters compilation/domain reload, poll the mcpforunity://editor/state resource until data.advice.ready_for_tools is true.\",\"refresh_triggered\":true,\"resulting_state\":\"idle\"},\"message\":\"Refresh requested.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "compile_requested": true,
+            "compile_started": null,
+            "hint": "If Unity enters compilation/domain reload, poll the mcpforunity://editor/state resource until data.advice.ready_for_tools is true.",
+            "refresh_triggered": true,
+            "resulting_state": "idle"
+          },
+          "message": "Refresh requested.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "failed_compile_console",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":[\"Assets/IndependentSmoke/DeliberateBroken.cs(1,53): error CS1026: ) expected\\n\",\"Assets/IndependentSmoke/DeliberateBroken.cs(1,53): error CS1002: ; expected\\n\"],\"message\":\"Retrieved 2 log entries.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "data": [
+          "Assets/IndependentSmoke/DeliberateBroken.cs(1,53): error CS1026: ) expected\n",
+          "Assets/IndependentSmoke/DeliberateBroken.cs(1,53): error CS1002: ; expected\n"
+        ],
+        "message": "Retrieved 2 log entries.",
+        "success": true
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "recovery_refresh",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"compile_requested\":true,\"compile_started\":null,\"hint\":\"If Unity enters compilation/domain reload, poll the mcpforunity://editor/state resource until data.advice.ready_for_tools is true.\",\"refresh_triggered\":true,\"resulting_state\":\"idle\"},\"message\":\"Refresh requested.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "compile_requested": true,
+            "compile_started": null,
+            "hint": "If Unity enters compilation/domain reload, poll the mcpforunity://editor/state resource until data.advice.ready_for_tools is true.",
+            "refresh_triggered": true,
+            "resulting_state": "idle"
+          },
+          "message": "Refresh requested.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "ready_after_reload",
+    "result": {
+      "_meta": null,
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "contents": [
+        {
+          "uri": "mcpforunity://editor/state",
+          "mimeType": "text/plain",
+          "_meta": null,
+          "text": "{\"data\":{\"activity\":{\"phase\":\"idle\",\"reasons\":[\"tick\"],\"since_unix_ms\":1791560312139},\"advice\":{\"blocking_reasons\":[],\"ready_for_tools\":true,\"recommended_next_action\":\"none\",\"recommended_retry_after_ms\":0},\"assets\":{\"external_changes_dirty\":false,\"external_changes_dirty_since_unix_ms\":null,\"external_changes_last_cleared_unix_ms\":1791560310153,\"external_changes_last_seen_unix_ms\":null,\"is_updating\":false,\"refresh\":{\"is_refresh_in_progress\":false,\"last_refresh_finished_unix_ms\":null,\"last_refresh_requested_unix_ms\":null}},\"compilation\":{\"is_compiling\":false,\"is_domain_reload_pending\":false,\"last_compile_finished_unix_ms\":1791560311161,\"last_compile_started_unix_ms\":1791560310293,\"last_domain_reload_after_unix_ms\":1791560312079,\"last_domain_reload_before_unix_ms\":null},\"editor\":{\"active_scene\":{\"guid\":null,\"name\":\"\",\"path\":null},\"is_focused\":true,\"play_mode\":{\"is_changing\":false,\"is_paused\":false,\"is_playing\":false}},\"observed_at_unix_ms\":1791560315139,\"schema_version\":\"unity-mcp/editor_state@2\",\"sequence\":6,\"settings\":{\"batch_execute_max_commands\":25},\"staleness\":{\"age_ms\":51,\"is_stale\":false},\"tests\":{\"current_job_id\":null,\"is_running\":false,\"last_run\":null,\"mode\":null,\"started_by\":\"unknown\",\"started_unix_ms\":null},\"transport\":{\"last_message_unix_ms\":null,\"unity_bridge_connected\":null},\"unity\":{\"instance_id\":\"unity-mcp-independent-review@987fb840\",\"is_batch_mode\":true,\"platform\":\"OSXEditor\",\"project_id\":null,\"unity_version\":\"6000.3.23f1\"}},\"error\":null,\"hint\":null,\"message\":\"Retrieved editor state.\",\"success\":true}"
+        }
+      ],
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "run_tests",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"include_details\":true,\"include_failed_tests\":false,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"mode\":\"EditMode\",\"status\":\"running\"},\"message\":\"Test job started.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "include_details": true,
+            "include_failed_tests": false,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "mode": "EditMode",
+            "status": "running"
+          },
+          "message": "Test job started.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "get_test_job",
+    "result": {
+      "_meta": null,
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"data\":{\"error\":null,\"finished_unix_ms\":1791560315585,\"job_id\":\"d43b76624ca9477e8acc69dcbeb72bee\",\"last_update_unix_ms\":1791560315585,\"mode\":\"EditMode\",\"progress\":{\"blocked_reason\":null,\"completed\":1,\"current_test_full_name\":null,\"current_test_started_unix_ms\":null,\"editor_is_focused\":true,\"failures_capped\":false,\"failures_so_far\":[],\"last_finished_test_full_name\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"last_finished_unix_ms\":1791560315569,\"run_in_background\":false,\"stuck_suspected\":false,\"total\":1},\"result\":{\"mode\":\"EditMode\",\"results\":[{\"durationSeconds\":0.006915,\"fullName\":\"MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"message\":null,\"name\":\"AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart\",\"output\":\"\",\"stackTrace\":null,\"state\":\"Passed\"}],\"summary\":{\"durationSeconds\":0.0165288,\"failed\":0,\"passed\":1,\"resultState\":\"Passed\",\"skipped\":0,\"total\":1}},\"started_unix_ms\":1791560315207,\"status\":\"succeeded\"},\"message\":\"Test job status retrieved.\",\"success\":true}",
+          "annotations": null,
+          "_meta": null
+        }
+      ],
+      "structuredContent": {
+        "result": {
+          "data": {
+            "error": null,
+            "finished_unix_ms": 1791560315585,
+            "job_id": "d43b76624ca9477e8acc69dcbeb72bee",
+            "last_update_unix_ms": 1791560315585,
+            "mode": "EditMode",
+            "progress": {
+              "blocked_reason": null,
+              "completed": 1,
+              "current_test_full_name": null,
+              "current_test_started_unix_ms": null,
+              "editor_is_focused": true,
+              "failures_capped": false,
+              "failures_so_far": [],
+              "last_finished_test_full_name": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+              "last_finished_unix_ms": 1791560315569,
+              "run_in_background": false,
+              "stuck_suspected": false,
+              "total": 1
+            },
+            "result": {
+              "mode": "EditMode",
+              "results": [
+                {
+                  "durationSeconds": 0.006915,
+                  "fullName": "MCPForUnityTests.Editor.Services.CrossModeLifecycleRegressionTests.AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "message": null,
+                  "name": "AllModeStop_WaitingForHttp_MustNotStopNewerStdioStart",
+                  "output": "",
+                  "stackTrace": null,
+                  "state": "Passed"
+                }
+              ],
+              "summary": {
+                "durationSeconds": 0.0165288,
+                "failed": 0,
+                "passed": 1,
+                "resultState": "Passed",
+                "skipped": 0,
+                "total": 1
+              }
+            },
+            "started_unix_ms": 1791560315207,
+            "status": "succeeded"
+          },
+          "message": "Test job status retrieved.",
+          "success": true
+        }
+      },
+      "isError": false,
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "completed",
+    "result": {
+      "success": true
+    }
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "cancel": false,
+    "untitledPath": "",
+    "dirtyObjectSurvives": true,
+    "borrowedSceneSurvives": true,
+    "originalSetupPreserved": true,
+    "scanSceneClosed": true,
+    "success": true
+  },
+  {
+    "cancel": true,
+    "untitledPath": "",
+    "dirtyObjectSurvives": true,
+    "borrowedSceneSurvives": true,
+    "originalSetupPreserved": true,
+    "scanSceneClosed": true,
+    "success": true
+  }
+]

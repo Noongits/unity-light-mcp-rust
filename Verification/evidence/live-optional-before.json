@@ -1,0 +1,122 @@
+[
+  {
+    "tool": "set_active_instance",
+    "args": {
+      "instance": "unity-mcp-independent-review@987fb840"
+    },
+    "result": {
+      "data": {
+        "instance": "unity-mcp-independent-review@987fb840",
+        "session_id": "stdio"
+      },
+      "message": "Active instance set to unity-mcp-independent-review@987fb840",
+      "success": true
+    }
+  },
+  {
+    "tool": "manage_graphics",
+    "args": {
+      "action": "volume_create_profile",
+      "path": "Assets/IndependentSmoke/RealVolume.asset"
+    },
+    "result": {
+      "data": {
+        "path": "Assets/IndependentSmoke/RealVolume.asset"
+      },
+      "message": "Created VolumeProfile at 'Assets/IndependentSmoke/RealVolume.asset'.",
+      "success": true
+    }
+  },
+  {
+    "tool": "manage_graphics",
+    "args": {
+      "action": "volume_create",
+      "name": "IndependentVolume",
+      "profile_path": "Assets/IndependentSmoke/RealVolume.asset"
+    },
+    "result": {
+      "data": {
+        "effects": [],
+        "instanceID": -1460,
+        "isGlobal": true,
+        "priority": 0.0,
+        "profilePath": "Assets/IndependentSmoke/RealVolume.asset",
+        "weight": 1.0
+      },
+      "message": "Created global Volume 'IndependentVolume'",
+      "success": true
+    }
+  },
+  {
+    "tool": "manage_graphics",
+    "args": {
+      "action": "volume_add_effect",
+      "target": "IndependentVolume",
+      "effect": "Bloom"
+    },
+    "result": {
+      "data": {
+        "effect": "Bloom",
+        "volumeInstanceID": -1460
+      },
+      "message": "Added 'Bloom' to Volume 'IndependentVolume'.",
+      "success": true
+    }
+  },
+  {
+    "tool": "manage_graphics",
+    "args": {
+      "action": "volume_get_info",
+      "target": "IndependentVolume"
+    },
+    "result": {
+      "data": {
+        "blend_distance": 0.0,
+        "effects": [
+          {
+            "active": true,
+            "overridden_params": [
+              "skipIterations",
+              "threshold",
+              "intensity",
+              "scatter",
+              "clamp",
+              "tint",
+              "highQualityFiltering",
+              "filter",
+              "downscale",
+              "maxIterations",
+              "dirtTexture",
+              "dirtIntensity"
+            ],
+            "type": "Bloom"
+          }
+        ],
+        "instance_id": -1460,
+        "is_global": true,
+        "name": "IndependentVolume",
+        "priority": 0.0,
+        "profile": "RealVolume",
+        "profile_path": "Assets/IndependentSmoke/RealVolume.asset",
+        "weight": 1.0
+      },
+      "message": "Volume info for 'IndependentVolume'.",
+      "success": true
+    }
+  },
+  {
+    "tool": "execute_custom_tool",
+    "args": {
+      "tool_name": "runtime_compilation",
+      "parameters": {
+        "action": "execute_with_roslyn",
+        "class_name": "IndependentGenerated",
+        "code": "using UnityEngine; public class IndependentGenerated { public static void Run(GameObject host) { Debug.Log(\"Independent synthetic Roslyn execution\"); } }"
+      }
+    },
+    "result": {
+      "message": "Tool 'runtime_compilation' not found for project unity-mcp-independent-review@987fb840",
+      "success": false
+    }
+  }
+]

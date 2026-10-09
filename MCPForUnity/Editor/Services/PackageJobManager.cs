@@ -1,0 +1,379 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using MCPForUnity.Editor.Helpers;
+using Newtonsoft.Json;
+using UnityEditor;
+using UnityEditor.PackageManager;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
+
+namespace MCPForUnity.Editor.Services
+{
+    internal enum PackageJobStatus { Running, Succeeded, Failed }
+
+    internal sealed class PackageJob
+    {
+        public string JobId { get; set; }
+        public PackageJobStatus Status { get; set; }
+        public string Operation { get; set; }
+        public string Package { get; set; }
+        public long StartedUnixMs { get; set; }
+        public long? FinishedUnixMs { get; set; }
+        public long LastUpdateUnixMs { get; set; }
+        public string Error { get; set; }
+        public string ResultVersion { get; set; }
+        public string ResultName { get; set; }
+    }
+
+    internal static class PackageJobManager
+    {
+        private const string SessionKeyJobs = "MCPForUnity.PackageJobsV1";
+        private const int MaxJobsToKeep = 10;
+        private const long DomainReloadTimeoutMs = 120_000;
+
+        private static readonly object LockObj = new();
+        private static readonly Dictionary<string, PackageJob> Jobs = new();
+        private static readonly HashSet<string> RecoveryPending = new();
+
+        static PackageJobManager()
+        {
+            TryRestoreFromSessionState();
+        }
+
+        private sealed class PersistedState
+        {
+            public List<PersistedJob> jobs { get; set; }
+        }
+
+        private sealed class PersistedJob
+        {
+            public string job_id { get; set; }
+            public string status { get; set; }
+            public string operation { get; set; }
+            public string package_ { get; set; }
+            public long started_unix_ms { get; set; }
+            public long? finished_unix_ms { get; set; }
+            public long last_update_unix_ms { get; set; }
+            public string error { get; set; }
+            public string result_version { get; set; }
+            public string result_name { get; set; }
+        }
+
+        private static PackageJobStatus ParseStatus(string status)
+        {
+            if (string.IsNullOrWhiteSpace(status))
+                return PackageJobStatus.Running;
+
+            return status.Trim().ToLowerInvariant() switch
+            {
+                "succeeded" => PackageJobStatus.Succeeded,
+                "failed" => PackageJobStatus.Failed,
+                _ => PackageJobStatus.Running
+            };
+        }
+
+        private static void TryRestoreFromSessionState()
+        {
+            try
+            {
+                string json = SessionState.GetString(SessionKeyJobs, string.Empty);
+                if (string.IsNullOrWhiteSpace(json))
+                    return;
+
+                var state = JsonConvert.DeserializeObject<PersistedState>(json);
+                if (state?.jobs == null)
+                    return;
+
+                lock (LockObj)
+                {
+                    Jobs.Clear();
+                    RecoveryPending.Clear();
+                    long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+                    foreach (var pj in state.jobs)
+                    {
+                        if (pj == null || string.IsNullOrWhiteSpace(pj.job_id))
+                            continue;
+
+                        var job = new PackageJob
+                        {
+                            JobId = pj.job_id,
+                            Status = ParseStatus(pj.status),
+                            Operation = pj.operation,
+                            Package = pj.package_,
+                            StartedUnixMs = pj.started_unix_ms,
+                            FinishedUnixMs = pj.finished_unix_ms,
+                            LastUpdateUnixMs = pj.last_update_unix_ms,
+                            Error = pj.error,
+                            ResultVersion = pj.result_version,
+                            ResultName = pj.result_name
+                        };
+
+                        // Domain reload recovery for running jobs
+                        if (job.Status == PackageJobStatus.Running)
+                        {
+                            TryRecoverJob(job, now);
+                            if (job.Status == PackageJobStatus.Running) RecoveryPending.Add(job.JobId);
+                        }
+
+                        Jobs[pj.job_id] = job;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                McpLog.Warn($"[PackageJobManager] Failed to restore SessionState: {ex.Message}");
+            }
+        }
+
+        internal static void TryRecoverJob(PackageJob job, long nowMs)
+        {
+            try
+            {
+                string packageName = ExtractPackageName(job.Package);
+                var allPackages = PackageInfo.GetAllRegisteredPackages();
+                if (allPackages == null) return; // No authoritative package snapshot yet.
+                var info = FindPackageInfo(allPackages, packageName, job.Package);
+
+                if (job.Operation == "add" || job.Operation == "embed")
+                {
+                    if (info != null && MatchesRecoveryTarget(job.Operation, job.Package, info.version, info.source))
+                    {
+                        job.Status = PackageJobStatus.Succeeded;
+                        job.FinishedUnixMs = nowMs;
+                        job.LastUpdateUnixMs = nowMs;
+                        job.ResultVersion = info.version;
+                        job.ResultName = info.name;
+                        McpLog.Info($"[PackageJobManager] Recovered {job.Operation} job {job.JobId}: {info.name}@{info.version} installed.");
+                    }
+                    else if (nowMs - job.StartedUnixMs > DomainReloadTimeoutMs)
+                    {
+                        job.Status = PackageJobStatus.Failed;
+                        job.FinishedUnixMs = nowMs;
+                        job.LastUpdateUnixMs = nowMs;
+                        job.Error = $"Package {job.Operation} timed out after domain reload.";
+                        McpLog.Warn($"[PackageJobManager] Timed out {job.Operation} job {job.JobId} for '{job.Package}'.");
+                    }
+                }
+                else if (job.Operation == "remove")
+                {
+                    if (info == null)
+                    {
+                        job.Status = PackageJobStatus.Succeeded;
+                        job.FinishedUnixMs = nowMs;
+                        job.LastUpdateUnixMs = nowMs;
+                        McpLog.Info($"[PackageJobManager] Recovered remove job {job.JobId}: '{packageName}' is no longer installed.");
+                    }
+                    else if (nowMs - job.StartedUnixMs > DomainReloadTimeoutMs)
+                    {
+                        job.Status = PackageJobStatus.Failed;
+                        job.FinishedUnixMs = nowMs;
+                        job.LastUpdateUnixMs = nowMs;
+                        job.Error = "Package removal timed out after domain reload.";
+                        McpLog.Warn($"[PackageJobManager] Timed out remove job {job.JobId} for '{job.Package}'.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                McpLog.Warn($"[PackageJobManager] Recovery check failed for job {job.JobId}: {ex.Message}");
+            }
+        }
+
+        internal static bool MatchesRecoveryTarget(string operation, string identifier,
+            string installedVersion, PackageSource source)
+        {
+            if (operation == "embed") return source == PackageSource.Embedded;
+            if (operation != "add" || string.IsNullOrEmpty(identifier)) return false;
+            if (IsSourceIdentifier(identifier)) return true; // FindPackageInfo matched the source.
+            int at = identifier.IndexOf('@');
+            return at < 0 || string.Equals(identifier.Substring(at + 1), installedVersion, StringComparison.Ordinal);
+        }
+
+        private static bool IsSourceIdentifier(string identifier)
+            => !string.IsNullOrEmpty(identifier) &&
+               (identifier.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                || identifier.StartsWith("git", StringComparison.OrdinalIgnoreCase)
+                || identifier.StartsWith("ssh:", StringComparison.OrdinalIgnoreCase)
+                || identifier.StartsWith("file:", StringComparison.OrdinalIgnoreCase)
+                || identifier.EndsWith(".git", StringComparison.OrdinalIgnoreCase));
+
+        /// <summary>
+        /// Find a PackageInfo by name, falling back to packageId or git/local source for non-standard identifiers.
+        /// </summary>
+        private static PackageInfo FindPackageInfo(PackageInfo[] allPackages, string packageName, string originalIdentifier)
+        {
+            if (string.IsNullOrEmpty(originalIdentifier)) return null;
+            // Direct name match (handles normal com.company.package identifiers)
+            var info = allPackages.FirstOrDefault(p =>
+                string.Equals(p.name, packageName, StringComparison.OrdinalIgnoreCase));
+            if (info != null)
+                return info;
+
+            // For git URLs / file: paths, packageName == originalIdentifier and won't match .name.
+            // Try matching by packageId or source (git/local).
+            bool isGitOrFile = IsSourceIdentifier(originalIdentifier);
+
+            if (!isGitOrFile)
+                return null;
+
+            return allPackages.FirstOrDefault(p =>
+                p.source == PackageSource.Git || p.source == PackageSource.Local
+                    ? string.Equals(p.packageId, p.name + "@" + originalIdentifier, StringComparison.Ordinal)
+                      || string.Equals(p.packageId, originalIdentifier, StringComparison.Ordinal)
+                      || string.Equals(p.resolvedPath, originalIdentifier, StringComparison.Ordinal)
+                    : false);
+        }
+
+        internal static string ExtractPackageName(string packageIdentifier)
+        {
+            if (string.IsNullOrEmpty(packageIdentifier) || IsSourceIdentifier(packageIdentifier))
+                return packageIdentifier;
+
+            // Strip version: "com.unity.foo@1.0.0" -> "com.unity.foo"
+            int atIndex = packageIdentifier.IndexOf('@');
+            if (atIndex > 0)
+                return packageIdentifier.Substring(0, atIndex);
+
+            // Git URLs and file: paths — can't reliably extract name, return as-is
+            return packageIdentifier;
+        }
+
+        internal static void PersistToSessionState()
+        {
+            try
+            {
+                PersistedState snapshot;
+                lock (LockObj)
+                {
+                    var jobs = Jobs.Values
+                        .OrderByDescending(j => j.LastUpdateUnixMs)
+                        .Take(MaxJobsToKeep)
+                        .Select(j => new PersistedJob
+                        {
+                            job_id = j.JobId,
+                            status = j.Status.ToString().ToLowerInvariant(),
+                            operation = j.Operation,
+                            package_ = j.Package,
+                            started_unix_ms = j.StartedUnixMs,
+                            finished_unix_ms = j.FinishedUnixMs,
+                            last_update_unix_ms = j.LastUpdateUnixMs,
+                            error = j.Error,
+                            result_version = j.ResultVersion,
+                            result_name = j.ResultName
+                        })
+                        .ToList();
+
+                    snapshot = new PersistedState { jobs = jobs };
+                }
+
+                SessionState.SetString(SessionKeyJobs, JsonConvert.SerializeObject(snapshot));
+            }
+            catch (Exception ex)
+            {
+                McpLog.Warn($"[PackageJobManager] Failed to persist SessionState: {ex.Message}");
+            }
+        }
+
+        public static string StartJob(string operation, string package)
+        {
+            string jobId = Guid.NewGuid().ToString("N");
+            long started = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            var job = new PackageJob
+            {
+                JobId = jobId,
+                Status = PackageJobStatus.Running,
+                Operation = operation,
+                Package = package,
+                StartedUnixMs = started,
+                FinishedUnixMs = null,
+                LastUpdateUnixMs = started,
+                Error = null,
+                ResultVersion = null,
+                ResultName = null
+            };
+
+            lock (LockObj)
+            {
+                Jobs[jobId] = job;
+            }
+            PersistToSessionState();
+            return jobId;
+        }
+
+        public static void CompleteJob(string jobId, bool success, string error = null,
+            string version = null, string name = null)
+        {
+            long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            lock (LockObj)
+            {
+                if (!Jobs.TryGetValue(jobId, out var job))
+                    return;
+
+                RecoveryPending.Remove(jobId);
+                job.Status = success ? PackageJobStatus.Succeeded : PackageJobStatus.Failed;
+                job.FinishedUnixMs = now;
+                job.LastUpdateUnixMs = now;
+                job.Error = error;
+                job.ResultVersion = version;
+                job.ResultName = name;
+            }
+            PersistToSessionState();
+        }
+
+        public static PackageJob GetJob(string jobId)
+        {
+            if (string.IsNullOrWhiteSpace(jobId))
+                return null;
+
+            lock (LockObj)
+            {
+                Jobs.TryGetValue(jobId, out var job);
+                RecoverPendingJob(job);
+                return job;
+            }
+        }
+
+        public static PackageJob GetLatestJob()
+        {
+            lock (LockObj)
+            {
+                var job = Jobs.Values.OrderByDescending(j => j.StartedUnixMs).FirstOrDefault();
+                RecoverPendingJob(job);
+                return job;
+            }
+        }
+
+        private static void RecoverPendingJob(PackageJob job)
+        {
+            if (job == null || !RecoveryPending.Contains(job.JobId)) return;
+            TryRecoverJob(job, DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+            if (job.Status != PackageJobStatus.Running)
+            {
+                RecoveryPending.Remove(job.JobId);
+                PersistToSessionState();
+            }
+        }
+
+        public static object ToSerializable(PackageJob job)
+        {
+            if (job == null)
+                return null;
+
+            return new
+            {
+                job_id = job.JobId,
+                status = job.Status.ToString().ToLowerInvariant(),
+                operation = job.Operation,
+                package_ = job.Package,
+                started_unix_ms = job.StartedUnixMs,
+                finished_unix_ms = job.FinishedUnixMs,
+                last_update_unix_ms = job.LastUpdateUnixMs,
+                error = job.Error,
+                result_version = job.ResultVersion,
+                result_name = job.ResultName
+            };
+        }
+    }
+}

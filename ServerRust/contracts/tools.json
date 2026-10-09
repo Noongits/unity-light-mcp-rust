@@ -1,0 +1,4633 @@
+[
+  {
+    "name": "apply_text_edits",
+    "title": "Apply Text Edits",
+    "description": "Apply small text edits to a C# script identified by URI.\n    IMPORTANT: This tool replaces EXACT character positions. Always verify content at target lines/columns BEFORE editing!\n    RECOMMENDED WORKFLOW:\n        1. First call resources/read with start_line/line_count to verify exact content\n        2. Count columns carefully (or use find_in_file to locate patterns)\n        3. Apply your edit with precise coordinates\n        4. Consider script_apply_edits with anchors for safer pattern-based replacements\n    Notes:\n        - For method/class operations, use script_apply_edits (safer, structured edits)\n        - For pattern-based replacements, consider anchor operations in script_apply_edits\n        - Lines, columns are 1-indexed\n        - Tabs count as 1 column",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "description": "URI of the script to edit under Assets/ directory, mcpforunity://path/Assets/... or file://... or Assets/...",
+          "type": "string"
+        },
+        "edits": {
+          "description": "List of edits to apply to the script, i.e. a list of {startLine,startCol,endLine,endCol,newText} (1-indexed!)",
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "precondition_sha256": {
+          "type": "string"
+        },
+        "strict": {
+          "type": "boolean"
+        },
+        "options": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "required": [
+        "uri",
+        "edits"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Apply Text Edits",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_script"
+  },
+  {
+    "name": "batch_execute",
+    "title": "Batch Execute",
+    "description": "Executes multiple MCP commands in a single batch for dramatically better performance. STRONGLY RECOMMENDED when creating/modifying multiple objects, adding components to multiple targets, or performing any repetitive operations. Reduces latency and token costs by 10-100x compared to sequential tool calls. The max commands per batch is configurable in the Unity MCP Tools window (default 25, hard max 100). Example: creating 5 cubes → use 1 batch_execute with 5 create commands instead of 5 separate calls.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "commands": {
+          "description": "List of commands with 'tool' and 'params' keys.",
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "type": "array"
+        },
+        "parallel": {
+          "type": "boolean",
+          "description": "Attempt to run read-only commands in parallel"
+        },
+        "fail_fast": {
+          "type": "boolean",
+          "description": "Stop processing after the first failure"
+        },
+        "max_parallelism": {
+          "type": "integer",
+          "description": "Hint for the maximum number of parallel workers"
+        }
+      },
+      "required": [
+        "commands"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Batch Execute",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "batch_execute"
+  },
+  {
+    "name": "blender_bridge",
+    "title": "Blender Bridge",
+    "description": "Bridge to a running Blender that has the BlenderMCP addon connected (socket, default 127.0.0.1:9876; configured in Window > MCP for Unity > Generative > Blender Bridge). Unity talks to the addon directly, so no BlenderMCP client is needed.\n\nActions:\n- status: is Blender reachable, is the checkout configured, does the installed addon match it.\n- scene_info / object_info(object_name): read Blender scene / one object.\n- screenshot(max_size, output_folder): Blender viewport → PNG under Library/BlenderBridge (or copied under Assets/ when output_folder is given). Returns the path.\n- run_python(code): execute Python inside Blender; returns stdout.\n- import_model: export from Blender (object_names with their children, or selection_only, else the whole scene) as glb (default; keeps PBR, emission, animation) or fbx, import it through the shared model pipeline, place it in the open scene at position, and scale it so its largest dimension equals target_size meters (0 keeps the imported scale). Set apply_modifiers=false for rigs / shape keys. animation_type applies to FBX only. auto_animate (default true) creates a looping AnimatorController for imported clips so the model actually moves; save_prefab stores the placed instance as a prefab; ensure_bloom adds a Bloom volume when the model has emissive materials. Returns asset_path, asset_guid, game_object, bounds, and animation / prefab_path / bloom when applicable.\n- compare_screenshot(game_object, max_size, output_folder): Blender viewport (left) and a Unity capture framed on the placed object (right) composited into one PNG, for eyeballing fidelity.\n- setup_bloom: enable post-processing on the main camera and add a Bloom override to the global volume.\n- check_updates: git fetch the blender-mcp checkout and report how far behind its remotes it is, plus whether Blender's installed addon.py matches the checkout.\n- sync_addon(force): copy the checkout's addon.py into Blender's addons folder (backs up the old file); restart Blender afterwards.\n\ncheck_updates and sync_addon need the checkout path to be set; the other actions only need Blender running with the addon connected.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Operation to perform.",
+          "enum": [
+            "status",
+            "scene_info",
+            "object_info",
+            "screenshot",
+            "run_python",
+            "import_model",
+            "compare_screenshot",
+            "setup_bloom",
+            "check_updates",
+            "sync_addon"
+          ],
+          "type": "string"
+        },
+        "object_name": {
+          "type": "string"
+        },
+        "object_names": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "selection_only": {
+          "type": "boolean"
+        },
+        "format": {
+          "enum": [
+            "glb",
+            "fbx"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "target_size": {
+          "type": "number"
+        },
+        "position": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array"
+        },
+        "place_in_scene": {
+          "type": "boolean"
+        },
+        "apply_modifiers": {
+          "type": "boolean"
+        },
+        "output_folder": {
+          "type": "string"
+        },
+        "animation_type": {
+          "enum": [
+            "none",
+            "generic",
+            "humanoid",
+            "legacy"
+          ],
+          "type": "string"
+        },
+        "auto_animate": {
+          "type": "boolean"
+        },
+        "save_prefab": {
+          "type": "boolean"
+        },
+        "ensure_bloom": {
+          "type": "boolean"
+        },
+        "game_object": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "max_size": {
+          "type": "integer"
+        },
+        "force": {
+          "type": "boolean"
+        },
+        "timeout_seconds": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Blender Bridge",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:asset_gen"
+        ]
+      }
+    },
+    "group": "asset_gen",
+    "unity_target": "blender_bridge"
+  },
+  {
+    "name": "create_script",
+    "title": "Create Script",
+    "description": "Create a new C# script at the given project path.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "description": "Path under Assets/ to create the script at, e.g., 'Assets/Scripts/My.cs'",
+          "type": "string"
+        },
+        "contents": {
+          "description": "Contents of the script to create (plain text C# code). The server handles Base64 encoding.",
+          "type": "string"
+        },
+        "script_type": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "contents"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Create Script",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_script"
+  },
+  {
+    "name": "delete_script",
+    "title": "Delete Script",
+    "description": "Delete a C# script by URI or Assets-relative path.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "description": "URI of the script to delete under Assets/ directory, mcpforunity://path/Assets/... or file://... or Assets/...",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uri"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Delete Script",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_script"
+  },
+  {
+    "name": "execute_code",
+    "title": "Execute Code",
+    "description": "Execute arbitrary C# code inside the Unity Editor. The code runs as a method body with access to UnityEngine and UnityEditor namespaces. Use 'return' to send data back. Compiled in-memory — no script files created. Actions: execute (run code), get_history (list past executions), replay (re-run a history entry), clear_history. NOTE: safety_checks blocks known dangerous patterns but is not a full sandbox. Compiler options: 'auto' (Roslyn if available, else CodeDom), 'roslyn' (C# 12+, requires Microsoft.CodeAnalysis), 'codedom' (C# 6 only).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action to perform.",
+          "enum": [
+            "execute",
+            "get_history",
+            "replay",
+            "clear_history"
+          ],
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "safety_checks": {
+          "default": true,
+          "description": "Enable basic blocked-pattern checks (File.Delete, Process.Start, infinite loops, etc). Not a full sandbox — advanced bypass is possible. Default: true.",
+          "type": "boolean"
+        },
+        "index": {
+          "type": "integer"
+        },
+        "limit": {
+          "default": 10,
+          "description": "Number of history entries to return (for 'get_history' action, 1-50). Default: 10.",
+          "type": "integer"
+        },
+        "compiler": {
+          "default": "auto",
+          "description": "Compiler backend for 'execute' action. 'auto' uses Roslyn if Microsoft.CodeAnalysis is installed, else falls back to CodeDom. 'roslyn' forces Roslyn (C# 12+). 'codedom' forces legacy CSharpCodeProvider (C# 6). Default: auto.",
+          "enum": [
+            "auto",
+            "roslyn",
+            "codedom"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Execute Code",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:scripting_ext"
+        ]
+      }
+    },
+    "group": "scripting_ext",
+    "unity_target": "execute_code"
+  },
+  {
+    "name": "execute_custom_tool",
+    "title": "Execute Custom Tool",
+    "description": "Execute a project-scoped custom tool registered by Unity.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "tool_name": {
+          "type": "string"
+        },
+        "parameters": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "required": [
+        "tool_name"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "data": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "success"
+      ],
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Execute Custom Tool",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    },
+    "group": null,
+    "unity_target": null
+  },
+  {
+    "name": "execute_menu_item",
+    "title": "Execute Menu Item",
+    "description": "Execute a Unity menu item by path.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "menu_path": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "outputSchema": {
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "data": {
+          "anyOf": [
+            {},
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "hint": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "success"
+      ],
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Execute Menu Item",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "execute_menu_item"
+  },
+  {
+    "name": "find_gameobjects",
+    "title": "Find GameObjects",
+    "description": "Search for GameObjects in the scene by name, tag, layer, component type, or path. Returns instance IDs only (paginated). Then use mcpforunity://scene/gameobject/{id} resource for full data, or mcpforunity://scene/gameobject/{id}/components for component details. For CRUD operations (create/modify/delete), use manage_gameobject instead.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "search_term": {
+          "description": "The value to search for (name, tag, layer name, component type, or path)",
+          "type": "string"
+        },
+        "search_method": {
+          "default": "by_name",
+          "description": "How to search for GameObjects",
+          "enum": [
+            "by_name",
+            "by_tag",
+            "by_layer",
+            "by_component",
+            "by_path",
+            "by_id"
+          ],
+          "type": "string"
+        },
+        "include_inactive": {
+          "description": "Include inactive GameObjects in search",
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "page_size": {
+          "description": "Number of results per page (default: 50, max: 500)",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "cursor": {
+          "description": "Pagination cursor (offset for next page)",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "search_term"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Find GameObjects",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "find_gameobjects"
+  },
+  {
+    "name": "find_in_file",
+    "title": "Find in File",
+    "description": "Searches a file with a regex pattern and returns line numbers and excerpts.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "description": "The resource URI to search under Assets/ or file path form supported by read_resource",
+          "type": "string"
+        },
+        "pattern": {
+          "description": "The regex pattern to search for",
+          "type": "string"
+        },
+        "project_root": {
+          "type": "string",
+          "description": "Optional project root path"
+        },
+        "max_results": {
+          "default": 200,
+          "description": "Cap results to avoid huge payloads",
+          "type": "integer"
+        },
+        "ignore_case": {
+          "default": true,
+          "description": "Case insensitive search",
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "uri",
+        "pattern"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Find in File",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_script"
+  },
+  {
+    "name": "get_sha",
+    "title": "Get SHA",
+    "description": "Get SHA256 and basic metadata for a Unity C# script without returning file contents. Requires uri (script path under Assets/ or mcpforunity://path/Assets/... or file://...).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "description": "URI of the script to edit under Assets/ directory, mcpforunity://path/Assets/... or file://... or Assets/...",
+          "type": "string"
+        }
+      },
+      "required": [
+        "uri"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Get SHA",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_script"
+  },
+  {
+    "name": "get_test_job",
+    "title": "Get Test Job",
+    "description": "Polls an async Unity test job by job_id.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "job_id": {
+          "description": "Job id returned by run_tests",
+          "type": "string"
+        },
+        "include_failed_tests": {
+          "default": false,
+          "description": "Include details for failed/skipped tests only (default: false)",
+          "type": "boolean"
+        },
+        "include_details": {
+          "default": false,
+          "description": "Include details for all tests (default: false)",
+          "type": "boolean"
+        },
+        "wait_timeout": {
+          "type": "integer",
+          "description": "If set, wait up to this many seconds for tests to complete before returning. Reduces polling frequency and avoids client-side loop detection. Recommended: 15-30 seconds. Returns immediately if tests complete sooner."
+        }
+      },
+      "required": [
+        "job_id"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "error": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "data": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "job_id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "mode": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "started_unix_ms": {
+                          "anyOf": [
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "finished_unix_ms": {
+                          "anyOf": [
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "last_update_unix_ms": {
+                          "anyOf": [
+                            {
+                              "type": "integer"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "progress": {
+                          "anyOf": [
+                            {
+                              "properties": {
+                                "completed": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "total": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "current_test_full_name": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "current_test_started_unix_ms": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "last_finished_test_full_name": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "last_finished_unix_ms": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "stuck_suspected": {
+                                  "anyOf": [
+                                    {
+                                      "type": "boolean"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "editor_is_focused": {
+                                  "anyOf": [
+                                    {
+                                      "type": "boolean"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "run_in_background": {
+                                  "anyOf": [
+                                    {
+                                      "type": "boolean"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "focus_nudge_attempts": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "focus_nudge_limit": {
+                                  "anyOf": [
+                                    {
+                                      "type": "integer"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "focus_nudge_status": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "blocked_reason": {
+                                  "anyOf": [
+                                    {
+                                      "type": "string"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "failures_so_far": {
+                                  "anyOf": [
+                                    {
+                                      "items": {
+                                        "properties": {
+                                          "full_name": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ],
+                                            "default": null
+                                          },
+                                          "message": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ],
+                                            "default": null
+                                          }
+                                        },
+                                        "type": "object"
+                                      },
+                                      "type": "array"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                },
+                                "failures_capped": {
+                                  "anyOf": [
+                                    {
+                                      "type": "boolean"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                }
+                              },
+                              "type": "object"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "error": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "result": {
+                          "anyOf": [
+                            {
+                              "properties": {
+                                "mode": {
+                                  "type": "string"
+                                },
+                                "summary": {
+                                  "properties": {
+                                    "total": {
+                                      "type": "integer"
+                                    },
+                                    "passed": {
+                                      "type": "integer"
+                                    },
+                                    "failed": {
+                                      "type": "integer"
+                                    },
+                                    "skipped": {
+                                      "type": "integer"
+                                    },
+                                    "durationSeconds": {
+                                      "type": "number"
+                                    },
+                                    "resultState": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "total",
+                                    "passed",
+                                    "failed",
+                                    "skipped",
+                                    "durationSeconds",
+                                    "resultState"
+                                  ],
+                                  "type": "object"
+                                },
+                                "results": {
+                                  "anyOf": [
+                                    {
+                                      "items": {
+                                        "properties": {
+                                          "name": {
+                                            "type": "string"
+                                          },
+                                          "fullName": {
+                                            "type": "string"
+                                          },
+                                          "state": {
+                                            "type": "string"
+                                          },
+                                          "durationSeconds": {
+                                            "type": "number"
+                                          },
+                                          "message": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ],
+                                            "default": null
+                                          },
+                                          "stackTrace": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ],
+                                            "default": null
+                                          },
+                                          "output": {
+                                            "anyOf": [
+                                              {
+                                                "type": "string"
+                                              },
+                                              {
+                                                "type": "null"
+                                              }
+                                            ],
+                                            "default": null
+                                          }
+                                        },
+                                        "required": [
+                                          "name",
+                                          "fullName",
+                                          "state",
+                                          "durationSeconds"
+                                        ],
+                                        "type": "object"
+                                      },
+                                      "type": "array"
+                                    },
+                                    {
+                                      "type": "null"
+                                    }
+                                  ],
+                                  "default": null
+                                }
+                              },
+                              "required": [
+                                "mode",
+                                "summary"
+                              ],
+                              "type": "object"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        }
+                      },
+                      "required": [
+                        "job_id",
+                        "status"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "hint": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                }
+              },
+              "required": [
+                "success"
+              ],
+              "type": "object"
+            },
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "error": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "data": {
+                  "anyOf": [
+                    {},
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "hint": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                }
+              },
+              "required": [
+                "success"
+              ],
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "type": "object",
+      "x-fastmcp-wrap-result": true
+    },
+    "annotations": {
+      "title": "Get Test Job",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:testing"
+        ]
+      }
+    },
+    "group": "testing",
+    "unity_target": "get_test_job"
+  },
+  {
+    "name": "import_model_file",
+    "title": "Import Model File",
+    "description": "Import a local 3D model file that already exists on disk (e.g. an FBX/OBJ/glTF exported from Blender or another DCC tool) into the Unity project. The file is copied under Assets/ and run through Unity's model-import pipeline (scale-normalize, material settings; glTF requires glTFast). Carries no API keys and no file bytes over the bridge.\n\nParams: source_path (absolute or Assets-relative path to a .fbx/.obj/.glb/.gltf/.zip), name, output_folder (under Assets/), target_size, animation_type. Returns { asset_path, asset_guid }.\n\nanimation_type (FBX/OBJ only): pass 'generic' or 'humanoid' for a rigged/animated mesh so Unity surfaces its AnimationClips; omitted or 'none' imports no rig (this is the usual cause of a rigged FBX importing with zero clips); 'legacy' selects Unity's legacy Animation system (rarely needed). glTF/GLB ignore it — glTFast imports animation itself.\n\nFor multi-file exports (a text .gltf with an external .bin, or an .obj with a sibling .mtl/textures), zip them and pass the .zip — a bare .gltf/.obj is copied without its sidecars.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "source_path": {
+          "description": "Path to the model file on disk (.fbx/.obj/.glb/.gltf/.zip).",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "output_folder": {
+          "type": "string"
+        },
+        "target_size": {
+          "type": "number"
+        },
+        "animation_type": {
+          "enum": [
+            "none",
+            "generic",
+            "humanoid",
+            "legacy"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_path"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Import Model File",
+      "destructiveHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:asset_gen"
+        ]
+      }
+    },
+    "group": "asset_gen",
+    "unity_target": "import_model_file"
+  },
+  {
+    "name": "inspect_prefab",
+    "title": "Inspect Prefab",
+    "description": "Read-only prefab inspector with compact text output; prefer it over manage_prefabs get_hierarchy. Usual path: manage_prefabs get_info -> tree -> node or refs. tree: hierarchy (depth=2, root=subtree, filter=name/component). node: one object's non-default fields and listeners (path, component, all_fields). refs: object references and UnityEvent listeners, by object. overrides: variant and nested-prefab changes. usages: prefabs/scenes using script=Class or asset=path. problems: missing scripts/refs, broken prefab links, event and material issues (prefab or folder).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "tree",
+          "description": "What to show.",
+          "enum": [
+            "tree",
+            "node",
+            "refs",
+            "overrides",
+            "usages",
+            "problems"
+          ],
+          "type": "string"
+        },
+        "prefab_path": {
+          "type": "string",
+          "description": "Assets/...prefab, a folder (problems), or scene:Path/To/Object."
+        },
+        "path": {
+          "type": "string",
+          "description": "node: object path in the prefab."
+        },
+        "component": {
+          "type": "string",
+          "description": "node/refs: component type."
+        },
+        "root": {
+          "type": "string",
+          "description": "tree/refs: only this subtree."
+        },
+        "depth": {
+          "type": "integer",
+          "description": "tree: depth, default 2."
+        },
+        "filter": {
+          "type": "string",
+          "description": "tree: name or component substring."
+        },
+        "all_fields": {
+          "type": "boolean",
+          "description": "node: include default values."
+        },
+        "script": {
+          "type": "string",
+          "description": "usages: class name."
+        },
+        "asset": {
+          "type": "string",
+          "description": "usages: asset path."
+        },
+        "max_chars": {
+          "type": "integer",
+          "description": "Output budget, default 6000."
+        }
+      },
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Inspect Prefab",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "inspect_prefab"
+  },
+  {
+    "name": "manage_asset",
+    "title": "Manage Asset",
+    "description": "Performs asset operations (import, create, modify, delete, etc.) in Unity.\n\nTip (payload safety): for `action=\"search\"`, prefer paging (`page_size`, `page_number`) and keep `generate_preview=false` (previews can add large base64 blobs).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Perform CRUD operations on assets.",
+          "enum": [
+            "import",
+            "create",
+            "modify",
+            "delete",
+            "duplicate",
+            "move",
+            "rename",
+            "search",
+            "get_info",
+            "create_folder",
+            "get_components"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "description": "Asset path (e.g., 'Materials/MyMaterial.mat') or search scope (e.g., 'Assets').",
+          "type": "string"
+        },
+        "asset_type": {
+          "type": "string"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "destination": {
+          "type": "string"
+        },
+        "generate_preview": {
+          "default": false,
+          "description": "Generate a preview/thumbnail for the asset when supported. Warning: previews may include large base64 payloads; keep false unless needed.",
+          "type": "boolean"
+        },
+        "search_pattern": {
+          "type": "string"
+        },
+        "filter_type": {
+          "type": "string"
+        },
+        "filter_date_after": {
+          "type": "string"
+        },
+        "page_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "page_number": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "action",
+        "path"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Asset",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_asset"
+  },
+  {
+    "name": "manage_build",
+    "title": "Manage Build",
+    "description": "Manage Unity player builds — trigger builds, switch platforms, configure settings, manage build scenes and profiles, run batch builds across platforms. Actions: build, status, platform, settings, scenes, profiles, batch, cancel.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action: build, status, platform, settings, scenes, profiles, batch, cancel",
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "description": "Build target: windows64, osx, linux64, android, ios, webgl, uwp, tvos, visionos"
+        },
+        "output_path": {
+          "type": "string",
+          "description": "Output path for the build"
+        },
+        "scenes": {
+          "type": "string",
+          "description": "JSON array of scene paths, or comma-separated paths"
+        },
+        "development": {
+          "type": "string",
+          "description": "Development build (true/false)"
+        },
+        "options": {
+          "type": "string",
+          "description": "JSON array of BuildOptions: clean_build, auto_run, deep_profiling, compress_lz4, strict_mode, detailed_report"
+        },
+        "subtarget": {
+          "type": "string",
+          "description": "Build subtarget: player or server"
+        },
+        "scripting_backend": {
+          "type": "string",
+          "description": "Scripting backend: mono or il2cpp (persistent change)"
+        },
+        "profile": {
+          "type": "string",
+          "description": "Build Profile asset path (Unity 6+ only)"
+        },
+        "property": {
+          "type": "string",
+          "description": "Settings property: product_name, company_name, version, bundle_id, scripting_backend, defines, architecture"
+        },
+        "value": {
+          "type": "string",
+          "description": "Value to set for the property (omit to read)"
+        },
+        "activate": {
+          "type": "string",
+          "description": "Activate a build profile (true/false)"
+        },
+        "targets": {
+          "type": "string",
+          "description": "JSON array of targets for batch build"
+        },
+        "profiles": {
+          "type": "string",
+          "description": "JSON array of profile paths for batch build (Unity 6+)"
+        },
+        "output_dir": {
+          "type": "string",
+          "description": "Base output directory for batch builds"
+        },
+        "job_id": {
+          "type": "string",
+          "description": "Job ID for status/cancel"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Build",
+      "readOnlyHint": false,
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_build"
+  },
+  {
+    "name": "manage_camera",
+    "title": "Manage Camera",
+    "description": "Manage cameras (Unity Camera + Cinemachine). Works without Cinemachine using basic Camera; unlocks presets, pipelines, and blending when Cinemachine is installed. Use ping to check Cinemachine availability.\n\nSETUP:\n- ping: Check if Cinemachine is available\n- ensure_brain: Ensure CinemachineBrain exists on main camera\n- get_brain_status: Get Brain state (active camera, blend, etc.)\n\nCAMERA CREATION:\n- create_camera: Create camera with preset (third_person, freelook, follow, dolly, static, top_down, side_scroller). Falls back to basic Camera without Cinemachine.\n\nCAMERA CONFIGURATION:\n- set_target: Set Follow and/or LookAt targets on a camera\n- set_priority: Set camera priority for Brain selection\n- set_lens: Configure lens (fieldOfView, nearClipPlane, farClipPlane, orthographicSize, dutch)\n- set_body: Configure Body component (bodyType to swap, plus component properties)\n- set_aim: Configure Aim component (aimType to swap, plus component properties)\n- set_noise: Configure Noise component (amplitudeGain, frequencyGain)\n\nEXTENSIONS:\n- add_extension: Add extension (extensionType: CinemachineConfiner2D, CinemachineDeoccluder, CinemachineImpulseListener, CinemachineFollowZoom, CinemachineRecomposer, etc.)\n- remove_extension: Remove extension by type\n\nCAMERA CONTROL:\n- set_blend: Configure default blend (style: Cut/EaseInOut/Linear/etc., duration)\n- force_camera: Override Brain to use specific camera\n- release_override: Release camera override\n- list_cameras: List all cameras with status\n\nCAPTURE:\n- screenshot: Capture a screenshot. By default (no camera specified) uses ScreenCapture API, which captures all render layers including Screen Space - Overlay UI canvases. Specifying a camera uses direct camera rendering, which EXCLUDES Screen Space - Overlay canvases (use only when you need a specific viewpoint without UI). Supports include_image=true for inline base64 PNG, batch='surround' for 6-angle contact sheet, batch='orbit' for configurable grid, view_target/view_position for positioned capture, and capture_source='scene_view' to capture the active Unity Scene View viewport.\n- screenshot_multiview: Shorthand for screenshot with batch='surround' and include_image=true.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "The camera action to perform.",
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target camera (name, path, or instance ID)."
+        },
+        "search_method": {
+          "enum": [
+            "by_id",
+            "by_name",
+            "by_path"
+          ],
+          "type": "string",
+          "description": "How to find target."
+        },
+        "properties": {
+          "description": "Action-specific parameters (dict or JSON string).",
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "screenshot_file_name": {
+          "type": "string",
+          "description": "Screenshot file name (optional). Defaults to timestamp."
+        },
+        "screenshot_super_size": {
+          "description": "Screenshot supersize multiplier (integer >= 1).",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "camera": {
+          "type": "string",
+          "description": "Camera to capture from (name, path, or instance ID). Omit to use ScreenCapture API (captures all layers including Screen Space Overlay UI). Specify only when you need a particular camera viewpoint; note that Screen Space - Overlay canvases will NOT appear in camera-rendered captures."
+        },
+        "include_image": {
+          "description": "If true, return screenshot as inline base64 PNG. Default false.",
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "max_resolution": {
+          "description": "Max resolution (longest edge px) for inline image. Default 640.",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "capture_source": {
+          "enum": [
+            "game_view",
+            "scene_view"
+          ],
+          "type": "string",
+          "description": "Screenshot source. 'game_view' (default) captures the game/camera path; 'scene_view' captures the active Unity Scene View viewport."
+        },
+        "batch": {
+          "type": "string",
+          "description": "Batch capture mode: 'surround' (6 angles) or 'orbit' (configurable grid)."
+        },
+        "view_target": {
+          "description": "Target to focus on. GameObject name/path/ID or [x,y,z]. For game_view: aims camera at target. For scene_view: frames the Scene View on the target.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "view_position": {
+          "description": "World position [x,y,z] to place camera for positioned capture.",
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "view_rotation": {
+          "description": "Euler rotation [x,y,z] for camera. Overrides view_target if both provided.",
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "orbit_angles": {
+          "description": "Number of azimuth samples for batch='orbit' (default 8, max 36).",
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "orbit_elevations": {
+          "description": "Elevation angles in degrees for batch='orbit' (default [0, 30, -15]).",
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "orbit_distance": {
+          "description": "Camera distance from target for batch='orbit' (default auto).",
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "orbit_fov": {
+          "description": "Camera FOV in degrees for batch='orbit' (default 60).",
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "output_folder": {
+          "type": "string",
+          "description": "Optional folder for screenshot output. Project-relative (e.g. 'Assets/Screenshots' or 'Captures') or absolute path inside the project. Overrides the user's Editor preference. If omitted, falls back to the Editor preference, then to the built-in default (Assets/Screenshots)."
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Camera",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_camera"
+  },
+  {
+    "name": "manage_components",
+    "title": "Manage Components",
+    "description": "Add, remove, or set properties on components attached to GameObjects. Actions: add, remove, set_property. Requires target (instance ID or name) and component_type. For READING component data, use the mcpforunity://scene/gameobject/{id}/components resource or mcpforunity://scene/gameobject/{id}/component/{name} for a single component. For creating/deleting GameObjects themselves, use manage_gameobject instead.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action to perform: add (add component), remove (remove component), set_property (set component property)",
+          "enum": [
+            "add",
+            "remove",
+            "set_property"
+          ],
+          "type": "string"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ],
+          "description": "Target GameObject - instance ID (preferred) or name/path"
+        },
+        "component_type": {
+          "description": "Component type name (e.g., 'Rigidbody', 'BoxCollider', 'MyScript')",
+          "type": "string"
+        },
+        "search_method": {
+          "enum": [
+            "by_id",
+            "by_name",
+            "by_path"
+          ],
+          "type": "string",
+          "description": "How to find the target GameObject"
+        },
+        "property": {
+          "type": "string",
+          "description": "Property name to set (for set_property action)"
+        },
+        "value": {
+          "description": "Value to set (for set_property action). For object references: instance ID (int), asset path (string), or {\"guid\": \"...\"} / {\"path\": \"...\"}. For Sprite sub-assets: {\"guid\": \"...\", \"spriteName\": \"<name>\"} or {\"guid\": \"...\", \"fileID\": <id>}. Single-sprite textures auto-resolve.",
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "boolean"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "items": {},
+              "type": "array"
+            }
+          ]
+        },
+        "properties": {
+          "description": "Dictionary of property names to values. Example: {\"mass\": 5.0, \"useGravity\": false}",
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "component_index": {
+          "type": "integer",
+          "description": "Zero-based index to select which component when multiple of the same type exist. Use the components resource to discover indices. If omitted, targets the first instance."
+        }
+      },
+      "required": [
+        "action",
+        "target",
+        "component_type"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Components",
+      "readOnlyHint": false,
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_components"
+  },
+  {
+    "name": "manage_editor",
+    "title": "Manage Editor",
+    "description": "Controls and queries the Unity editor's state and settings. Read-only actions: telemetry_status, telemetry_ping. Modifying actions: play, pause, stop, set_active_tool, add_tag, remove_tag, add_layer, remove_layer, deploy_package, restore_package, undo, redo. For prefab editing (open/save/close prefab stage), use manage_prefabs. deploy_package copies the configured MCPForUnity source folder into the project's installed package location (triggers recompile, no confirmation dialog). restore_package reverts to the pre-deployment backup. undo/redo perform Unity editor undo/redo and return the affected group name.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Get and update the Unity Editor state. deploy_package copies the configured MCPForUnity source into the project's package location (triggers recompile). restore_package reverts the last deployment from backup. undo/redo perform editor undo/redo. For prefab editing (open/save/close prefab stage), use manage_prefabs.",
+          "enum": [
+            "telemetry_status",
+            "telemetry_ping",
+            "play",
+            "pause",
+            "stop",
+            "set_active_tool",
+            "add_tag",
+            "remove_tag",
+            "add_layer",
+            "remove_layer",
+            "deploy_package",
+            "restore_package",
+            "undo",
+            "redo"
+          ],
+          "type": "string"
+        },
+        "tool_name": {
+          "type": "string"
+        },
+        "tag_name": {
+          "type": "string"
+        },
+        "layer_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Editor",
+      "readOnlyHint": false,
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_editor"
+  },
+  {
+    "name": "manage_gameobject",
+    "title": "Manage GameObject",
+    "description": "Performs CRUD operations on GameObjects. Actions: create, modify, delete, duplicate, move_relative, look_at. NOT for searching — use the find_gameobjects tool to search by name/tag/layer/component/path. NOT for component management — use the manage_components tool (add/remove/set_property) or mcpforunity://scene/gameobject/{id}/components resource (read).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "create",
+            "modify",
+            "delete",
+            "duplicate",
+            "move_relative",
+            "look_at"
+          ],
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "search_method": {
+          "enum": [
+            "by_id",
+            "by_name",
+            "by_path",
+            "by_tag",
+            "by_layer",
+            "by_component"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "position": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "rotation": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "components_to_add": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "additionalProperties": true,
+                    "type": "object"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "primitive_type": {
+          "type": "string"
+        },
+        "save_as_prefab": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "prefab_path": {
+          "type": "string"
+        },
+        "prefab_folder": {
+          "type": "string"
+        },
+        "set_active": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "layer": {
+          "type": "string"
+        },
+        "is_static": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "components_to_remove": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "component_properties": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "new_name": {
+          "type": "string"
+        },
+        "offset": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "reference_object": {
+          "type": "string"
+        },
+        "direction": {
+          "enum": [
+            "left",
+            "right",
+            "up",
+            "down",
+            "forward",
+            "back",
+            "front",
+            "backward",
+            "behind"
+          ],
+          "type": "string"
+        },
+        "distance": {
+          "type": "number"
+        },
+        "world_space": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "look_at_target": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "look_at_up": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage GameObject",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_gameobject"
+  },
+  {
+    "name": "manage_graphics",
+    "title": "Manage Graphics",
+    "description": "Manage rendering graphics: volumes, post-processing, light baking, rendering stats, pipeline settings, and URP renderer features. Use ping to check pipeline and available features.\n\nVOLUME (require URP/HDRP):\n- volume_create, volume_add_effect, volume_set_effect, volume_remove_effect\n- volume_get_info, volume_set_properties, volume_list_effects, volume_create_profile\n\nBAKE (Edit mode only):\n- bake_start, bake_cancel, bake_status, bake_clear, bake_reflection_probe\n- bake_get_settings, bake_set_settings\n- bake_create_light_probe_group, bake_create_reflection_probe, bake_set_probe_positions\n\nSTATS:\n- stats_get: Rendering counters (draw calls, batches, triangles, etc.)\n- stats_list_counters, stats_set_scene_debug, stats_get_memory\n\nPIPELINE:\n- pipeline_get_info, pipeline_set_quality, pipeline_get_settings, pipeline_set_settings\n\nFEATURES (URP only):\n- feature_list, feature_add, feature_remove, feature_configure, feature_toggle, feature_reorder\n\nSKYBOX / ENVIRONMENT:\n- skybox_get: Read all environment settings (material, ambient, fog, reflection, sun)\n- skybox_set_material: Set skybox material by asset path\n- skybox_set_properties: Set properties on current skybox material (tint, exposure, rotation)\n- skybox_set_ambient: Set ambient lighting mode and colors\n- skybox_set_fog: Enable/configure fog (mode, color, density, start/end distance)\n- skybox_set_reflection: Set environment reflection settings\n- skybox_set_sun: Set the sun source light",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "The graphics action to perform.",
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target object name or instance ID."
+        },
+        "effect": {
+          "type": "string",
+          "description": "Effect type name (e.g., 'Bloom', 'Vignette')."
+        },
+        "parameters": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Dict of parameter values."
+        },
+        "properties": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Dict of properties to set."
+        },
+        "settings": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Dict of settings (bake/pipeline)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name for created objects."
+        },
+        "is_global": {
+          "type": "boolean",
+          "description": "Whether Volume is global (default true)."
+        },
+        "weight": {
+          "type": "number",
+          "description": "Volume weight (0-1)."
+        },
+        "priority": {
+          "type": "number",
+          "description": "Volume priority."
+        },
+        "profile_path": {
+          "type": "string",
+          "description": "Asset path for VolumeProfile."
+        },
+        "effects": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "type": "array",
+          "description": "Effect definitions for volume_create."
+        },
+        "path": {
+          "type": "string",
+          "description": "Asset path for volume_create_profile."
+        },
+        "level": {
+          "type": "string",
+          "description": "Quality level name or index."
+        },
+        "position": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Position [x,y,z]."
+        },
+        "grid_size": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array",
+          "description": "Probe grid size [x,y,z]."
+        },
+        "spacing": {
+          "type": "number",
+          "description": "Probe grid spacing."
+        },
+        "size": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Probe/volume size [x,y,z]."
+        },
+        "resolution": {
+          "type": "integer",
+          "description": "Probe resolution."
+        },
+        "mode": {
+          "type": "string",
+          "description": "Probe mode or debug mode."
+        },
+        "hdr": {
+          "type": "boolean",
+          "description": "HDR for reflection probes."
+        },
+        "box_projection": {
+          "type": "boolean",
+          "description": "Box projection for reflection probes."
+        },
+        "positions": {
+          "items": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array"
+          },
+          "type": "array",
+          "description": "Probe positions array."
+        },
+        "index": {
+          "type": "integer",
+          "description": "Feature index."
+        },
+        "active": {
+          "type": "boolean",
+          "description": "Feature active state."
+        },
+        "order": {
+          "items": {
+            "type": "integer"
+          },
+          "type": "array",
+          "description": "Feature reorder indices."
+        },
+        "async_bake": {
+          "type": "boolean",
+          "description": "Async bake (default true)."
+        },
+        "feature_type": {
+          "type": "string",
+          "description": "Renderer feature type name."
+        },
+        "material": {
+          "type": "string",
+          "description": "Material asset path for feature."
+        },
+        "color": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Color [r,g,b,a] for ambient/fog."
+        },
+        "intensity": {
+          "type": "number",
+          "description": "Intensity value (ambient/reflection)."
+        },
+        "ambient_mode": {
+          "type": "string",
+          "description": "Ambient mode: Skybox, Trilight, Flat, Custom."
+        },
+        "equator_color": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Equator color [r,g,b,a] (Trilight mode)."
+        },
+        "ground_color": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Ground color [r,g,b,a] (Trilight mode)."
+        },
+        "fog_enabled": {
+          "type": "boolean",
+          "description": "Enable or disable fog."
+        },
+        "fog_mode": {
+          "type": "string",
+          "description": "Fog mode: Linear, Exponential, ExponentialSquared."
+        },
+        "fog_color": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Fog color [r,g,b,a]."
+        },
+        "fog_density": {
+          "type": "number",
+          "description": "Fog density (Exponential modes)."
+        },
+        "fog_start": {
+          "type": "number",
+          "description": "Fog start distance (Linear mode)."
+        },
+        "fog_end": {
+          "type": "number",
+          "description": "Fog end distance (Linear mode)."
+        },
+        "bounces": {
+          "type": "integer",
+          "description": "Reflection bounces."
+        },
+        "reflection_mode": {
+          "type": "string",
+          "description": "Default reflection mode: Skybox, Custom."
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Graphics",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_graphics"
+  },
+  {
+    "name": "manage_material",
+    "title": "Manage Material",
+    "description": "Manages Unity materials (set properties, colors, shaders, etc). Read-only actions: ping, get_material_info. Modifying actions: create, set_material_shader_property, set_material_color, assign_material_to_renderer, set_renderer_color.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action to perform.",
+          "enum": [
+            "ping",
+            "create",
+            "set_material_shader_property",
+            "set_material_color",
+            "assign_material_to_renderer",
+            "set_renderer_color",
+            "get_material_info"
+          ],
+          "type": "string"
+        },
+        "material_path": {
+          "type": "string"
+        },
+        "property": {
+          "type": "string"
+        },
+        "shader": {
+          "type": "string"
+        },
+        "properties": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "value": {
+          "anyOf": [
+            {
+              "items": {},
+              "type": "array"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "color": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "target": {
+          "type": "string"
+        },
+        "search_method": {
+          "enum": [
+            "by_id",
+            "by_name",
+            "by_path",
+            "by_tag",
+            "by_layer",
+            "by_component"
+          ],
+          "type": "string"
+        },
+        "slot": {
+          "type": "integer"
+        },
+        "mode": {
+          "enum": [
+            "shared",
+            "instance",
+            "property_block",
+            "create_unique"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Material",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_material"
+  },
+  {
+    "name": "manage_physics",
+    "title": "Manage Physics",
+    "description": "Manage physics settings, collision matrix, materials, joints, queries, and validation.\n\nSETTINGS: ping, get_settings, set_settings\nCOLLISION MATRIX: get_collision_matrix, set_collision_matrix\nMATERIALS: create_physics_material, configure_physics_material, assign_physics_material\nJOINTS: add_joint, configure_joint, remove_joint\nQUERIES: raycast, raycast_all, linecast, shapecast, overlap\nFORCES: apply_force\nRIGIDBODY: get_rigidbody, configure_rigidbody\nVALIDATION: validate\nSIMULATION: simulate_step\n",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "The physics action to perform.",
+          "enum": [
+            "ping",
+            "get_settings",
+            "set_settings",
+            "get_collision_matrix",
+            "set_collision_matrix",
+            "create_physics_material",
+            "configure_physics_material",
+            "assign_physics_material",
+            "add_joint",
+            "configure_joint",
+            "remove_joint",
+            "raycast",
+            "raycast_all",
+            "linecast",
+            "shapecast",
+            "overlap",
+            "validate",
+            "simulate_step",
+            "apply_force",
+            "get_rigidbody",
+            "configure_rigidbody"
+          ],
+          "type": "string"
+        },
+        "dimension": {
+          "type": "string",
+          "description": "Physics dimension: '3d' (default) or '2d'."
+        },
+        "settings": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Key-value settings for set_settings."
+        },
+        "layer_a": {
+          "type": "string",
+          "description": "Layer name or index for collision matrix."
+        },
+        "layer_b": {
+          "type": "string",
+          "description": "Layer name or index for collision matrix."
+        },
+        "collide": {
+          "type": "boolean",
+          "description": "Whether layers should collide (set_collision_matrix)."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name for new physics material."
+        },
+        "path": {
+          "type": "string",
+          "description": "Asset path for materials."
+        },
+        "dynamic_friction": {
+          "type": "number",
+          "description": "Dynamic friction (0-1)."
+        },
+        "static_friction": {
+          "type": "number",
+          "description": "Static friction (0-1)."
+        },
+        "bounciness": {
+          "type": "number",
+          "description": "Bounciness (0-1)."
+        },
+        "friction": {
+          "type": "number",
+          "description": "Friction for 2D materials."
+        },
+        "friction_combine": {
+          "type": "string",
+          "description": "Friction combine mode: Average, Minimum, Multiply, Maximum."
+        },
+        "bounce_combine": {
+          "type": "string",
+          "description": "Bounce combine mode: Average, Minimum, Multiply, Maximum."
+        },
+        "material_path": {
+          "type": "string",
+          "description": "Path to physics material asset for assign."
+        },
+        "target": {
+          "type": "string",
+          "description": "Target GameObject name or instance ID."
+        },
+        "collider_type": {
+          "type": "string",
+          "description": "Specific collider type to target."
+        },
+        "search_method": {
+          "type": "string",
+          "description": "Search method for target resolution."
+        },
+        "joint_type": {
+          "type": "string",
+          "description": "Joint type: fixed, hinge, spring, character, configurable (3D); distance, fixed, friction, hinge, relative, slider, spring, target, wheel (2D)."
+        },
+        "connected_body": {
+          "type": "string",
+          "description": "Connected body target for joints."
+        },
+        "motor": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Motor config: {targetVelocity, force, freeSpin}."
+        },
+        "limits": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Limits config: {min, max, bounciness}."
+        },
+        "spring": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Spring config: {spring, damper, targetPosition}."
+        },
+        "drive": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Drive config for ConfigurableJoint."
+        },
+        "properties": {
+          "additionalProperties": true,
+          "type": "object",
+          "description": "Direct property dict for joints or materials."
+        },
+        "origin": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Ray origin [x,y,z] or [x,y]."
+        },
+        "direction": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Ray direction [x,y,z] or [x,y]."
+        },
+        "max_distance": {
+          "type": "number",
+          "description": "Max raycast distance."
+        },
+        "layer_mask": {
+          "type": "string",
+          "description": "Layer mask for queries (name or int)."
+        },
+        "query_trigger_interaction": {
+          "type": "string",
+          "description": "Trigger interaction: UseGlobal, Ignore, Collide."
+        },
+        "shape": {
+          "type": "string",
+          "description": "Overlap shape: sphere, box, capsule (3D); circle, box, capsule (2D)."
+        },
+        "position": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Overlap position [x,y,z] or [x,y]."
+        },
+        "size": {
+          "description": "Overlap size: float (radius) or [x,y,z] (half-extents)."
+        },
+        "start": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Linecast start point [x,y,z] or [x,y]."
+        },
+        "end": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Linecast end point [x,y,z] or [x,y]."
+        },
+        "point1": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Capsule shapecast point1 [x,y,z]."
+        },
+        "point2": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Capsule shapecast point2 [x,y,z]."
+        },
+        "height": {
+          "type": "number",
+          "description": "Capsule height for shapecast."
+        },
+        "capsule_direction": {
+          "type": "integer",
+          "description": "Capsule direction: 0=X, 1=Y (default), 2=Z."
+        },
+        "angle": {
+          "type": "number",
+          "description": "Rotation angle for 2D shape casts."
+        },
+        "force": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Force vector [x,y,z] or [x,y] for apply_force."
+        },
+        "force_mode": {
+          "type": "string",
+          "description": "Force mode: Force, Impulse, Acceleration, VelocityChange (3D); Force, Impulse (2D)."
+        },
+        "force_type": {
+          "type": "string",
+          "description": "Force type: 'normal' (default) or 'explosion' (3D only)."
+        },
+        "torque": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Torque vector [x,y,z] (3D) or [z] (2D)."
+        },
+        "explosion_position": {
+          "items": {
+            "type": "number"
+          },
+          "type": "array",
+          "description": "Explosion center [x,y,z]."
+        },
+        "explosion_radius": {
+          "type": "number",
+          "description": "Explosion radius."
+        },
+        "explosion_force": {
+          "type": "number",
+          "description": "Explosion force magnitude."
+        },
+        "upwards_modifier": {
+          "type": "number",
+          "description": "Explosion upwards modifier."
+        },
+        "steps": {
+          "type": "integer",
+          "description": "Number of simulation steps (max 100)."
+        },
+        "step_size": {
+          "type": "number",
+          "description": "Step size in seconds."
+        },
+        "page_size": {
+          "type": "integer",
+          "description": "Page size for validate results (default 50)."
+        },
+        "cursor": {
+          "type": "integer",
+          "description": "Cursor offset for validate pagination."
+        },
+        "component_index": {
+          "type": "integer",
+          "description": "Zero-based index to select which component when multiple of the same type exist (e.g., multiple HingeJoints or BoxColliders). If omitted, targets the first instance."
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Physics",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_physics"
+  },
+  {
+    "name": "manage_prefabs",
+    "title": "Manage Prefabs",
+    "description": "Manages Unity Prefab assets. Actions: get_info, get_hierarchy, create_from_gameobject, modify_contents, open_prefab_stage, save_prefab_stage, close_prefab_stage. Two approaches to prefab editing: (1) Headless: use modify_contents for automated/scripted edits without opening the prefab in the editor. (2) Interactive: use open_prefab_stage to open a prefab, then manage_gameobject/manage_components to edit objects inside the prefab stage, then save_prefab_stage to save and close_prefab_stage to return to the main scene. Use create_child parameter with modify_contents to add child GameObjects or nested prefab instances to a prefab (single object or array for batch creation in one save). Example: create_child=[{\"name\": \"Child1\", \"primitive_type\": \"Sphere\", \"position\": [1,0,0]}, {\"name\": \"Nested\", \"source_prefab_path\": \"Assets/Prefabs/Bullet.prefab\", \"position\": [0,2,0]}]. Use delete_child parameter to remove child GameObjects from the prefab (single name/path or array of paths for batch deletion. Example: delete_child=[\"Child1\", \"Child2/Grandchild\"]). Use component_properties with modify_contents to set serialized fields on existing components (e.g. component_properties={\"Rigidbody\": {\"mass\": 5.0}, \"MyScript\": {\"health\": 100}}). Supports object references via {\"guid\": \"...\"}, {\"path\": \"Assets/...\"}, or {\"instanceID\": 123}. Use manage_asset action=search filterType=Prefab to list prefabs.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Prefab operation to perform.",
+          "enum": [
+            "create_from_gameobject",
+            "get_info",
+            "get_hierarchy",
+            "modify_contents",
+            "open_prefab_stage",
+            "save_prefab_stage",
+            "close_prefab_stage"
+          ],
+          "type": "string"
+        },
+        "prefab_path": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "allow_overwrite": {
+          "type": "boolean"
+        },
+        "search_inactive": {
+          "type": "boolean"
+        },
+        "unlink_if_instance": {
+          "type": "boolean"
+        },
+        "position": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "rotation": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "scale": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "number"
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "type": "number"
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "layer": {
+          "type": "string"
+        },
+        "set_active": {
+          "type": "boolean"
+        },
+        "parent": {
+          "type": "string"
+        },
+        "components_to_add": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "components_to_remove": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "create_child": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "delete_child": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          ]
+        },
+        "component_properties": {
+          "additionalProperties": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "type": "object"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Prefabs",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_prefabs"
+  },
+  {
+    "name": "manage_scene",
+    "title": "Manage Scene",
+    "description": "Performs CRUD operations on Unity scenes. Read-only actions: get_hierarchy, get_active, get_build_settings, get_loaded_scenes, scene_view_frame. Modifying actions: create (with optional template), load (with optional additive flag), save, close_scene, set_active_scene, move_to_scene, validate (with optional auto_repair). For build settings management (add/remove/enable scenes), use manage_build(action='scenes'). For screenshots, use manage_camera (screenshot, screenshot_multiview actions).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Perform CRUD operations on Unity scenes and control the Scene View camera.",
+          "enum": [
+            "create",
+            "load",
+            "save",
+            "get_hierarchy",
+            "get_active",
+            "get_build_settings",
+            "scene_view_frame",
+            "close_scene",
+            "set_active_scene",
+            "get_loaded_scenes",
+            "move_to_scene",
+            "validate"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "build_index": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "scene_view_target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "parent": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "page_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "max_nodes": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "max_depth": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "max_children_per_node": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "include_transform": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "scene_name": {
+          "type": "string"
+        },
+        "scene_path": {
+          "type": "string"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            }
+          ]
+        },
+        "remove_scene": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "additive": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "template": {
+          "type": "string"
+        },
+        "auto_repair": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Scene",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_scene"
+  },
+  {
+    "name": "manage_script",
+    "title": "Manage Script",
+    "description": "Compatibility router for legacy script operations. Prefer apply_text_edits (ranges) or script_apply_edits (structured) for edits. Read-only action: read. Modifying actions: create, delete.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Perform CRUD operations on C# scripts.",
+          "enum": [
+            "create",
+            "read",
+            "delete"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "contents": {
+          "type": "string"
+        },
+        "script_type": {
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "name",
+        "path"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Script",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_script"
+  },
+  {
+    "name": "manage_scriptable_object",
+    "title": "Manage Scriptable Object",
+    "description": "Creates and modifies ScriptableObject assets using Unity SerializedObject property paths.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action to perform: create or modify.",
+          "enum": [
+            "create",
+            "modify"
+          ],
+          "type": "string"
+        },
+        "type_name": {
+          "type": "string",
+          "description": "Namespace-qualified ScriptableObject type name (for create)."
+        },
+        "folder_path": {
+          "type": "string",
+          "description": "Target folder under Assets/... (for create)."
+        },
+        "asset_name": {
+          "type": "string",
+          "description": "Asset file name without extension (for create)."
+        },
+        "overwrite": {
+          "description": "If true, overwrite existing asset at same path (for create).",
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "target": {
+          "description": "Target asset reference {guid|path} (for modify).",
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "patches": {
+          "description": "Patch list (or JSON string) to apply. For object references: use {\"ref\": {\"guid\": \"...\"}} or {\"value\": {\"guid\": \"...\"}}. For Sprite sub-assets: include \"spriteName\" in the ref/value object. Single-sprite textures auto-resolve from guid/path alone.",
+          "anyOf": [
+            {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "dry_run": {
+          "description": "If true, validate patches without applying (modify only).",
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Scriptable Object",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:scripting_ext"
+        ]
+      }
+    },
+    "group": "scripting_ext",
+    "unity_target": "manage_scriptable_object"
+  },
+  {
+    "name": "manage_shader",
+    "title": "Manage Shader",
+    "description": "Manages shader scripts in Unity (create, read, update, delete). Read-only action: read. Modifying actions: create, update, delete.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Perform CRUD operations on shader scripts.",
+          "enum": [
+            "create",
+            "read",
+            "update",
+            "delete"
+          ],
+          "type": "string"
+        },
+        "name": {
+          "description": "Shader name (no .cs extension)",
+          "type": "string"
+        },
+        "path": {
+          "description": "Asset path (default: \"Assets/\")",
+          "type": "string"
+        },
+        "contents": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action",
+        "name",
+        "path"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Shader",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:vfx"
+        ]
+      }
+    },
+    "group": "vfx",
+    "unity_target": "manage_shader"
+  },
+  {
+    "name": "manage_texture",
+    "title": "Manage Texture",
+    "description": "Procedural texture generation for Unity. Creates textures with solid fills, patterns (checkerboard, stripes, dots, grid, brick), gradients, and noise. Actions: create, modify, delete, create_sprite, apply_pattern, apply_gradient, apply_noise, set_import_settings",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action to perform.",
+          "enum": [
+            "create",
+            "modify",
+            "delete",
+            "create_sprite",
+            "apply_pattern",
+            "apply_gradient",
+            "apply_noise",
+            "set_import_settings"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "fill_color": {
+          "anyOf": [
+            {
+              "items": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "type": "array"
+            },
+            {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "integer"
+                  },
+                  {
+                    "type": "number"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "pattern": {
+          "enum": [
+            "checkerboard",
+            "stripes",
+            "stripes_h",
+            "stripes_v",
+            "stripes_diag",
+            "dots",
+            "grid",
+            "brick"
+          ],
+          "type": "string"
+        },
+        "palette": {
+          "anyOf": [
+            {
+              "items": {
+                "items": {
+                  "anyOf": [
+                    {
+                      "type": "integer"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ]
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "pattern_size": {
+          "type": "integer"
+        },
+        "pixels": {
+          "anyOf": [
+            {
+              "items": {
+                "items": {
+                  "type": "integer"
+                },
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "image_path": {
+          "type": "string"
+        },
+        "gradient_type": {
+          "enum": [
+            "linear",
+            "radial"
+          ],
+          "type": "string"
+        },
+        "gradient_angle": {
+          "type": "number"
+        },
+        "noise_scale": {
+          "type": "number"
+        },
+        "octaves": {
+          "type": "integer"
+        },
+        "set_pixels": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "as_sprite": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "boolean"
+            }
+          ]
+        },
+        "import_settings": {
+          "additionalProperties": true,
+          "type": "object"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Texture",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:vfx"
+        ]
+      }
+    },
+    "group": "vfx",
+    "unity_target": "manage_texture"
+  },
+  {
+    "name": "manage_tools",
+    "title": "Manage Tools",
+    "description": "Manage which tool groups are visible in this session. Actions: list_groups (show all groups and their status), activate (enable a group), deactivate (disable a group), sync (refresh visibility from Unity Editor's toggle states), reset (restore defaults). Activating a group makes its tools appear; deactivating hides them. Use sync after toggling tools in the Unity Editor GUI.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action to perform.",
+          "enum": [
+            "list_groups",
+            "activate",
+            "deactivate",
+            "sync",
+            "reset"
+          ],
+          "type": "string"
+        },
+        "group": {
+          "type": "string",
+          "description": "Group name (required for activate / deactivate). Valid groups: asset_gen, core, docs, scripting_ext, testing, ui, vfx"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Tools",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    },
+    "group": null,
+    "unity_target": null
+  },
+  {
+    "name": "manage_ui",
+    "title": "Manage UI",
+    "description": "Manages Unity UI Toolkit elements (UXML documents, USS stylesheets, UIDocument components). Read-only actions: ping, read, get_visual_tree, list. Modifying actions: create, update, delete, attach_ui_document, detach_ui_document, create_panel_settings, update_panel_settings, modify_visual_element.\nVisual actions: render_ui (captures UI panel to a PNG screenshot for self-evaluation).\nStructural actions: link_stylesheet (adds a Style src reference to a UXML file).\n\nUI Toolkit workflow:\n1. Use list to discover existing UI assets\n2. Create a UXML file (structure, like HTML)\n3. Create a USS file (styling, like CSS)\n4. Link stylesheet to UXML via link_stylesheet\n5. Attach UIDocument to a GameObject with the UXML source\n6. Use get_visual_tree to inspect the result\n7. Use modify_visual_element to change text, classes, or inline styles on live elements\n8. Use render_ui to capture a visual preview for self-evaluation\n   - In play mode: first call queues a WaitForEndOfFrame screen capture and returns pending=true;\n     call render_ui a second time to retrieve the saved PNG (hasContent will be true).\n   - In editor mode: assigns a RenderTexture to PanelSettings (best-effort; may stay blank).\n9. Use detach_ui_document to remove UIDocument from a GameObject\n10. Use delete to remove .uxml/.uss files\n\nImportant: Always use <ui:Style> (with the ui: namespace prefix) in UXML, not bare <Style>. UI Builder will fail to open files that use <Style> without the prefix.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action to perform.",
+          "enum": [
+            "ping",
+            "create",
+            "read",
+            "update",
+            "delete",
+            "attach_ui_document",
+            "detach_ui_document",
+            "create_panel_settings",
+            "update_panel_settings",
+            "get_visual_tree",
+            "render_ui",
+            "link_stylesheet",
+            "list",
+            "modify_visual_element"
+          ],
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "contents": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "source_asset": {
+          "type": "string"
+        },
+        "panel_settings": {
+          "type": "string"
+        },
+        "sort_order": {
+          "type": "integer"
+        },
+        "scale_mode": {
+          "enum": [
+            "ConstantPixelSize",
+            "ConstantPhysicalSize",
+            "ScaleWithScreenSize"
+          ],
+          "type": "string"
+        },
+        "reference_resolution": {
+          "additionalProperties": {
+            "type": "integer"
+          },
+          "type": "object"
+        },
+        "settings": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "max_depth": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer"
+        },
+        "height": {
+          "type": "integer"
+        },
+        "include_image": {
+          "type": "boolean"
+        },
+        "max_resolution": {
+          "type": "integer"
+        },
+        "screenshot_file_name": {
+          "type": "string"
+        },
+        "output_folder": {
+          "type": "string"
+        },
+        "stylesheet": {
+          "type": "string"
+        },
+        "filter_type": {
+          "type": "string"
+        },
+        "page_size": {
+          "type": "integer"
+        },
+        "page_number": {
+          "type": "integer"
+        },
+        "element_name": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "add_classes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "remove_classes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "toggle_classes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "style": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "visible": {
+          "type": "boolean"
+        },
+        "tooltip": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage UI",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:ui"
+        ]
+      }
+    },
+    "group": "ui",
+    "unity_target": "manage_ui"
+  },
+  {
+    "name": "read_console",
+    "title": "Read Console",
+    "description": "Gets messages from or clears the Unity Editor console. Defaults to 10 most recent entries. Use page_size/cursor for paging. Note: For maximum client compatibility, pass count as a quoted string (e.g., '5'). The 'get' action is read-only; 'clear' modifies ephemeral UI state (not project data).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "get",
+            "clear"
+          ],
+          "type": "string"
+        },
+        "types": {
+          "anyOf": [
+            {
+              "items": {
+                "enum": [
+                  "error",
+                  "warning",
+                  "log",
+                  "all"
+                ],
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "filter_text": {
+          "type": "string"
+        },
+        "page_size": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "cursor": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "format": {
+          "enum": [
+            "plain",
+            "detailed",
+            "json"
+          ],
+          "type": "string"
+        },
+        "include_stacktrace": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Read Console",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "read_console"
+  },
+  {
+    "name": "refresh_unity",
+    "title": "Refresh Unity",
+    "description": "Request a Unity asset database refresh and optionally a script compilation. Can optionally wait for readiness.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "if_dirty",
+          "description": "Refresh mode",
+          "enum": [
+            "if_dirty",
+            "force"
+          ],
+          "type": "string"
+        },
+        "scope": {
+          "default": "all",
+          "description": "Refresh scope",
+          "enum": [
+            "assets",
+            "scripts",
+            "all"
+          ],
+          "type": "string"
+        },
+        "compile": {
+          "default": "none",
+          "description": "Whether to request compilation",
+          "enum": [
+            "none",
+            "request"
+          ],
+          "type": "string"
+        },
+        "wait_for_ready": {
+          "default": true,
+          "description": "If true, wait until mcpforunity://editor/state reports data.advice.ready_for_tools true",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "outputSchema": {
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "error": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "data": {
+                  "anyOf": [
+                    {},
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "hint": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                }
+              },
+              "required": [
+                "success"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": true,
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "type": "object",
+      "x-fastmcp-wrap-result": true
+    },
+    "annotations": {
+      "title": "Refresh Unity",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "refresh_unity"
+  },
+  {
+    "name": "run_tests",
+    "title": "Run Tests",
+    "description": "Starts a Unity test run asynchronously and returns a job_id immediately. Poll with get_test_job for progress.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "default": "EditMode",
+          "description": "Unity test mode to run",
+          "enum": [
+            "EditMode",
+            "PlayMode"
+          ],
+          "type": "string"
+        },
+        "test_names": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "group_names": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "category_names": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "assembly_names": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "include_failed_tests": {
+          "default": false,
+          "description": "Include details for failed/skipped tests only (default: false)",
+          "type": "boolean"
+        },
+        "include_details": {
+          "default": false,
+          "description": "Include details for all tests (default: false)",
+          "type": "boolean"
+        },
+        "init_timeout": {
+          "type": "integer",
+          "description": "Initialization timeout in milliseconds. PlayMode tests may need longer due to domain reload (default: 15000). Recommended: 120000 for PlayMode."
+        },
+        "clear_stuck": {
+          "default": false,
+          "description": "Clear an orphaned running job instead of starting a run. Use when a job was lost to a domain reload and is blocking every subsequent run.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "outputSchema": {
+      "properties": {
+        "result": {
+          "anyOf": [
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "error": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "data": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "job_id": {
+                          "type": "string"
+                        },
+                        "status": {
+                          "type": "string"
+                        },
+                        "mode": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "include_details": {
+                          "anyOf": [
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        },
+                        "include_failed_tests": {
+                          "anyOf": [
+                            {
+                              "type": "boolean"
+                            },
+                            {
+                              "type": "null"
+                            }
+                          ],
+                          "default": null
+                        }
+                      },
+                      "required": [
+                        "job_id",
+                        "status"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "hint": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                }
+              },
+              "required": [
+                "success"
+              ],
+              "type": "object"
+            },
+            {
+              "properties": {
+                "success": {
+                  "type": "boolean"
+                },
+                "message": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "error": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "data": {
+                  "anyOf": [
+                    {},
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                },
+                "hint": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ],
+                  "default": null
+                }
+              },
+              "required": [
+                "success"
+              ],
+              "type": "object"
+            }
+          ]
+        }
+      },
+      "required": [
+        "result"
+      ],
+      "type": "object",
+      "x-fastmcp-wrap-result": true
+    },
+    "annotations": {
+      "title": "Run Tests",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:testing"
+        ]
+      }
+    },
+    "group": "testing",
+    "unity_target": "run_tests"
+  },
+  {
+    "name": "script_apply_edits",
+    "title": "Script Apply Edits",
+    "description": "Structured C# edits (methods/classes) with safer boundaries - prefer this over raw text.\n    Best practices:\n    - Prefer anchor_* ops for pattern-based insert/replace near stable markers\n    - Use replace_method/delete_method for whole-method changes (keeps signatures balanced)\n    - Avoid whole-file regex deletes; validators will guard unbalanced braces\n    - For tail insertions, prefer anchor/regex_replace on final brace (class closing)\n    - Pass options.validate='standard' for structural checks; 'basic' for interior-only edits\n    Canonical fields (use these exact keys):\n    - op: replace_method | insert_method | delete_method | anchor_insert | anchor_delete | anchor_replace\n    - className: string (defaults to 'name' if omitted on method/class ops)\n    - methodName: string (required for replace_method, delete_method)\n    - replacement: string (required for replace_method, insert_method)\n    - position: start | end | after | before (insert_method only)\n    - afterMethodName / beforeMethodName: string (required when position='after'/'before')\n    - anchor: regex string (for anchor_* ops)\n    - text: string (for anchor_insert/anchor_replace)\n    Examples:\n    1) Replace a method:\n    {\n        \"name\": \"SmartReach\",\n        \"path\": \"Assets/Scripts/Interaction\",\n        \"edits\": [\n        {\n        \"op\": \"replace_method\",\n        \"className\": \"SmartReach\",\n        \"methodName\": \"HasTarget\",\n        \"replacement\": \"public bool HasTarget(){ return currentTarget!=null; }\"\n        }\n    ],\n    \"options\": {\"validate\": \"standard\", \"refresh\": \"immediate\"}\n    }\n    \"2) Insert a method after another:\n    {\n        \"name\": \"SmartReach\",\n        \"path\": \"Assets/Scripts/Interaction\",\n        \"edits\": [\n        {\n        \"op\": \"insert_method\",\n        \"className\": \"SmartReach\",\n        \"replacement\": \"public void PrintSeries(){ Debug.Log(seriesName); }\",\n        \"position\": \"after\",\n        \"afterMethodName\": \"GetCurrentTarget\"\n        }\n    ],\n    }\n    ]",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Name of the script to edit",
+          "type": "string"
+        },
+        "path": {
+          "description": "Path to the script to edit under Assets/ directory",
+          "type": "string"
+        },
+        "edits": {
+          "anyOf": [
+            {
+              "items": {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              "type": "array"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "List of edits to apply to the script (JSON list or stringified JSON)"
+        },
+        "options": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "script_type": {
+          "default": "MonoBehaviour",
+          "description": "Type of the script to edit",
+          "type": "string"
+        },
+        "namespace": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "path",
+        "edits"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Script Apply Edits",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_script"
+  },
+  {
+    "name": "set_active_instance",
+    "title": "Set Active Instance",
+    "description": "Set the active Unity instance for this client/session. Accepts Name@hash, hash prefix, or port number (stdio only).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "instance": {
+          "description": "Target instance (Name@hash, hash prefix, or port number in stdio mode)",
+          "type": "string"
+        }
+      },
+      "required": [
+        "instance"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Set Active Instance",
+      "readOnlyHint": false,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": []
+      }
+    },
+    "group": null,
+    "unity_target": null
+  },
+  {
+    "name": "unity_reflect",
+    "title": "Unity Reflect",
+    "description": "Inspect Unity's live C# API via reflection. Use this to verify that classes, methods, and properties exist before writing C# code — training data may be wrong or outdated.\n\nActions:\n- get_type: Member summary (names only) for a class. Requires class_name.\n- get_member: Full signature detail for one member. Requires class_name + member_name.\n- search: Type name search across loaded assemblies. Requires query. Optional scope.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "The reflection action to perform.",
+          "type": "string"
+        },
+        "class_name": {
+          "type": "string",
+          "description": "Fully qualified or simple C# class name."
+        },
+        "member_name": {
+          "type": "string",
+          "description": "Method, property, or field name to inspect."
+        },
+        "query": {
+          "type": "string",
+          "description": "Search query for type name search."
+        },
+        "scope": {
+          "type": "string",
+          "description": "Assembly scope for search: unity, packages, project, all."
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Unity Reflect",
+      "readOnlyHint": true,
+      "destructiveHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:docs"
+        ]
+      }
+    },
+    "group": "docs",
+    "unity_target": "unity_reflect"
+  },
+  {
+    "name": "validate_script",
+    "title": "Validate Script",
+    "description": "Validate a C# script and return diagnostics.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "uri": {
+          "description": "URI of the script to validate under Assets/ directory, mcpforunity://path/Assets/... or file://... or Assets/...",
+          "type": "string"
+        },
+        "level": {
+          "default": "basic",
+          "description": "Validation level",
+          "enum": [
+            "basic",
+            "standard"
+          ],
+          "type": "string"
+        },
+        "include_diagnostics": {
+          "default": false,
+          "description": "Include full diagnostics and summary",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "uri"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Validate Script",
+      "readOnlyHint": true,
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:core"
+        ]
+      }
+    },
+    "group": "core",
+    "unity_target": "manage_script"
+  }
+]

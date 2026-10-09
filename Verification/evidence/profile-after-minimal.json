@@ -1,0 +1,155 @@
+{
+  "unity": "6000.3.23f1",
+  "graphicsDevice": "Metal",
+  "gpu": "Apple M4",
+  "samples": [
+    {
+      "existingSettings": false,
+      "before": {
+        "renderTextures": 0,
+        "texture2Ds": 112,
+        "renderTextureNativeBytes": 0,
+        "texture2DNativeBytes": 34823706,
+        "gfxDriverBytes": 30513433,
+        "panelAssets": 0,
+        "renderTextureAssets": 0
+      },
+      "firstResponse": {
+        "success": true,
+        "message": "UI rendered to 'Captures/profile-after-minimal-images/ui-render-20261009-175534.png'.",
+        "data": {
+          "path": "Captures/profile-after-minimal-images/ui-render-20261009-175534.png",
+          "fullPath": "/private/tmp/unity-mcp-profile-clean/Captures/profile-after-minimal-images/ui-render-20261009-175534.png",
+          "width": 64,
+          "height": 64,
+          "hasContent": true,
+          "sourceAsset": "Assets/__IndependentProfile/Probe.uxml"
+        }
+      },
+      "after100": {
+        "renderTextures": 1,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 1188,
+        "texture2DNativeBytes": 35264058,
+        "gfxDriverBytes": 93571373,
+        "panelAssets": 0,
+        "renderTextureAssets": 0
+      },
+      "successes": 100,
+      "contentResponses": 100,
+      "redPixelSamples": 4,
+      "resizeResponse": {
+        "success": true,
+        "message": "UI rendered to 'Captures/profile-after-minimal-images/ui-render-20261009-175534-100.png'.",
+        "data": {
+          "path": "Captures/profile-after-minimal-images/ui-render-20261009-175534-100.png",
+          "fullPath": "/private/tmp/unity-mcp-profile-clean/Captures/profile-after-minimal-images/ui-render-20261009-175534-100.png",
+          "width": 96,
+          "height": 64,
+          "hasContent": true,
+          "sourceAsset": "Assets/__IndependentProfile/Probe.uxml"
+        }
+      },
+      "failureResponse": {
+        "success": false,
+        "code": "The file '/private/tmp/unity-mcp-profile-clean/Captures/profile-after-minimal-images/blocked' already exists.",
+        "error": "The file '/private/tmp/unity-mcp-profile-clean/Captures/profile-after-minimal-images/blocked' already exists.",
+        "data": {
+          "stackTrace": "  at System.IO.FileSystem.CreateDirectory (System.String fullPath) [0x00191] in <4ac0ee785b7843ea944af6fc649f4ee5>:0 \n  at System.IO.Directory.CreateDirectory (System.String path) [0x0002c] in <4ac0ee785b7843ea944af6fc649f4ee5>:0 \n  at MCPForUnity.Editor.Tools.ManageUI.RenderUI (Newtonsoft.Json.Linq.JObject params) [0x00785] in /Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity/Editor/Tools/ManageUI.cs:1193 \n  at MCPForUnity.Editor.Tools.ManageUI.HandleCommand (Newtonsoft.Json.Linq.JObject params) [0x002a2] in /Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity/Editor/Tools/ManageUI.cs:117 "
+        }
+      },
+      "afterCleanup": {
+        "renderTextures": 1,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 1188,
+        "texture2DNativeBytes": 35264058,
+        "gfxDriverBytes": 94325037,
+        "panelAssets": 0,
+        "renderTextureAssets": 0
+      },
+      "userTargetSurvives": true
+    },
+    {
+      "existingSettings": true,
+      "before": {
+        "renderTextures": 2,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 3256,
+        "texture2DNativeBytes": 35272250,
+        "gfxDriverBytes": 55889057,
+        "panelAssets": 1,
+        "renderTextureAssets": 0
+      },
+      "firstResponse": {
+        "success": true,
+        "message": "UI rendered to 'Captures/profile-after-minimal-images/ui-render-20261009-175534-101.png'.",
+        "data": {
+          "path": "Captures/profile-after-minimal-images/ui-render-20261009-175534-101.png",
+          "fullPath": "/private/tmp/unity-mcp-profile-clean/Captures/profile-after-minimal-images/ui-render-20261009-175534-101.png",
+          "width": 64,
+          "height": 64,
+          "hasContent": true,
+          "sourceAsset": "Assets/__IndependentProfile/Probe.uxml"
+        }
+      },
+      "after100": {
+        "renderTextures": 2,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 3256,
+        "texture2DNativeBytes": 35272250,
+        "gfxDriverBytes": 118738081,
+        "panelAssets": 1,
+        "renderTextureAssets": 0
+      },
+      "successes": 100,
+      "contentResponses": 100,
+      "redPixelSamples": 4,
+      "resizeResponse": {
+        "success": true,
+        "message": "UI rendered to 'Captures/profile-after-minimal-images/ui-render-20261009-175534-201.png'.",
+        "data": {
+          "path": "Captures/profile-after-minimal-images/ui-render-20261009-175534-201.png",
+          "fullPath": "/private/tmp/unity-mcp-profile-clean/Captures/profile-after-minimal-images/ui-render-20261009-175534-201.png",
+          "width": 96,
+          "height": 64,
+          "hasContent": true,
+          "sourceAsset": "Assets/__IndependentProfile/Probe.uxml"
+        }
+      },
+      "failureResponse": {
+        "success": false,
+        "code": "The file '/private/tmp/unity-mcp-profile-clean/Captures/profile-after-minimal-images/blocked' already exists.",
+        "error": "The file '/private/tmp/unity-mcp-profile-clean/Captures/profile-after-minimal-images/blocked' already exists.",
+        "data": {
+          "stackTrace": "  at System.IO.FileSystem.CreateDirectory (System.String fullPath) [0x00191] in <4ac0ee785b7843ea944af6fc649f4ee5>:0 \n  at System.IO.Directory.CreateDirectory (System.String path) [0x0002c] in <4ac0ee785b7843ea944af6fc649f4ee5>:0 \n  at MCPForUnity.Editor.Tools.ManageUI.RenderUI (Newtonsoft.Json.Linq.JObject params) [0x00785] in /Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity/Editor/Tools/ManageUI.cs:1193 \n  at MCPForUnity.Editor.Tools.ManageUI.HandleCommand (Newtonsoft.Json.Linq.JObject params) [0x002a2] in /Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/MCPForUnity/Editor/Tools/ManageUI.cs:117 "
+        }
+      },
+      "afterCleanup": {
+        "renderTextures": 2,
+        "texture2Ds": 136,
+        "renderTextureNativeBytes": 3256,
+        "texture2DNativeBytes": 35272250,
+        "gfxDriverBytes": 119491745,
+        "panelAssets": 1,
+        "renderTextureAssets": 0
+      },
+      "userTargetSurvives": true
+    }
+  ],
+  "panelAPI": [
+    "Void GetPlayerPanelsByRenderMode(System.Collections.Generic.List`1[UnityEngine.UIElements.BaseRuntimePanel], System.Collections.Generic.List`1[UnityEngine.UIElements.BaseRuntimePanel])",
+    "Void RenderOffscreenPanels()",
+    "Void RepaintPanel(UnityEngine.UIElements.BaseRuntimePanel)",
+    "Void RenderPanel(UnityEngine.UIElements.BaseRuntimePanel, Boolean)",
+    "Void BeginRenderOverlays(Int32)",
+    "Void RenderOverlaysBeforePriority(Int32, Single)",
+    "Void EndRenderOverlays(Int32)",
+    "Void RepaintPanels(Boolean)",
+    "Boolean get_autoUpdateEventSystem()",
+    "Void set_autoUpdateEventSystem(Boolean)",
+    "Void UpdatePanels()",
+    "Void UpdateEventSystem()",
+    "Void EnableRenderingAndInputCallbacks()",
+    "Void DisableRenderingAndInputCallbacks()"
+  ]
+}

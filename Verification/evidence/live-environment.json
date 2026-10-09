@@ -1,0 +1,7 @@
+{
+  "UNITY_MCP_STATUS_DIR": "/tmp/unity-mcp-review-live-status",
+  "REVIEW_BRIDGE_PORT": "57246",
+  "REVIEW_BRIDGE_READY": "/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/live-ready.txt",
+  "REVIEW_BRIDGE_STOP": "/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence/live-stop.txt",
+  "REVIEW_EVIDENCE": "/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/evidence"
+}
