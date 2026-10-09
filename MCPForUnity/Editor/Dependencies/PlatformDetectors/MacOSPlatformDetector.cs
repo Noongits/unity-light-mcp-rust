@@ -20,7 +20,7 @@ namespace MCPForUnity.Editor.Dependencies.PlatformDetectors
 
         public override DependencyStatus DetectPython()
         {
-            var status = new DependencyStatus("Python", isRequired: true)
+            var status = new DependencyStatus("Python (fallback)", isRequired: false)
             {
                 InstallationHint = GetPythonInstallUrl()
             };

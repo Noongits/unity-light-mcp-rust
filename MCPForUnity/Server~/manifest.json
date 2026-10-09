@@ -1,0 +1,22 @@
+{
+  "version": "0.1.0",
+  "sourceRevision": "473ac5714de5068ccb9ac87a8808eb923bf6472f",
+  "binaries": {
+    "windows-x86_64": {
+      "file": "unity-mcp-light.exe",
+      "sha256": "72c42db532177c45367e4ffd68f86f055e37a5057fe0e3caadaf0160d18997ec"
+    },
+    "macos-aarch64": {
+      "file": "unity-mcp-light",
+      "sha256": "d871186fad680a998b543e8b9e3d6871ae87f2a80e77cf05b1ac1cdb14e1bd6f"
+    },
+    "macos-x86_64": {
+      "file": "unity-mcp-light",
+      "sha256": "5164196fefbd251a96c92468bc000f74257f06fe923b008eb6a1fb51a7eb8c31"
+    },
+    "linux-x86_64": {
+      "file": "unity-mcp-light",
+      "sha256": "df84d3536c4096c557456c460570d899d75abca68fc0f695812612939b02e8e0"
+    }
+  }
+}

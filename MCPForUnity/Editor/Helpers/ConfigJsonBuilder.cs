@@ -43,7 +43,7 @@ namespace MCPForUnity.Editor.Helpers
 
         /// <summary>
         /// Centralized builder that applies all caveats consistently.
-        /// - Sets command/args with uvx and package version
+        /// - Sets the packaged Rust executable and native stdio arguments
         /// - Ensures env exists
         /// - Adds transport configuration (HTTP or stdio)
         /// - Adds disabled:false for Windsurf/Kiro only when missing
@@ -101,13 +101,8 @@ namespace MCPForUnity.Editor.Helpers
             }
             else
             {
-                // Stdio mode: Use uvx command
-                var (uvxPath, fromUrl, packageName) = AssetPathUtility.GetUvxCommandParts();
-
-                var toolArgs = BuildUvxArgs(fromUrl, packageName);
-
-                unity["command"] = uvxPath;
-                unity["args"] = JArray.FromObject(toolArgs.ToArray());
+                unity["command"] = NativeServerRuntime.GetExecutableOrThrow();
+                unity["args"] = new JArray("--transport", "stdio");
 
                 // Remove url/serverUrl if they exist from previous config
                 if (unity["url"] != null) unity.Remove("url");
@@ -157,30 +152,6 @@ namespace MCPForUnity.Editor.Helpers
             var created = new JObject();
             parent[name] = created;
             return created;
-        }
-
-        private static IList<string> BuildUvxArgs(string fromUrl, string packageName)
-        {
-            // Dev mode: force a fresh install/resolution (avoids stale cached builds while iterating).
-            // `--no-cache` avoids reading from cache; `--refresh` ensures metadata is revalidated.
-            // Note: --reinstall is not supported by uvx and will cause a warning.
-            // Keep ordering consistent with other uvx builders: dev flags first, then --from <url>, then package name.
-            var args = new List<string>();
-
-            foreach (var flag in AssetPathUtility.GetUvxDevFlagsList())
-                args.Add(flag);
-
-            // Use centralized helper for beta server / prerelease args
-            foreach (var arg in AssetPathUtility.GetBetaServerFromArgsList())
-            {
-                args.Add(arg);
-            }
-            args.Add(packageName);
-
-            args.Add("--transport");
-            args.Add("stdio");
-
-            return args;
         }
 
     }

@@ -1,0 +1,56 @@
+{
+  "cycles": [
+    {
+      "health": {
+        "message": "MCP for Unity Rust server is running",
+        "status": "healthy",
+        "timestamp": 1791572998.9847219,
+        "version": "0.1.0"
+      },
+      "instances": {
+        "instances": [
+          {
+            "hash": "d696acaaf0c2ca8b",
+            "id": "unity-light-animation-review-20261009@d696acaaf0c2ca8b",
+            "name": "unity-light-animation-review-20261009",
+            "path": "/private/tmp/unity-light-animation-review-20261009",
+            "project": "unity-light-animation-review-20261009",
+            "session_id": "07df9423-c6c1-4308-9485-a26635b07a25",
+            "status": "running",
+            "unity_version": "6000.3.23f1"
+          }
+        ],
+        "success": true
+      },
+      "freshServiceDiscovery": true,
+      "stopped": true
+    },
+    {
+      "health": {
+        "message": "MCP for Unity Rust server is running",
+        "status": "healthy",
+        "timestamp": 1791573008.223969,
+        "version": "0.1.0"
+      },
+      "instances": {
+        "instances": [
+          {
+            "hash": "d696acaaf0c2ca8b",
+            "id": "unity-light-animation-review-20261009@d696acaaf0c2ca8b",
+            "name": "unity-light-animation-review-20261009",
+            "path": "/private/tmp/unity-light-animation-review-20261009",
+            "project": "unity-light-animation-review-20261009",
+            "session_id": "d73a0a1b-f1d8-4332-83ca-740d14ed4db7",
+            "status": "running",
+            "unity_version": "6000.3.23f1"
+          }
+        ],
+        "success": true
+      },
+      "freshServiceDiscovery": true,
+      "stopped": true
+    }
+  ],
+  "command": "\"/Users/reviewer/.local/share/UnityMCPRust/d871186fad680a998b543e8b9e3d6871ae87f2a80e77cf05b1ac1cdb14e1bd6f/unity-mcp-light\" --transport http --http-url \"http://127.0.0.1:60060\" --project-scoped-tools",
+  "success": true
+}

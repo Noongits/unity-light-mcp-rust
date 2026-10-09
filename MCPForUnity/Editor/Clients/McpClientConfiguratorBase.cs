@@ -55,12 +55,7 @@ namespace MCPForUnity.Editor.Clients
 
         protected string GetUvxPathOrError()
         {
-            string uvx = MCPServiceLocator.Paths.GetUvxPath();
-            if (string.IsNullOrEmpty(uvx))
-            {
-                throw new InvalidOperationException("uvx not found. Install uv/uvx or set the override in Advanced Settings.");
-            }
-            return uvx;
+            return EditorConfigurationCache.Instance.UseHttpTransport ? null : NativeServerRuntime.GetExecutableOrThrow();
         }
 
         protected string CurrentOsPath()
@@ -171,6 +166,7 @@ namespace MCPForUnity.Editor.Clients
 
                 string configJson = File.ReadAllText(path);
                 string[] args = null;
+                string command = null;
                 string configuredUrl = null;
                 bool configExists = false;
 
@@ -190,6 +186,7 @@ namespace MCPForUnity.Editor.Clients
                     if (unityToken is JObject unityObj)
                     {
                         configExists = true;
+                        command = unityObj["command"]?.ToString();
 
                         var argsToken = unityObj["args"];
                         if (argsToken is JArray)
@@ -245,6 +242,10 @@ namespace MCPForUnity.Editor.Clients
 
                 if (args != null && args.Length > 0)
                 {
+                    if (NativeServerRuntime.TryGetExecutable(out string nativePath, out _)
+                        && McpConfigurationHelper.PathsEqual(command, nativePath)
+                        && args.Length == 2 && args[0] == "--transport" && args[1] == "stdio")
+                        matches = true;
                     // Use beta-aware expected package source for comparison
                     string expectedUvxUrl = GetExpectedPackageSourceForValidation();
                     string configuredUvxUrl = McpConfigurationHelper.ExtractUvxUrl(args);
@@ -453,7 +454,7 @@ namespace MCPForUnity.Editor.Clients
                 }
 
                 string toml = File.ReadAllText(path);
-                if (CodexConfigHelper.TryParseCodexServer(toml, out _, out var args, out var url))
+                if (CodexConfigHelper.TryParseCodexServer(toml, out var nativeCommand, out var args, out var url))
                 {
                     // Determine and set the configured transport type
                     if (!string.IsNullOrEmpty(url))
@@ -489,6 +490,10 @@ namespace MCPForUnity.Editor.Clients
                     }
                     else if (args != null && args.Length > 0)
                     {
+                        if (NativeServerRuntime.TryGetExecutable(out string nativePath, out _)
+                            && McpConfigurationHelper.PathsEqual(nativeCommand, nativePath)
+                            && args.Length == 2 && args[0] == "--transport" && args[1] == "stdio")
+                            matches = true;
                         // Use beta-aware expected package source for comparison
                         string expected = GetExpectedPackageSourceForValidation();
                         string configured = McpConfigurationHelper.ExtractUvxUrl(args);
@@ -969,11 +974,8 @@ namespace MCPForUnity.Editor.Clients
             }
             else
             {
-                var (uvxPath, _, packageName) = AssetPathUtility.GetUvxCommandParts();
-                string devFlags = AssetPathUtility.GetUvxDevFlags();
-                string fromArgs = AssetPathUtility.GetBetaServerFromArgs(quoteFromPath: true);
-                // Use --scope local to register in the project-local config, avoiding conflicts with user-level config (#664)
-                args = $"mcp add --scope local --transport stdio {ProductInfo.McpServerName} -- \"{uvxPath}\" {devFlags}{fromArgs} {packageName}";
+                string executable = NativeServerRuntime.GetExecutableOrThrow();
+                args = $"mcp add --scope local --transport stdio {ProductInfo.McpServerName} -- {NativeServerRuntime.QuoteArgument(executable)} --transport stdio";
             }
 
             string projectDir = GetClientProjectDir();
@@ -1050,7 +1052,7 @@ namespace MCPForUnity.Editor.Clients
 
         public override string GetManualSnippet()
         {
-            string uvxPath = MCPServiceLocator.Paths.GetUvxPath();
+            string uvxPath = null;
             bool useHttpTransport = EditorConfigurationCache.Instance.UseHttpTransport;
 
             if (useHttpTransport)
@@ -1073,16 +1075,10 @@ namespace MCPForUnity.Editor.Clients
                        "claude mcp list";
             }
 
-            if (string.IsNullOrEmpty(uvxPath))
-            {
-                return "# Error: Configuration not available - check paths in Advanced Settings";
-            }
-
-            string devFlags = AssetPathUtility.GetUvxDevFlags();
-            string fromArgs = AssetPathUtility.GetBetaServerFromArgs(quoteFromPath: true);
+            uvxPath = NativeServerRuntime.GetExecutableOrThrow();
 
             return "# Register the MCP server with Claude Code:\n" +
-                   $"claude mcp add --scope local --transport stdio {ProductInfo.McpServerName} -- \"{uvxPath}\" {devFlags}{fromArgs} mcp-for-unity\n\n" +
+                   $"claude mcp add --scope local --transport stdio {ProductInfo.McpServerName} -- \"{uvxPath}\" --transport stdio\n\n" +
                    "# Unregister the MCP server (from all scopes to clean up any stale configs):\n" +
                    $"claude mcp remove --scope local {ProductInfo.McpServerName}\n" +
                    $"claude mcp remove --scope user {ProductInfo.McpServerName}\n" +

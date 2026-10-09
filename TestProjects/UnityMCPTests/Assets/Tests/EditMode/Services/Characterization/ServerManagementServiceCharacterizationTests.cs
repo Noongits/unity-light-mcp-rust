@@ -600,7 +600,7 @@ namespace MCPForUnityTests.Editor.Services.Characterization
             {
                 Assert.IsNotNull(command, "Command should be set on success");
                 Assert.IsNull(error, "Error should be null on success");
-                Assert.That(command, Does.Contain("uvx").Or.Contain("uv"), "Command should reference uvx/uv");
+                Assert.That(command, Does.Contain("unity-mcp-light"), "Command should launch the native Rust server");
             }
             else
             {

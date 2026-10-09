@@ -44,9 +44,23 @@ Discovery defaults to `$HOME/.unity-mcp`, or `%USERPROFILE%/.unity-mcp` when `HO
 
 Tool listing uses a single, bounded metadata request instead of command/reload retries. With no Editor listening, connection refusal returns immediately; the default legacy port 6400 remains supported even without discovery files. TCP custom definitions are cached for up to five seconds (at most 64 instances), scoped to the selected instance and socket connection. Reconnects, reloads, and command I/O invalidate that cache; `manage_tools` with `action: "sync"` explicitly refreshes it. HTTP custom definitions continue to come from live WebSocket registration.
 
-### Existing Unity configuration buttons
+### Unity configuration buttons
 
-The original Unity **Configure** flow still builds a Python `uv`/`uvx` command through unchanged C# helpers. Clicking it can replace your manual native configuration. Existing Python server launch helpers are not an installer or launcher for this binary. Start Rust HTTP yourself, or let the MCP client start Rust stdio.
+The Unity package includes prebuilt native servers for Windows x86-64, macOS
+arm64/x86-64, and Linux x86-64 (glibc 2.28+). In **HTTP Local**, click **Start Server**:
+Unity verifies and copies the executable to a user-owned cache, launches it without
+a terminal, and connects the Editor automatically. **Stop Server** stops that owned
+process. No Rust toolchain, Python, uv, or Git is needed to run the included server.
+
+The **Configure** flow writes the HTTP `/mcp` endpoint or, for stdio clients, the
+cached Rust executable with `--transport stdio`. Existing source/tool overrides
+for Python do not select the native executable. `Server/` remains available for
+people who deliberately configure the Python fallback outside this launcher.
+
+Update the Unity package using
+`https://github.com/Noongits/unity-light-mcp-rust.git?path=/MCPForUnity#main`.
+See [launch verification](../Verification/NATIVE_LAUNCH.md) for the platforms
+actually executed and the limits of cross-compilation evidence.
 
 ## HTTP: shared local server
 

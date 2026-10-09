@@ -17,13 +17,6 @@ namespace MCPForUnity.Editor.Helpers
     /// </summary>
     public static class CodexConfigHelper
     {
-        private static void AddUvxModeFlags(TomlArray args)
-        {
-            if (args == null) return;
-            foreach (var flag in AssetPathUtility.GetUvxDevFlagsList())
-                args.Add(new TomlString { Value = flag });
-        }
-
         public static string BuildCodexServerBlock(string uvPath)
         {
             var table = new TomlTable();
@@ -45,22 +38,11 @@ namespace MCPForUnity.Editor.Helpers
             else
             {
                 // Stdio mode: Use command and args
-                var (uvxPath, _, packageName) = AssetPathUtility.GetUvxCommandParts();
-
-                unityMCP["command"] = uvxPath;
-
-                var args = new TomlArray();
-                AddUvxModeFlags(args);
-                // Use centralized helper for beta server / prerelease args
-                foreach (var arg in AssetPathUtility.GetBetaServerFromArgsList())
+                unityMCP["command"] = new TomlString { Value = NativeServerRuntime.GetExecutableOrThrow() };
+                unityMCP["args"] = new TomlArray
                 {
-                    args.Add(new TomlString { Value = arg });
-                }
-                args.Add(new TomlString { Value = packageName });
-                args.Add(new TomlString { Value = "--transport" });
-                args.Add(new TomlString { Value = "stdio" });
-
-                unityMCP["args"] = args;
+                    new TomlString { Value = "--transport" }, new TomlString { Value = "stdio" }
+                };
 
                 // Add Windows-specific environment configuration for stdio mode
                 var platformService = MCPServiceLocator.Platform;
@@ -71,7 +53,7 @@ namespace MCPForUnity.Editor.Helpers
                     unityMCP["env"] = envTable;
                 }
 
-                // Allow extra time for uvx to download packages on first run
+                // Allow the MCP client time to connect to the Unity bridge
                 unityMCP["startup_timeout_sec"] = new TomlInteger { Value = 60 };
             }
 
@@ -200,21 +182,11 @@ namespace MCPForUnity.Editor.Helpers
             else
             {
                 // Stdio mode: Use command and args
-                var (uvxPath, _, packageName) = AssetPathUtility.GetUvxCommandParts();
-
-                unityMCP["command"] = new TomlString { Value = uvxPath };
-
-                var argsArray = new TomlArray();
-                AddUvxModeFlags(argsArray);
-                // Use centralized helper for beta server / prerelease args
-                foreach (var arg in AssetPathUtility.GetBetaServerFromArgsList())
+                unityMCP["command"] = new TomlString { Value = NativeServerRuntime.GetExecutableOrThrow() };
+                unityMCP["args"] = new TomlArray
                 {
-                    argsArray.Add(new TomlString { Value = arg });
-                }
-                argsArray.Add(new TomlString { Value = packageName });
-                argsArray.Add(new TomlString { Value = "--transport" });
-                argsArray.Add(new TomlString { Value = "stdio" });
-                unityMCP["args"] = argsArray;
+                    new TomlString { Value = "--transport" }, new TomlString { Value = "stdio" }
+                };
 
                 // Add Windows-specific environment configuration for stdio mode
                 var platformService = MCPServiceLocator.Platform;
@@ -225,7 +197,7 @@ namespace MCPForUnity.Editor.Helpers
                     unityMCP["env"] = envTable;
                 }
 
-                // Allow extra time for uvx to download packages on first run
+                // Allow the MCP client time to connect to the Unity bridge
                 unityMCP["startup_timeout_sec"] = new TomlInteger { Value = 60 };
             }
 

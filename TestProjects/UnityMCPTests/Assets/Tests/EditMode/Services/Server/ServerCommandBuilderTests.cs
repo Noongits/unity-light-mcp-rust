@@ -273,7 +273,8 @@ namespace MCPForUnityTests.Editor.Services.Server
                 Assert.IsNotNull(arguments, "arguments should be set on success");
                 Assert.IsNotNull(displayCommand, "displayCommand should be set on success");
                 Assert.IsNull(error, "error should be null on success");
-                Assert.That(displayCommand, Does.Contain("uvx").Or.Contain("uv"));
+                Assert.That(displayCommand, Does.Contain("unity-mcp-light"));
+                Assert.That(arguments, Does.Not.Contain("--from"));
             }
             else
             {

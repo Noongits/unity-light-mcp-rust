@@ -52,6 +52,13 @@ namespace MCPForUnity.Editor.Dependencies
                 var detector = GetCurrentPlatformDetector();
                 McpLog.Info($"Checking dependencies on {detector.PlatformName}...", always: false);
 
+                var nativeStatus = new DependencyStatus("Native Rust server", isRequired: true);
+                nativeStatus.IsAvailable = Helpers.NativeServerRuntime.TryGetExecutable(out var nativePath, out var nativeError);
+                nativeStatus.Path = nativePath;
+                nativeStatus.Details = nativeStatus.IsAvailable ? "Packaged Rust executable ready" : nativeError;
+                nativeStatus.ErrorMessage = nativeStatus.IsAvailable ? null : nativeError;
+                result.Dependencies.Add(nativeStatus);
+
                 // Check Python
                 var pythonStatus = detector.DetectPython();
                 result.Dependencies.Add(pythonStatus);

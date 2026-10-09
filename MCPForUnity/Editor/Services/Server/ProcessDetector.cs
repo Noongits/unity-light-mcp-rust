@@ -67,8 +67,8 @@ namespace MCPForUnity.Editor.Services.Server
             {
                 if (Application.platform == RuntimePlatform.WindowsEditor)
                 {
-                    // Windows: use wmic to get command line
-                    bool windowsOk = ExecPath.TryRun("cmd.exe", $"/c wmic process where \"ProcessId={pid}\" get CommandLine /value", Application.dataPath, out var wmicOut, out _, 5000);
+                    // CIM remains available on Windows versions that removed wmic.
+                    bool windowsOk = ExecPath.TryRun("powershell.exe", $"-NoProfile -NonInteractive -Command \"$p = Get-CimInstance Win32_Process -Filter 'ProcessId={pid}'; if ($p) {{ 'CommandLine=' + $p.CommandLine }}\"", Application.dataPath, out var wmicOut, out _, 5000);
                     return TryExtractWindowsCommandLine(windowsOk, wmicOut, out argsLower);
                 }
 
@@ -189,7 +189,8 @@ namespace MCPForUnity.Editor.Services.Server
                 if (!TryGetProcessCommandLine(pid, out var commandLine)) return false;
                 string command = NormalizeForMatch(commandLine);
                 if (command.Contains("unityhub")) return false;
-                return command.Contains("mcp-for-unity")
+                return command.Contains("unity-mcp-light")
+                    || command.Contains("mcp-for-unity")
                     || command.Contains("mcp_for_unity")
                     || command.Contains("mcpforunity");
             }

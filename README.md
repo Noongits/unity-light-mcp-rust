@@ -1,4 +1,4 @@
-> **Reviewed Unity MCP Light with a native Rust server.** Build and configure the native server using [ServerRust/README.md](ServerRust/README.md). The [independent review](INDEPENDENT_REVIEW.md) records the fixes, 142 Rust tests, Unity regressions, UXML profiling, skips, and remaining risks. Unity's automatic configuration still selects the retained Python fallback; follow the manual Rust setup.
+> **Unity MCP Light with a native Rust server.** On Windows x86-64, macOS arm64/x86-64, and Linux x86-64, install `MCPForUnity` and click **Start Server** in HTTP Local mode. The package includes the Rust executable; no Python, Cargo, or terminal is required. See [native setup](ServerRust/README.md) and [launch verification](Verification/NATIVE_LAUNCH.md).
 
 <p align="center">
   <picture>

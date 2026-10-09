@@ -20,7 +20,7 @@ namespace MCPForUnity.Editor.Dependencies.PlatformDetectors
 
         public virtual DependencyStatus DetectUv()
         {
-            var status = new DependencyStatus("uv Package Manager", isRequired: true)
+            var status = new DependencyStatus("uv (Python fallback)", isRequired: false)
             {
                 InstallationHint = GetUvInstallUrl()
             };

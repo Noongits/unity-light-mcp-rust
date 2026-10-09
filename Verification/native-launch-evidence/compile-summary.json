@@ -1,0 +1,25 @@
+{
+  "unityVersion": "6000.3.23f1",
+  "unityCompileExitCode": 0,
+  "editorSemanticCompile": {
+    "Windows": 0,
+    "macOS": 0,
+    "Linux": 0
+  },
+  "nativeTargets": [
+    "windows-x86_64",
+    "macos-aarch64",
+    "macos-x86_64",
+    "linux-x86_64"
+  ],
+  "WindowsDllImports": [
+    "ws2_32.dll",
+    "KERNEL32.dll",
+    "bcryptprimitives.dll",
+    "ntdll.dll",
+    "api-ms-win-core-synch-l1-2-0.dll",
+    "bcrypt.dll",
+    "ADVAPI32.dll"
+  ],
+  "WindowsLiveUnityRun": false
+}

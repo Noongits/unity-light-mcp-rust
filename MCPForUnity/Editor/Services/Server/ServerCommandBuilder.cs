@@ -10,7 +10,7 @@ using UnityEngine;
 namespace MCPForUnity.Editor.Services.Server
 {
     /// <summary>
-    /// Builds uvx/server command strings for starting the MCP HTTP server.
+    /// Builds native Rust server command strings for starting the MCP HTTP server.
     /// Handles platform-specific command construction.
     /// </summary>
     public class ServerCommandBuilder : IServerCommandBuilder
@@ -39,30 +39,11 @@ namespace MCPForUnity.Editor.Services.Server
                 return false;
             }
 
-            var (uvxPath, fromUrl, packageName) = AssetPathUtility.GetUvxCommandParts();
-            if (string.IsNullOrEmpty(uvxPath))
-            {
-                error = "uv is not installed or found in PATH. Install it or set an override in Advanced Settings.";
-                return false;
-            }
-
-            string devFlags = AssetPathUtility.GetUvxDevFlags();
-            bool projectScopedTools = EditorPrefs.GetBool(
-                EditorPrefKeys.ProjectScopedToolsLocalHttp,
-                true
-            );
-            string scopedFlag = projectScopedTools ? " --project-scoped-tools" : string.Empty;
-
-            // Use centralized helper for beta server / prerelease args
-            string fromArgs = AssetPathUtility.GetBetaServerFromArgs(quoteFromPath: true);
-
-            string args = string.IsNullOrEmpty(fromArgs)
-                ? $"{devFlags}{packageName} --transport http --http-url {httpUrl}{scopedFlag}"
-                : $"{devFlags}{fromArgs} {packageName} --transport http --http-url {httpUrl}{scopedFlag}";
-
-            fileName = uvxPath;
-            arguments = args;
-            displayCommand = $"{QuoteIfNeeded(uvxPath)} {args}";
+            if (!NativeServerRuntime.TryGetExecutable(out fileName, out error)) return false;
+            bool projectScopedTools = EditorPrefs.GetBool(EditorPrefKeys.ProjectScopedToolsLocalHttp, true);
+            arguments = "--transport http --http-url " + NativeServerRuntime.QuoteArgument(httpUrl)
+                + (projectScopedTools ? " --project-scoped-tools" : string.Empty);
+            displayCommand = NativeServerRuntime.QuoteArgument(fileName) + " " + arguments;
             return true;
         }
 

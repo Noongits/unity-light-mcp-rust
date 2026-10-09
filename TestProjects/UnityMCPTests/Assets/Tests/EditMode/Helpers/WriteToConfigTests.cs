@@ -249,7 +249,7 @@ namespace MCPForUnityTests.Editor.Helpers
         }
 
         [Test]
-        public void ClaudeDesktop_UsesAbsoluteUvPath_WhenOverrideProvided()
+        public void ClaudeDesktop_UsesNativeRust_WhenLegacyUvOverrideProvided()
         {
             var configPath = Path.Combine(_tempRoot, "claude-desktop.json");
             WriteInitialConfig(configPath, isVSCode: false, command: "uvx", directory: "/old/path");
@@ -271,7 +271,7 @@ namespace MCPForUnityTests.Editor.Helpers
                     var root = JObject.Parse(File.ReadAllText(configPath));
                     var unity = (JObject)root.SelectToken("mcpServers['unity-mcp-light']");
                     Assert.NotNull(unity, "Expected mcpServers.unity-mcp-light node");
-                    Assert.AreEqual(_fakeUvPath, (string)unity["command"], "Claude Desktop should use absolute uvx path");
+                    Assert.AreEqual(NativeServerRuntime.GetExecutableOrThrow(), (string)unity["command"], "Legacy uv overrides must not select Python in this Rust distribution");
                     Assert.IsNull(unity["env"], "Claude Desktop config should not include env block when not required");
                     AssertTransportConfiguration(unity, client);
                 }

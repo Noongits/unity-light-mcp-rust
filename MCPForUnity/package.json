@@ -1,11 +1,11 @@
 {
   "name": "com.coplaydev.unity-mcp",
-  "version": "10.3.0",
+  "version": "10.3.1",
   "displayName": "Unity MCP Light",
   "description": "A bridge that connects AI assistants to Unity via the MCP (Model Context Protocol). Allows AI clients like Claude Code, Cursor, and VSCode to directly control your Unity Editor for enhanced development workflows.\n\nFeatures automated setup wizard, cross-platform support, and seamless integration with popular AI development tools.\n\nJoin Our Discord: https://discord.gg/y4p8KfzrN4",
   "unity": "2021.3",
-  "documentationUrl": "https://github.com/Talhasarac/unity-mcp-light",
-  "licensesUrl": "https://github.com/Talhasarac/unity-mcp-light/blob/main/LICENSE",
+  "documentationUrl": "https://github.com/Noongits/unity-light-mcp-rust",
+  "licensesUrl": "https://github.com/Noongits/unity-light-mcp-rust/blob/main/LICENSE",
   "dependencies": {
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.imageconversion": "1.0.0",

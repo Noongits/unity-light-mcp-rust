@@ -13,28 +13,16 @@ namespace MCPForUnityTests.Editor.Helpers
     public class CodexConfigHelperTests : TransportPreferenceTestBase
     {
         /// <summary>
-        /// Validates that a TOML args array contains the expected uvx structure:
-        /// --from, the server package source, mcp-for-unity package name,
-        /// and optionally --prerelease/explicit (only for prerelease builds).
+        /// Validates the exact native stdio arguments, without Python package resolution.
         /// </summary>
-        private static void AssertValidUvxArgs(TomlArray args)
+        private static void AssertValidNativeArgs(TomlArray args)
         {
             var argValues = new List<string>();
             foreach (TomlNode child in args.Children)
                 argValues.Add((child as TomlString).Value);
 
-            Assert.IsTrue(argValues.Contains("--from"), "Args should contain --from");
-            Assert.IsTrue(argValues.Any(a => a.Contains("unity-mcp-light")), "Args should contain the server package source");
-            Assert.IsTrue(argValues.Contains("mcp-for-unity"), "Args should contain package name");
-
-            // Prerelease builds include --prerelease explicit before --from
-            int fromIndex = argValues.IndexOf("--from");
-            int prereleaseIndex = argValues.IndexOf("--prerelease");
-            if (prereleaseIndex >= 0)
-            {
-                Assert.IsTrue(prereleaseIndex < fromIndex, "--prerelease should come before --from");
-                Assert.AreEqual("explicit", argValues[prereleaseIndex + 1], "--prerelease should be followed by explicit");
-            }
+            CollectionAssert.AreEqual(new[] { "--transport", "stdio" }, argValues,
+                "Native Rust configuration must not invoke uvx or resolve Python packages");
         }
 
         /// <summary>
@@ -268,11 +256,11 @@ namespace MCPForUnityTests.Editor.Helpers
 
             // Verify command contains uvx
             var command = (commandNode as TomlString).Value;
-            Assert.IsTrue(command.Contains("uvx"), "Command should contain uvx");
+            Assert.IsTrue(command.Contains("unity-mcp-light"), "Command should launch the native Rust executable");
 
             // Verify args contains the proper uvx command structure
             var args = argsNode as TomlArray;
-            AssertValidUvxArgs(args);
+            AssertValidNativeArgs(args);
 
             // Verify env.SystemRoot is present on Windows
             bool hasEnv = unityMcp.TryGetNode("env", out var envNode);
@@ -325,11 +313,11 @@ namespace MCPForUnityTests.Editor.Helpers
 
             // Verify command contains uvx
             var command = (commandNode as TomlString).Value;
-            Assert.IsTrue(command.Contains("uvx"), "Command should contain uvx");
+            Assert.IsTrue(command.Contains("unity-mcp-light"), "Command should launch the native Rust executable");
 
             // Verify args contains the proper uvx command structure
             var args = argsNode as TomlArray;
-            AssertValidUvxArgs(args);
+            AssertValidNativeArgs(args);
 
             // Verify env is NOT present on non-Windows platforms
             bool hasEnv = unityMcp.TryGetNode("env", out _);
@@ -384,11 +372,11 @@ namespace MCPForUnityTests.Editor.Helpers
 
             // Verify command contains uvx
             var command = (commandNode as TomlString).Value;
-            Assert.IsTrue(command.Contains("uvx"), "Command should contain uvx");
+            Assert.IsTrue(command.Contains("unity-mcp-light"), "Command should launch the native Rust executable");
 
             // Verify args contains the proper uvx command structure
             var args = argsNode as TomlArray;
-            AssertValidUvxArgs(args);
+            AssertValidNativeArgs(args);
 
             // Verify env.SystemRoot is present on Windows
             bool hasEnv = unityMcp.TryGetNode("env", out var envNode);
@@ -450,11 +438,11 @@ namespace MCPForUnityTests.Editor.Helpers
 
             // Verify command contains uvx
             var command = (commandNode as TomlString).Value;
-            Assert.IsTrue(command.Contains("uvx"), "Command should contain uvx");
+            Assert.IsTrue(command.Contains("unity-mcp-light"), "Command should launch the native Rust executable");
 
             // Verify args contains the proper uvx command structure
             var args = argsNode as TomlArray;
-            AssertValidUvxArgs(args);
+            AssertValidNativeArgs(args);
 
             // Verify env is NOT present on non-Windows platforms
             bool hasEnv = unityMcp.TryGetNode("env", out _);

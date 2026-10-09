@@ -98,18 +98,7 @@ namespace MCPForUnity.Editor.Services
             {
                 string tokenNeedle = instanceToken.ToLowerInvariant();
 
-                if (Application.platform == RuntimePlatform.WindowsEditor)
-                {
-                    // Query full command line so we can validate token (reduces PID reuse risk).
-                    // Use CIM via PowerShell (wmic is deprecated).
-                    string ps = $"(Get-CimInstance Win32_Process -Filter \\\"ProcessId={pid}\\\").CommandLine";
-                    bool ok = ExecPath.TryRun("powershell", $"-NoProfile -Command \"{ps}\"", Application.dataPath, out var stdout, out var stderr, 5000);
-                    string combined = ((stdout ?? string.Empty) + "\n" + (stderr ?? string.Empty)).ToLowerInvariant();
-                    containsToken = combined.Contains(tokenNeedle);
-                    return ok;
-                }
-
-                if (TryGetUnixProcessArgs(pid, out var argsLowerNow))
+                if (_processDetector.TryGetProcessCommandLine(pid, out var argsLowerNow))
                 {
                     containsToken = argsLowerNow.Contains(NormalizeForMatch(tokenNeedle));
                     return true;
@@ -238,10 +227,7 @@ namespace MCPForUnity.Editor.Services
         /// </summary>
         public bool StartLocalHttpServer(bool quiet = false)
         {
-            /// Clean stale Python build artifacts when using a local dev server path
-            AssetPathUtility.CleanLocalServerBuildArtifacts();
-
-            if (!TryGetLocalHttpServerCommandParts(out _, out _, out var displayCommand, out var error))
+            if (!TryGetLocalHttpServerCommandParts(out var executable, out var nativeArguments, out var displayCommand, out var error))
             {
                 if (!quiet)
                 {
@@ -290,9 +276,12 @@ namespace MCPForUnity.Editor.Services
             string pidFilePath = portForPid > 0 ? GetLocalHttpServerPidFilePath(portForPid) : null;
 
             string launchCommand = displayCommand;
+            string processArguments = nativeArguments;
             if (!string.IsNullOrEmpty(pidFilePath))
             {
-                launchCommand = $"{displayCommand} --pidfile {QuoteIfNeeded(pidFilePath)} --unity-instance-token {instanceToken}";
+                string ownershipArgs = " --pidfile " + NativeServerRuntime.QuoteArgument(pidFilePath) + " --unity-instance-token " + instanceToken;
+                launchCommand = displayCommand + ownershipArgs;
+                processArguments += ownershipArgs;
             }
 
             // First-time-only confirmation. Subsequent launches (and the quiet auto-start path) skip the dialog.
@@ -340,11 +329,20 @@ namespace MCPForUnity.Editor.Services
                     catch { }
                 }
 
-                McpLog.Info("Starting local HTTP server… (first run may take a minute while dependencies install)");
+                McpLog.Info("Starting native Rust HTTP server…");
 
                 // Launch the server headless (no terminal window); stdout+stderr go to the launch log.
                 string effectiveLog = launchLog ?? Path.Combine(Path.GetTempPath(), "mcp-for-unity-server-launch.log");
-                var startInfo = CreateHeadlessProcessStartInfo(launchCommand, effectiveLog);
+                bool nativeLaunch = string.Equals(Path.GetFileNameWithoutExtension(executable), "unity-mcp-light", StringComparison.OrdinalIgnoreCase);
+                var startInfo = nativeLaunch
+                    ? new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = executable, Arguments = processArguments,
+                        WorkingDirectory = Path.GetDirectoryName(Application.dataPath),
+                        UseShellExecute = false, CreateNoWindow = true,
+                        RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true
+                    }
+                    : CreateHeadlessProcessStartInfo(launchCommand, effectiveLog);
 
                 // The headless shell is not a login shell, so it does not inherit the user's
                 // profile PATH (on macOS, GUI-launched Unity has a minimal PATH). Prepend the
@@ -359,7 +357,28 @@ namespace MCPForUnity.Editor.Services
                         : (extraPathPrepend + Path.PathSeparator + currentPath);
                 }
 
-                _lastLaunchedProcess = System.Diagnostics.Process.Start(startInfo);
+                if (nativeLaunch)
+                {
+                    var process = new System.Diagnostics.Process { StartInfo = startInfo };
+                    object logLock = new object();
+                    System.Diagnostics.DataReceivedEventHandler append = (_, e) =>
+                    {
+                        if (e.Data == null) return;
+                        lock (logLock)
+                        {
+                            try { File.AppendAllText(effectiveLog, e.Data + Environment.NewLine); }
+                            catch { /* A log write failure must not break server lifecycle. */ }
+                        }
+                    };
+                    process.OutputDataReceived += append;
+                    process.ErrorDataReceived += append;
+                    if (!process.Start()) { process.Dispose(); throw new IOException("Rust server process did not start."); }
+                    _lastLaunchedProcess = process;
+                    process.StandardInput.Close();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                }
+                else _lastLaunchedProcess = System.Diagnostics.Process.Start(startInfo);
                 if (!string.IsNullOrEmpty(pidFilePath))
                 {
                     StoreLocalHttpServerHandshake(pidFilePath, instanceToken);

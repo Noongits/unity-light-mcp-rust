@@ -390,9 +390,10 @@ namespace MCPForUnity.Editor.Windows.Components.ClientConfig
             string claudePath = MCPServiceLocator.Paths.GetClaudeCliPath();
             string httpUrl = HttpEndpointUtility.GetMcpRpcUrl();
             var serverTransport = HttpEndpointUtility.GetCurrentServerTransport();
-            var (uvxPath, _, packageName) = AssetPathUtility.GetUvxCommandParts();
-            string fromArgs = AssetPathUtility.GetBetaServerFromArgs(quoteFromPath: true);
-            string uvxDevFlags = AssetPathUtility.GetUvxDevFlags();
+            string uvxPath = useHttpTransport ? null : NativeServerRuntime.GetExecutableOrThrow();
+            string fromArgs = string.Empty;
+            string packageName = "--transport stdio";
+            string uvxDevFlags = string.Empty;
             string apiKey = EditorPrefs.GetString(EditorPrefKeys.ApiKey, string.Empty);
 
             // Compute pathPrepend on main thread

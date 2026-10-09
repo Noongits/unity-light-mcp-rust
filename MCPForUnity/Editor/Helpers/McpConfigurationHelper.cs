@@ -91,8 +91,7 @@ namespace MCPForUnity.Editor.Helpers
             catch { }
 
             // 1) Start from existing, only fill gaps (prefer trusted resolver)
-            string uvxPath = MCPServiceLocator.Paths.GetUvxPath();
-            if (uvxPath == null) return "uv package manager not found. Please install uv first.";
+            string uvxPath = null; // Native/HTTP builders resolve only what their transport needs.
 
             // Ensure containers exist and write back configuration
             JObject existingRoot;
@@ -144,11 +143,7 @@ namespace MCPForUnity.Editor.Helpers
                 CodexConfigHelper.TryParseCodexServer(existingToml, out existingCommand, out existingArgs);
             }
 
-            string uvxPath = MCPServiceLocator.Paths.GetUvxPath();
-            if (uvxPath == null)
-            {
-                return "uv package manager not found. Please install uv first.";
-            }
+            string uvxPath = null;
 
             string updatedToml;
             try { updatedToml = CodexConfigHelper.UpsertCodexServerBlock(existingToml, uvxPath); }

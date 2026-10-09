@@ -274,24 +274,8 @@ namespace MCPForUnity.Editor.Clients.Configurators
             ConfiguredTransport transport = HttpEndpointUtility.GetCurrentServerTransport();
             if (transport == ConfiguredTransport.Stdio)
             {
-                var (uvxPath, _, packageName) = AssetPathUtility.GetUvxCommandParts();
-                if (string.IsNullOrWhiteSpace(uvxPath))
-                {
-                    throw new InvalidOperationException("uvx not found. Install uv/uvx or set the override in Advanced Settings.");
-                }
-
-                var args = new JArray();
-                foreach (string value in AssetPathUtility.GetUvxDevFlagsList())
-                {
-                    args.Add(value);
-                }
-                foreach (string value in AssetPathUtility.GetBetaServerFromArgsList())
-                {
-                    args.Add(value);
-                }
-                args.Add(packageName);
-                args.Add("--transport");
-                args.Add("stdio");
+                string uvxPath = NativeServerRuntime.GetExecutableOrThrow();
+                var args = new JArray("--transport", "stdio");
 
                 return new JObject
                 {
