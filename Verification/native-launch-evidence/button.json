@@ -4,7 +4,7 @@
       "health": {
         "message": "MCP for Unity Rust server is running",
         "status": "healthy",
-        "timestamp": 1791572998.9847219,
+        "timestamp": 1791573262.270371,
         "version": "0.1.0"
       },
       "instances": {
@@ -15,7 +15,7 @@
             "name": "unity-light-animation-review-20261009",
             "path": "/private/tmp/unity-light-animation-review-20261009",
             "project": "unity-light-animation-review-20261009",
-            "session_id": "07df9423-c6c1-4308-9485-a26635b07a25",
+            "session_id": "7f14c992-6dab-4ced-a998-6643ec549e44",
             "status": "running",
             "unity_version": "6000.3.23f1"
           }
@@ -29,7 +29,7 @@
       "health": {
         "message": "MCP for Unity Rust server is running",
         "status": "healthy",
-        "timestamp": 1791573008.223969,
+        "timestamp": 1791573271.4276991,
         "version": "0.1.0"
       },
       "instances": {
@@ -40,7 +40,7 @@
             "name": "unity-light-animation-review-20261009",
             "path": "/private/tmp/unity-light-animation-review-20261009",
             "project": "unity-light-animation-review-20261009",
-            "session_id": "d73a0a1b-f1d8-4332-83ca-740d14ed4db7",
+            "session_id": "50b7e351-25a0-4a0d-a3a6-390b3c671cac",
             "status": "running",
             "unity_version": "6000.3.23f1"
           }
@@ -51,6 +51,6 @@
       "stopped": true
     }
   ],
-  "command": "\"/Users/reviewer/.local/share/UnityMCPRust/d871186fad680a998b543e8b9e3d6871ae87f2a80e77cf05b1ac1cdb14e1bd6f/unity-mcp-light\" --transport http --http-url \"http://127.0.0.1:60060\" --project-scoped-tools",
+  "command": "\"/Users/reviewer/.local/share/UnityMCPRust/d30d85694e6ea9301aa7915f2fbd8d4b4b24da97daa97d3cf673f61f8726f69c/unity-mcp-light\" --transport http --http-url \"http://127.0.0.1:60134\" --project-scoped-tools",
   "success": true
 }

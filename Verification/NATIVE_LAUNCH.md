@@ -11,6 +11,9 @@ the binary into a per-user cache keyed by its checksum. Cached corruption is rep
 invalid package content is rejected. Package-cache files are never made executable
 or overwritten. Multiple native versions can coexist without replacing a running file.
 The native process launches directly with redirected output and no console window.
+A console-signal registration failure no longer initiates HTTP shutdown: headless
+processes keep serving until their owner stops them. Two injected-signal regressions
+verify both the unavailable-signal and received-signal paths.
 
 JSON, TOML, OpenCode, OpenClaw, and Claude Code configuration builders now use the
 native executable for stdio and the normal `/mcp` endpoint for HTTP. HTTP configuration
@@ -22,6 +25,8 @@ PowerShell CIM instead of removed `wmic`, including launch-token validation for 
 The existing PID/token and unrelated-process guards remain in place.
 
 ## Verification
+
+Native Rust tests after the headless-signal fix: **135 library + 10 binary tests passed**.
 
 - Compile first: Unity 6000.3.23f1, macOS arm64, disposable project; exit 0.
 - Semantic editor compilation with Windows, macOS, and Linux preprocessor definitions:

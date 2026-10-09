@@ -1,0 +1,10 @@
+{
+  "libraryPassed": 135,
+  "binaryPassed": 10,
+  "failed": 0,
+  "ignored": 0,
+  "signalTests": [
+    "unavailable_console_signal_does_not_stop_http_server",
+    "actual_console_signal_allows_shutdown"
+  ]
+}
