@@ -1,0 +1,14 @@
+test_01_exact_tool_contract (__main__.Contract.test_01_exact_tool_contract) ... ok
+test_02_exact_resource_contract (__main__.Contract.test_02_exact_resource_contract) ... ok
+test_03_static_docs (__main__.Contract.test_03_static_docs) ... ok
+test_04_resource_bridge_framing (__main__.Contract.test_04_resource_bridge_framing) ... ok
+test_05_no_prompts (__main__.Contract.test_05_no_prompts) ... ok
+test_06_unknown_method (__main__.Contract.test_06_unknown_method) ... ok
+test_07_group_visibility_and_reset (__main__.Contract.test_07_group_visibility_and_reset) ... ok
+test_08_invalid_resource_id (__main__.Contract.test_08_invalid_resource_id) ... ok
+test_09_python_forwarding_parity (__main__.Contract.test_09_python_forwarding_parity) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.558s
+
+OK

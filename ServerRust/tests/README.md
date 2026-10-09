@@ -31,7 +31,7 @@ Linux uses `/proc`. Run against the release binary with `UNITY_MCP_RUST_BIN`.
 
 ## Coverage
 
-- Exact 38-tool advertised schemas, annotations and metadata
+- Exact 39-tool advertised schemas, annotations and metadata
 - Exact 25 resources/templates and static resource contents
 - Legacy TCP greeting, eight-byte framing, zero-length heartbeats
 - Python-to-Unity argument transformations and actual MCP validation

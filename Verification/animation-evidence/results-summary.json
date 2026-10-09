@@ -1,0 +1,57 @@
+{
+  "upstream_commit": "aa5fc638d623f56178d50329d9ad8c541a57fe66",
+  "unity_version": "6000.3.23f1",
+  "platform": "macOS arm64",
+  "compile_exit": 0,
+  "editmode": {
+    "id": "2",
+    "testcasecount": "1706",
+    "result": "Skipped:Ignored",
+    "total": "1706",
+    "passed": "1630",
+    "failed": "0",
+    "inconclusive": "0",
+    "skipped": "76",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-09 17:10:01Z",
+    "end-time": "2026-10-09 17:10:54Z",
+    "duration": "52.6639293"
+  },
+  "playmode": {
+    "id": "2",
+    "testcasecount": "5",
+    "result": "Passed",
+    "total": "5",
+    "passed": "5",
+    "failed": "0",
+    "inconclusive": "0",
+    "skipped": "0",
+    "asserts": "0",
+    "engine-version": "3.5.0.0",
+    "clr-version": "4.0.30319.42000",
+    "start-time": "2026-10-09 17:14:54Z",
+    "end-time": "2026-10-09 17:14:54Z",
+    "duration": "0.1191978"
+  },
+  "animation": {
+    "total": 80,
+    "passed": 80,
+    "failed": 0,
+    "skipped": 0
+  },
+  "rust": {
+    "library_passed": 135,
+    "binary_passed": 8,
+    "stdio_groups_passed": 9,
+    "http_groups_passed": 8
+  },
+  "python": {
+    "passed": 1294,
+    "skipped": 18
+  },
+  "website_build_passed": true,
+  "live_animation_passed": true,
+  "vendor_importer_metadata_restored": 47
+}

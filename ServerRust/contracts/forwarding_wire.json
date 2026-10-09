@@ -872,5 +872,94 @@
       }
     ],
     "valid": true
+  },
+  {
+    "tool": "manage_animation",
+    "arguments": {
+      "action": "CLIP_CREATE",
+      "clip_path": "Assets/AnimationParity/Test.anim",
+      "properties": {
+        "loop": true,
+        "length": 2
+      }
+    },
+    "calls": [
+      {
+        "command": "manage_animation",
+        "params": {
+          "action": "clip_create",
+          "properties": {
+            "loop": true,
+            "length": 2
+          },
+          "clipPath": "Assets/AnimationParity/Test.anim"
+        }
+      }
+    ]
+  },
+  {
+    "tool": "manage_animation",
+    "arguments": {
+      "action": "controller_add_state",
+      "controller_path": "Assets/AnimationParity/Test.controller",
+      "clip_path": "Assets/AnimationParity/Test.anim",
+      "properties": "{\"state_name\":\"Move\",\"is_default\":true}"
+    },
+    "calls": [
+      {
+        "command": "manage_animation",
+        "params": {
+          "action": "controller_add_state",
+          "properties": "{\"state_name\":\"Move\",\"is_default\":true}",
+          "clipPath": "Assets/AnimationParity/Test.anim",
+          "controllerPath": "Assets/AnimationParity/Test.controller"
+        }
+      }
+    ]
+  },
+  {
+    "tool": "manage_animation",
+    "arguments": {
+      "action": "animator_set_parameter",
+      "target": "-123",
+      "search_method": "by_id",
+      "properties": {
+        "parameter_name": "Speed",
+        "parameter_type": "float",
+        "value": 2
+      }
+    },
+    "calls": [
+      {
+        "command": "manage_animation",
+        "params": {
+          "action": "animator_set_parameter",
+          "properties": {
+            "parameter_name": "Speed",
+            "parameter_type": "float",
+            "value": 2
+          },
+          "target": "-123",
+          "searchMethod": "by_id"
+        }
+      }
+    ]
+  },
+  {
+    "tool": "manage_animation",
+    "arguments": {
+      "action": "clip_get_info",
+      "clip_path": "Assets/AnimationParity/Test.anim",
+      "properties": null
+    },
+    "calls": [
+      {
+        "command": "manage_animation",
+        "params": {
+          "action": "clip_get_info",
+          "clipPath": "Assets/AnimationParity/Test.anim"
+        }
+      }
+    ]
   }
 ]

@@ -1,0 +1,568 @@
+[
+  {
+    "step": "initialize",
+    "result": {
+      "_meta": null,
+      "protocolVersion": "2025-11-25",
+      "capabilities": {
+        "experimental": null,
+        "logging": {},
+        "prompts": {
+          "listChanged": false
+        },
+        "resources": {
+          "subscribe": null,
+          "listChanged": false
+        },
+        "tools": {
+          "listChanged": true
+        },
+        "completions": null,
+        "extensions": null,
+        "tasks": null
+      },
+      "serverInfo": {
+        "name": "unity-mcp-light",
+        "title": null,
+        "version": "0.1.0",
+        "description": null,
+        "websiteUrl": null,
+        "icons": null
+      },
+      "instructions": "\nThis server provides tools to interact with the Unity Game Engine Editor.\n\nI have a dynamic tool system. Always check the mcpforunity://custom-tools resource first to see what special capabilities are available for the current project.\n\nTargeting Unity instances:\n- Use the resource mcpforunity://instances to list active Unity sessions (Name@hash).\n- When multiple instances are connected, call set_active_instance with the exact Name@hash before using tools/resources to pin routing for the whole session. The server will error if multiple are connected and no active instance is set.\n- Alternatively, pass unity_instance as a parameter on any individual tool call to route just that call (e.g. unity_instance=\"MyGame@abc123\", unity_instance=\"abc\" for a hash prefix, or unity_instance=\"6401\" for a port number in stdio mode). This does not change the session default.\n\nImportant Workflows:\n\nResources vs Tools:\n- Use RESOURCES to read editor state (mcpforunity://editor/state, mcpforunity://project/info, mcpforunity://project/tags, mcpforunity://tests, etc)\n- Use TOOLS to perform actions and mutations (manage_editor for play mode control, tag/layer management, etc)\n- Always check related resources before modifying the engine state with tools\n\nReading resources (read this before using ANY resource named below):\n- Resources are addressed by URI, never by name. A resource's name and URI are NOT interchangeable: names use underscores (e.g. editor_state) while URIs use slashes (e.g. mcpforunity://editor/state). Do NOT build a URI by swapping separators in the name \u2014 you will 404.\n- These instructions always spell resources as full mcpforunity:// URIs \u2014 read one exactly as written. If you only have a name (from resources/list or another tool's output), look its URI up in resources/list rather than guessing it.\n- Resource payloads are wrapped: the content lives under a top-level `data` object, so field paths are `data.<section>.<field>` (e.g. `data.advice.ready_for_tools`), not bare top-level fields.\n- The mcpforunity:// URI names the resource, not the server. Some clients take a separate server key on a resource read \u2014 in Codex, tools are exposed as mcp__unity-mcp-light__* but resources/read wants server: \"unity-mcp-light\". If a read fails with an unknown-server error, list resources first and use the key exactly as returned.\n\nScript Management:\n- After creating or modifying scripts (by your own tools or the `manage_script` tool) use `read_console` to check for compilation errors before proceeding\n- Only after successful compilation can new components/types be used\n- You can poll mcpforunity://editor/state and read `data.compilation.is_compiling` to check if the domain reload is complete, or `data.advice.ready_for_tools` for overall readiness\n\nScene Setup:\n- Always include a Camera and main Light (Directional Light) in new scenes\n- Create prefabs with `manage_asset` for reusable GameObjects\n- Use `manage_scene` to load, save, and query scene information\n\nPath Conventions:\n- Unless specified otherwise, all paths are relative to the project's `Assets/` folder\n- Use forward slashes (/) in paths for cross-platform compatibility\n\nConsole Monitoring:\n- Check `read_console` regularly to catch errors and compilation status (it returns errors only unless you ask for warnings)\n- Filter by log type (Error, Warning, Log) to focus on specific issues\n\nMenu Items:\n- Use `execute_menu_item` when you have read the mcpforunity://menu-items resource\n- This lets you interact with Unity's menu system and third-party tools\n\nUnity API Verification (requires 'docs' tool group):\n- When the 'docs' tool group is active, use `unity_reflect` to verify Unity API details before answering questions or writing C# code. LLM training data frequently contains incorrect, outdated, or hallucinated Unity APIs.\n- BEFORE answering Unity API questions: search the project's assets (`manage_asset`) and reflect the API (`unity_reflect`) to verify. Do NOT rely on training data alone.\n- Common hallucination areas: shaders and materials (always search assets for actual shader names), package-specific APIs (Input System, Cinemachine, ProBuilder, NavMesh, URP/HDRP), and APIs that changed between Unity versions.\n- Workflow: `unity_reflect search` \u2192 `unity_reflect get_type` \u2192 `unity_reflect get_member`.\n- For shader/material questions: use `manage_asset(action=\"search\", filter_type=\"Shader\")` to find actual shaders in the project before recommending one.\n\nPayload sizing & paging (important):\n- Many Unity queries can return very large JSON. Prefer **paged + summary-first** calls.\n- `manage_scene(action=\"get_hierarchy\")`:\n  - Use `page_size` + `cursor` and follow `next_cursor` until null.\n  - `page_size` is **items per page**; recommended starting point: **50**.\n- `manage_gameobject(action=\"get_components\")`:\n  - Start with `include_properties=false` (metadata-only) and small `page_size` (e.g. **10-25**).\n  - Only request `include_properties=true` when needed; keep `page_size` small (e.g. **3-10**) to bound payloads.\n- `manage_asset(action=\"search\")`:\n  - Use paging (`page_size`, `page_number`) and keep `page_size` modest (e.g. **25-50**) to avoid token-heavy responses.\n  - Keep `generate_preview=false` unless you explicitly need thumbnails (previews may include large base64 payloads).\n"
+    }
+  },
+  {
+    "step": "set_active_instance",
+    "result": {
+      "data": {
+        "instance": "unity-light-animation-review-20261009@d696acaa",
+        "session_id": "stdio"
+      },
+      "message": "Active instance set to unity-light-animation-review-20261009@d696acaa",
+      "success": true
+    }
+  },
+  {
+    "step": "project/info",
+    "result": {
+      "_meta": null,
+      "ttlMs": 0,
+      "cacheScope": "private",
+      "contents": [
+        {
+          "uri": "mcpforunity://project/info",
+          "mimeType": "text/plain",
+          "_meta": null,
+          "text": "{\"data\":{\"assetsPath\":\"/private/tmp/unity-light-animation-review-20261009/Assets\",\"platform\":\"StandaloneOSX\",\"projectName\":\"unity-light-animation-review-20261009\",\"projectRoot\":\"/private/tmp/unity-light-animation-review-20261009\",\"unityVersion\":\"6000.3.23f1\"},\"error\":null,\"hint\":null,\"message\":\"Retrieved project info.\",\"success\":true}"
+        }
+      ],
+      "resultType": "complete"
+    }
+  },
+  {
+    "step": "tools/list",
+    "result": {
+      "names": [
+        "apply_text_edits",
+        "batch_execute",
+        "blender_bridge",
+        "create_script",
+        "delete_script",
+        "execute_code",
+        "execute_custom_tool",
+        "execute_menu_item",
+        "find_gameobjects",
+        "find_in_file",
+        "get_sha",
+        "get_test_job",
+        "import_model_file",
+        "inspect_prefab",
+        "manage_animation",
+        "manage_asset",
+        "manage_build",
+        "manage_camera",
+        "manage_components",
+        "manage_editor",
+        "manage_gameobject",
+        "manage_graphics",
+        "manage_material",
+        "manage_physics",
+        "manage_prefabs",
+        "manage_scene",
+        "manage_script",
+        "manage_scriptable_object",
+        "manage_shader",
+        "manage_texture",
+        "manage_tools",
+        "manage_ui",
+        "read_console",
+        "refresh_unity",
+        "run_tests",
+        "script_apply_edits",
+        "set_active_instance",
+        "unity_reflect",
+        "validate_script"
+      ]
+    }
+  },
+  {
+    "step": "manage_gameobject",
+    "result": {
+      "data": {
+        "activeInHierarchy": true,
+        "activeSelf": true,
+        "componentNames": [
+          "UnityEngine.Transform"
+        ],
+        "instanceID": -1356,
+        "isStatic": false,
+        "layer": 0,
+        "name": "AnimationLiveTarget",
+        "parentInstanceID": 0,
+        "scenePath": "",
+        "tag": "Untagged",
+        "transform": {
+          "forward": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "localPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "localRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "right": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "up": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          }
+        }
+      },
+      "message": "GameObject 'AnimationLiveTarget' created successfully in scene.",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_gameobject",
+    "result": {
+      "data": {
+        "activeInHierarchy": true,
+        "activeSelf": true,
+        "componentNames": [
+          "UnityEngine.Transform"
+        ],
+        "instanceID": -1374,
+        "isStatic": false,
+        "layer": 0,
+        "name": "Visual",
+        "parentInstanceID": -1356,
+        "scenePath": "",
+        "tag": "Untagged",
+        "transform": {
+          "forward": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "localPosition": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "localRotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "position": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "right": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "rotation": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "scale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "up": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          }
+        }
+      },
+      "message": "GameObject 'Visual' created successfully in scene.",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "frameRate": 60.0,
+        "isLooping": true,
+        "length": 1.0,
+        "name": "Move",
+        "path": "Assets/AnimationLive/Move.anim"
+      },
+      "message": "Created AnimationClip at 'Assets/AnimationLive/Move.anim'",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "clipPath": "Assets/AnimationLive/Move.anim",
+        "keyframeCount": 2,
+        "propertyPath": "m_LocalPosition.x",
+        "type": "Transform"
+      },
+      "message": "Set curve on 'm_LocalPosition.x' (Transform) with 2 keyframes",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "layerCount": 1,
+        "name": "Actor",
+        "parameterCount": 0,
+        "path": "Assets/AnimationLive/Actor.controller"
+      },
+      "message": "Created AnimatorController at 'Assets/AnimationLive/Actor.controller'",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "parameterName": "Speed",
+        "parameterType": "float",
+        "totalParameters": 1
+      },
+      "message": "Added float parameter 'Speed'",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "hasMotion": true,
+        "isDefault": true,
+        "layerIndex": 0,
+        "speed": 1.0,
+        "stateName": "Move"
+      },
+      "message": "Added state 'Move' to layer 0",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "blendParameter": "Speed",
+        "blendType": "Simple1D",
+        "controllerPath": "Assets/AnimationLive/Actor.controller",
+        "layerIndex": 0,
+        "stateName": "Locomotion"
+      },
+      "message": "Created 1D blend tree state 'Locomotion' in 'Assets/AnimationLive/Actor.controller'",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "childCount": 1,
+        "clipPath": "Assets/AnimationLive/Move.anim",
+        "controllerPath": "Assets/AnimationLive/Actor.controller",
+        "stateName": "Locomotion",
+        "threshold": 1.0
+      },
+      "message": "Added clip 'Move' to blend tree 'Locomotion' at threshold 1",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "controllerName": "Actor",
+        "controllerPath": "Assets/AnimationLive/Actor.controller",
+        "gameObject": "AnimationLiveTarget"
+      },
+      "message": "Assigned controller 'Actor' to 'AnimationLiveTarget'",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "message": "Set float 'Speed' = 2 (default value, Edit mode)",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "curveCount": 1,
+        "curves": [
+          {
+            "keyCount": 2,
+            "path": "Visual",
+            "propertyName": "m_LocalPosition.x",
+            "type": "Transform"
+          }
+        ],
+        "eventCount": 0,
+        "events": [],
+        "frameRate": 60.0,
+        "isLooping": true,
+        "length": 1.0,
+        "name": "Move",
+        "path": "Assets/AnimationLive/Move.anim",
+        "wrapMode": "Loop"
+      },
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "layerCount": 1,
+        "layers": [
+          {
+            "index": 0,
+            "name": "Base Layer",
+            "stateCount": 2,
+            "states": [
+              {
+                "hasMotion": true,
+                "isDefault": true,
+                "motionName": "Move",
+                "name": "Move",
+                "speed": 1.0,
+                "transitionCount": 0,
+                "transitions": []
+              },
+              {
+                "hasMotion": true,
+                "isDefault": false,
+                "motionName": "Locomotion",
+                "name": "Locomotion",
+                "speed": 1.0,
+                "transitionCount": 0,
+                "transitions": []
+              }
+            ]
+          }
+        ],
+        "name": "Actor",
+        "parameterCount": 1,
+        "parameters": [
+          {
+            "defaultBool": false,
+            "defaultFloat": 2.0,
+            "defaultInt": 0,
+            "name": "Speed",
+            "type": "Float"
+          }
+        ],
+        "path": "Assets/AnimationLive/Actor.controller"
+      },
+      "success": true
+    }
+  },
+  {
+    "step": "manage_editor",
+    "result": {
+      "data": null,
+      "message": "Entered play mode.",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "animatorGameObject": "AnimationLiveTarget",
+        "applyRootMotion": false,
+        "clips": [
+          {
+            "frameRate": 60.0,
+            "isLooping": true,
+            "length": 1.0,
+            "name": "Move",
+            "wrapMode": "Loop"
+          },
+          {
+            "frameRate": 60.0,
+            "isLooping": true,
+            "length": 1.0,
+            "name": "Move",
+            "wrapMode": "Loop"
+          }
+        ],
+        "controllerName": "Actor",
+        "cullingMode": "AlwaysAnimate",
+        "enabled": true,
+        "gameObject": "AnimationLiveTarget",
+        "hasController": true,
+        "layerCount": 1,
+        "layers": [
+          {
+            "currentStateHash": 1718862356,
+            "currentStateLength": 1.0,
+            "currentStateNormalizedTime": 3.2670095,
+            "index": 0,
+            "isInTransition": false,
+            "name": "Base Layer",
+            "weight": 1.0
+          }
+        ],
+        "parameterCount": 1,
+        "parameters": [
+          {
+            "defaultBool": false,
+            "defaultFloat": 2.0,
+            "defaultInt": 0,
+            "name": "Speed",
+            "type": "Float"
+          }
+        ],
+        "speed": 1.0,
+        "updateMode": "Normal"
+      },
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "message": "Playing state 'Move' on 'AnimationLiveTarget'",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "message": "Set animator speed to 1.5 on 'AnimationLiveTarget'",
+      "success": true
+    }
+  },
+  {
+    "step": "manage_animation",
+    "result": {
+      "data": {
+        "animatorGameObject": "AnimationLiveTarget",
+        "applyRootMotion": false,
+        "clips": [
+          {
+            "frameRate": 60.0,
+            "isLooping": true,
+            "length": 1.0,
+            "name": "Move",
+            "wrapMode": "Loop"
+          },
+          {
+            "frameRate": 60.0,
+            "isLooping": true,
+            "length": 1.0,
+            "name": "Move",
+            "wrapMode": "Loop"
+          }
+        ],
+        "controllerName": "Actor",
+        "cullingMode": "AlwaysAnimate",
+        "enabled": true,
+        "gameObject": "AnimationLiveTarget",
+        "hasController": true,
+        "layerCount": 1,
+        "layers": [
+          {
+            "currentStateHash": 1718862356,
+            "currentStateLength": 0.6666667,
+            "currentStateNormalizedTime": 4.36216354,
+            "index": 0,
+            "isInTransition": false,
+            "name": "Base Layer",
+            "weight": 1.0
+          }
+        ],
+        "parameterCount": 1,
+        "parameters": [
+          {
+            "defaultBool": false,
+            "defaultFloat": 2.0,
+            "defaultInt": 0,
+            "name": "Speed",
+            "type": "Float"
+          }
+        ],
+        "speed": 1.5,
+        "updateMode": "Normal"
+      },
+      "success": true
+    }
+  },
+  {
+    "step": "playback-verified",
+    "result": {
+      "state_hash": 1718862356,
+      "normalized_time": 4.36216354
+    }
+  },
+  {
+    "step": "manage_editor",
+    "result": {
+      "data": null,
+      "message": "Exited play mode.",
+      "success": true
+    }
+  }
+]

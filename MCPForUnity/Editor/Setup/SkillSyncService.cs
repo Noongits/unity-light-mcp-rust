@@ -15,8 +15,8 @@ namespace MCPForUnity.Editor.Setup
     {
         private static readonly object SyncGate = new object();
 
-        private const string DefaultRepoUrl = "https://github.com/Talhasarac/unity-mcp-light";
-        private const string SkillSubdir = ".claude/skills/unity-mcp-skill";
+        private const string DefaultRepoUrl = "https://github.com/Noongits/unity-light-mcp-rust";
+        private const string SkillSubdir = "unity-mcp-skill";
         private const string SyncOwnershipMarker = ".unity-mcp-skill-sync";
         private const string LastSyncedCommitKeyPrefix = "UnityMcpSkillSync.LastSyncedCommit";
 

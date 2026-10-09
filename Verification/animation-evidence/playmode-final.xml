@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Passed" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.1191978">
+  <test-suite type="TestSuite" id="1012" name="unity-light-animation-review-20261009" fullname="unity-light-animation-review-20261009" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.119198" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties>
+      <property name="platform" value="PlayMode" />
+    </properties>
+    <test-suite type="Assembly" id="1007" name="MCPForUnityTests.PlayMode.dll" fullname="/private/tmp/unity-light-animation-review-20261009/Library/ScriptAssemblies/MCPForUnityTests.PlayMode.dll" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.116185" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="76792" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="PlayMode" />
+        <property name="EditorOnly" value="False" />
+      </properties>
+      <test-suite type="TestSuite" id="1008" name="MCPForUnityTests" fullname="MCPForUnityTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.115977" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="1009" name="PlayMode" fullname="MCPForUnityTests.PlayMode" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.115756" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="1001" name="PlayModeBasicTests" fullname="MCPForUnityTests.PlayMode.PlayModeBasicTests" classname="MCPForUnityTests.PlayMode.PlayModeBasicTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.115273" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="1005" name="Component_AddAndRemove_InPlayMode" fullname="MCPForUnityTests.PlayMode.PlayModeBasicTests.Component_AddAndRemove_InPlayMode" methodname="Component_AddAndRemove_InPlayMode" classname="MCPForUnityTests.PlayMode.PlayModeBasicTests" runstate="Runnable" seed="874160609" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.005868" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1006" name="Coroutine_CanYieldMultipleTimes" fullname="MCPForUnityTests.PlayMode.PlayModeBasicTests.Coroutine_CanYieldMultipleTimes" methodname="Coroutine_CanYieldMultipleTimes" classname="MCPForUnityTests.PlayMode.PlayModeBasicTests" runstate="Runnable" seed="569886933" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.002239" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1002" name="GameObjectCreation_InPlayMode_Succeeds" fullname="MCPForUnityTests.PlayMode.PlayModeBasicTests.GameObjectCreation_InPlayMode_Succeeds" methodname="GameObjectCreation_InPlayMode_Succeeds" classname="MCPForUnityTests.PlayMode.PlayModeBasicTests" runstate="Runnable" seed="554857631" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.000846" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1004" name="MultipleFrames_ProgressCorrectly" fullname="MCPForUnityTests.PlayMode.PlayModeBasicTests.MultipleFrames_ProgressCorrectly" methodname="MultipleFrames_ProgressCorrectly" classname="MCPForUnityTests.PlayMode.PlayModeBasicTests" runstate="Runnable" seed="1855365198" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.001537" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+            </test-case>
+            <test-case id="1003" name="WaitForSeconds_CompletesAfterDelay" fullname="MCPForUnityTests.PlayMode.PlayModeBasicTests.WaitForSeconds_CompletesAfterDelay" methodname="WaitForSeconds_CompletesAfterDelay" classname="MCPForUnityTests.PlayMode.PlayModeBasicTests" runstate="Runnable" seed="350968631" result="Passed" start-time="2026-10-09 17:14:54Z" end-time="2026-10-09 17:14:54Z" duration="0.100855" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="retryIteration" value="0" />
+                <property name="repeatIteration" value="0" />
+              </properties>
+              <output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: [TestRunnerNoThrottle] Restored Interaction Mode after test run.
+Saving results to: /Users/reviewer/Library/Application Support/DefaultCompany/unity-light-animation-review-20261009/TestResults.xml
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

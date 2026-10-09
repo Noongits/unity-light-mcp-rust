@@ -6,6 +6,7 @@ use serde_json::{json, Map, Value};
 use std::time::{Duration, Instant};
 
 const DEFINITIONS: &str = r###"{
+  "manage_animation": {"map":{"action":"action","target":"target","search_method":"searchMethod","clip_path":"clipPath","controller_path":"controllerPath","properties":"properties"},"defaults":{},"actions":["animator_get_info","animator_get_parameter","animator_play","animator_crossfade","animator_set_parameter","animator_set_speed","animator_set_enabled","controller_create","controller_add_state","controller_add_transition","controller_add_parameter","controller_get_info","controller_assign","controller_add_layer","controller_remove_layer","controller_set_layer_weight","controller_create_blend_tree_1d","controller_create_blend_tree_2d","controller_add_blend_tree_child","clip_create","clip_get_info","clip_add_curve","clip_set_curve","clip_set_vector_curve","clip_create_preset","clip_assign","clip_add_event","clip_remove_event"]},
   "manage_build": {"map":{"action":"action","target":"target","output_path":"output_path","scenes":"scenes","development":"development","options":"options","subtarget":"subtarget","scripting_backend":"scripting_backend","profile":"profile","property":"property","value":"value","activate":"activate","targets":"targets","profiles":"profiles","output_dir":"output_dir","job_id":"job_id"},"defaults":{},"actions":["build","status","platform","settings","scenes","profiles","batch","cancel"]},
   "find_gameobjects": {"map":{"search_term":"searchTerm","search_method":"searchMethod","include_inactive":"includeInactive","page_size":"pageSize","cursor":"cursor"},"defaults":{"search_method":"by_name"}},
   "execute_code": {"map":{"action":"action","code":"code","safety_checks":"safety_checks","index":"index","limit":"limit","compiler":"compiler"},"defaults":{"safety_checks":true,"limit":10,"compiler":"auto"}},
@@ -352,6 +353,7 @@ fn normalize(name: &str, args: Value) -> Result<(Map<String, Value>, Value)> {
     if matches!(
         name,
         "manage_asset"
+            | "manage_animation"
             | "manage_material"
             | "manage_texture"
             | "manage_build"
@@ -1779,6 +1781,20 @@ mod tests {
     }
     fn params(n: &str, v: Value) -> Value {
         normalize(n, v).unwrap().1
+    }
+    #[tokio::test]
+    async fn invalid_animation_action_never_reaches_unity() {
+        let mock = Mock::new(vec![]);
+        let result = call(
+            &mock,
+            "manage_animation",
+            json!({"action":"controller_typo"}),
+            None,
+        )
+        .await
+        .unwrap();
+        assert_eq!(result["success"], false);
+        assert!(mock.calls.lock().unwrap().is_empty());
     }
     #[test]
     fn captured_python_forwarding_parity() {

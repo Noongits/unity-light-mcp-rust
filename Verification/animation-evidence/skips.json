@@ -1,0 +1,382 @@
+[
+  {
+    "test": "MCPForUnity.Tests.EditMode.Tools.ScriptToolsBatch2AuditTests.OptionalRuntimeCompiler_NullSourceIsRejectedWithoutThrowing",
+    "label": "Ignored",
+    "reason": "Optional CustomTools Roslyn compiler is not installed in this project."
+  },
+  {
+    "test": "MCPForUnity.Tests.EditMode.Tools.ScriptToolsBatch2AuditTests.OptionalRuntimeTool_IsDiscoveredAsProjectCustomTool",
+    "label": "Ignored",
+    "reason": "Optional CustomTools runtime tool is not installed."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.AssetGen.FalModelCatalogTests.LivePublicCatalog_RefreshAndExactEndpointVerification",
+    "label": "Explicit",
+    "reason": "Queries the public fal catalog and OpenAPI schemas; no paid generation."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.AssetGen.OpenRouterModelCatalogTests.LivePublicCatalog_AndExactEndpoint",
+    "label": "Explicit",
+    "reason": "Reads public OpenRouter image discovery; no paid generation."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.GitDetectionTests.CheckAllDependencies_ReportsGitAsOptional",
+    "label": "Explicit",
+    "reason": "Probes installed executables; run only in an isolated editor."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Helpers.ExecPathBatchShimTests.FindAllInPath_ReturnsEveryMatchInPathOrder",
+    "label": "Ignored",
+    "reason": "Batch shim launching is Windows-only (CI runs linux)."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Helpers.ExecPathBatchShimTests.FindAllInPath_UnknownExecutable_ReturnsEmpty",
+    "label": "Ignored",
+    "reason": "Batch shim launching is Windows-only (CI runs linux)."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Helpers.ExecPathBatchShimTests.TryRun_BatchShim_RunsAndForwardsArguments",
+    "label": "Ignored",
+    "reason": "Batch shim launching is Windows-only (CI runs linux)."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Helpers.ExecPathBatchShimTests.TryRun_BatchShimInPathWithSpaces_RunsAndForwardsArguments",
+    "label": "Ignored",
+    "reason": "Batch shim launching is Windows-only (CI runs linux)."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Helpers.ExecPathBatchShimTests.TryRun_ExtraPathPrepend_IsVisibleToChildProcess",
+    "label": "Ignored",
+    "reason": "Batch shim launching is Windows-only (CI runs linux)."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Characterization.ServerManagementServiceCharacterizationTests.ClearUvxCache_DoesNotThrow",
+    "label": "Explicit",
+    "reason": "Clears the real uv package cache; run only in an isolated disposable environment"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Characterization.ServerManagementServiceCharacterizationTests.StartLocalHttpServer_AlreadyConfirmed_SkipsDialogAndLaunchesHeadless",
+    "label": "Explicit",
+    "reason": "Launches an OS process and changes server handshake tracking; requires a disposable project"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Characterization.ServerManagementServiceCharacterizationTests.StartLocalHttpServer_LaunchesIntoPerPortLaunchLog",
+    "label": "Explicit",
+    "reason": "Launches an OS process and changes server handshake tracking; requires a disposable project"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Characterization.ServerManagementServiceCharacterizationTests.StartLocalHttpServer_Quiet_BypassesDialogAndDoesNotSetConfirmedFlag",
+    "label": "Explicit",
+    "reason": "Launches an OS process and changes server handshake tracking; requires a disposable project"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Characterization.ServicesCharacterizationTests.ServerManagementService_IsLocalHttpServerReachable_UsesNetworkProbe",
+    "label": "Explicit",
+    "reason": "Uses machine-wide server configuration and real process/network discovery; run only in an isolated editor."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Characterization.ServicesCharacterizationTests.ServerManagementService_IsLocalHttpServerRunning_UsesMultiDetectionStrategy",
+    "label": "Explicit",
+    "reason": "Uses machine-wide server configuration and real process/network discovery; run only in an isolated editor."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Characterization.ServicesCharacterizationTests.ServerManagementService_StopLocalHttpServer_PrefersPidfileBasedApproach",
+    "label": "Explicit",
+    "reason": "Stops the MCP server - kills connection"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Characterization.ServicesCharacterizationTests.ServerManagementService_TryGetLocalHttpServerCommand_BuildsUvxCommand",
+    "label": "Explicit",
+    "reason": "Uses machine-wide server configuration and real process/network discovery; run only in an isolated editor."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.ConfigureDetectedClientsTests.Summary_ContainsOnlyInstalledClients",
+    "label": "Explicit",
+    "reason": "Side-effect: writes real client configs on machines with MCP clients installed"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.ConfigureDetectedClientsTests.Summary_SkippedCountTracksUninstalled",
+    "label": "Explicit",
+    "reason": "Side-effect: writes real client configs on machines with MCP clients installed"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.GetCurrentProcessId_ReturnsConsistentValue",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.GetCurrentProcessId_ReturnsPositiveInt",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.GetListeningProcessIdsForPort_DoesNotThrow",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.GetListeningProcessIdsForPort_InvalidPort_ReturnsEmpty",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.GetListeningProcessIdsForPort_ReturnsDistinctPids",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.GetListeningProcessIdsForPort_UnusedPort_ReturnsEmpty",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.LooksLikeMcpServerProcess_CurrentProcess_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.LooksLikeMcpServerProcess_DoesNotThrow",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.LooksLikeMcpServerProcess_InvalidPid_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.LooksLikeMcpServerProcess_NegativePid_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.LooksLikeMcpServerProcess_ZeroPid_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.NormalizeForMatch_HandlesEmptyString",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.NormalizeForMatch_HandlesNull",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.NormalizeForMatch_LowercasesInput",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.NormalizeForMatch_PreservesNonWhitespace",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.NormalizeForMatch_RemovesNewlines",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.NormalizeForMatch_RemovesTabs",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.NormalizeForMatch_RemovesWhitespace",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.ProcessDetector_CanBeUsedViaInterface",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.ProcessDetector_ImplementsIProcessDetector",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.ProcessExists_CurrentProcess_ReturnsTrue",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.ProcessExists_InvalidPid_ReturnsFalseOrHandlesGracefully",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.ProcessExists_NegativePid_HandlesGracefully",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.ProcessExists_ZeroPid_HandlesGracefully",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.TryGetProcessCommandLine_CurrentProcess_ReturnsResult",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.TryGetProcessCommandLine_InvalidPid_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessDetectorTests.TryGetProcessCommandLine_ReturnsNormalizedOutput",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Constructor_NullDetector_ThrowsArgumentNullException",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Constructor_ValidDetector_Succeeds",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.ProcessTerminator_CanBeUsedViaInterface",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.ProcessTerminator_ImplementsIProcessTerminator",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Terminate_CurrentProcessPid_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Terminate_DoesNotThrow",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Terminate_InvalidPid_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Terminate_NonExistentPid_ReturnsFalseOrHandlesGracefully",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Terminate_Pid1_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Terminate_WithRealDetector_HandlesMissingProcess",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.Server.ProcessTerminatorTests.Terminate_ZeroPid_ReturnsFalse",
+    "label": "Explicit",
+    "reason": null
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.StdioBridgeReconnectTests.NewClient_AfterAbruptDisconnect_CanSendAndReceiveCommands",
+    "label": "Ignored",
+    "reason": "StdioBridgeHost is not running; skipping reconnect test."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.StdioBridgeReconnectTests.NewClient_WhileOldClientStillConnected_ClosesStaleClient",
+    "label": "Ignored",
+    "reason": "StdioBridgeHost is not running; skipping reconnect test."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Services.StdioBrokerResendTests.IdenticalCommandResentOnNewConnection_IsQueuedOnce",
+    "label": "Ignored",
+    "reason": "StdioBridgeHost is not running; skipping broker-resend test."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.BuildSaveBeforeBuildTests.SaveBeforeBuild_LeavesUntitledSceneUnsaved",
+    "label": "Explicit",
+    "reason": "Invokes real project-wide scene/asset saving; run only in a disposable test project"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.BuildSaveBeforeBuildTests.SaveBeforeBuild_WithNoDirtyScenes_IsANoOp",
+    "label": "Explicit",
+    "reason": "Invokes real project-wide scene/asset saving; run only in a disposable test project"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.Characterization.EditorToolsCharacterizationTests.HandleCommand_ExecuteMenuItem_ExecutesNonBlacklistedItems",
+    "label": "Explicit",
+    "reason": "Opens Console window - steals focus"
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.DomainReloadResilienceTests.CreateScript_ThenQueryConsole_Succeeds",
+    "label": "Explicit",
+    "reason": "Domain reload stress tests; run manually when needed."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.DomainReloadResilienceTests.RapidScriptCreation_WithConsoleReads_AllSucceed",
+    "label": "Explicit",
+    "reason": "Domain reload stress tests; run manually when needed."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.DomainReloadResilienceTests.ReadConsole_AfterDomainReload_Succeeds",
+    "label": "Explicit",
+    "reason": "Domain reload stress tests; run manually when needed."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.DomainReloadResilienceTests.StressTest_CreateScriptAndReadConsoleMultipleTimes",
+    "label": "Explicit",
+    "reason": "Domain reload stress tests; run manually when needed."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.ManageGraphicsTests.BakeClear_Succeeds",
+    "label": "Explicit",
+    "reason": "Lightmapping.Clear has editor-wide side effects; use only in a disposable test project."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.ManageGraphicsTests.FeatureAdd_InvalidType_ReturnsError",
+    "label": "Ignored",
+    "reason": "URP not available \u2014 skipping."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.ManageGraphicsTests.FeatureList_ReturnsFeatures",
+    "label": "Ignored",
+    "reason": "URP not available \u2014 skipping."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.ManageGraphicsTests.PipelineGetSettings_ReturnsSettings",
+    "label": "Ignored",
+    "reason": "Built-in pipeline has no settings asset \u2014 skipping."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.ManageSceneReplacementSafetyTests.ReplacementGuard_AcceptsCleanScenesAndRechecksAfterDirtySceneCloses",
+    "label": "Ignored",
+    "reason": "Existing user scenes are dirty; do not change them to run this test."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.ManageSceneReplacementSafetyTests.SceneLookup_ExplicitMissingPathDoesNotFallBackToMatchingName",
+    "label": "Ignored",
+    "reason": "The active scene needs a name for this lookup-only regression."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.ManageUIRenderLifetimeTests.PathRender_WithoutAnyPanelSettings_DoesNotCreatePersistentAssets(False)",
+    "label": "Ignored",
+    "reason": "This branch requires a project without other PanelSettings assets."
+  },
+  {
+    "test": "MCPForUnityTests.Editor.Tools.ManageUIRenderLifetimeTests.PathRender_WithoutAnyPanelSettings_DoesNotCreatePersistentAssets(True)",
+    "label": "Ignored",
+    "reason": "This branch requires a project without other PanelSettings assets."
+  }
+]

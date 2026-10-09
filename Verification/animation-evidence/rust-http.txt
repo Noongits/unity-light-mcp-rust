@@ -1,0 +1,14 @@
+test_animation_group_activation_and_forwarding (__main__.HTTPContract.test_animation_group_activation_and_forwarding) ... ok
+test_cancellation_and_session_delete (__main__.HTTPContract.test_cancellation_and_session_delete) ... ok
+test_clean_websocket_close (__main__.HTTPContract.test_clean_websocket_close) ... ok
+test_custom_tool_registration (__main__.HTTPContract.test_custom_tool_registration) ... ok
+test_remote_auth_and_cross_user_isolation (__main__.HTTPContract.test_remote_auth_and_cross_user_isolation) ... ok
+test_rest_and_origin (__main__.HTTPContract.test_rest_and_origin) ... ok
+test_sdk_initialization (__main__.HTTPContract.test_sdk_initialization) ... Executing <Task pending name='Task-47' coro=<HTTPContract.test_sdk_initialization() running at /Users/reviewer/Documents/GitHub/unity-light-mcp-rust/ServerRust/tests/contract_http.py:94> wait_for=<Future pending cb=[Task.task_wakeup()] created at /private/tmp/unity-mcp-review-python314/lib/python3.14/site-packages/anyio/_backends/_asyncio.py:1007> cb=[_run_until_complete_cb() at /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/base_events.py:181] created at /Library/Frameworks/Python.framework/Versions/3.14/lib/python3.14/asyncio/runners.py:109> took 0.263 seconds
+ok
+test_session_instance_and_group_isolation (__main__.HTTPContract.test_session_instance_and_group_isolation) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 1.299s
+
+OK

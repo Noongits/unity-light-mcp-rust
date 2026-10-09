@@ -89,9 +89,10 @@ class HTTPContract(unittest.IsolatedAsyncioTestCase):
     async def test_sdk_initialization(self):
         from mcp import ClientSession
         from mcp.client.streamable_http import streamable_http_client
-        async with streamable_http_client(self.server.url+'/mcp') as (read,write,_):
+        async with streamable_http_client(self.server.url+'/mcp') as streams:
+            read,write=streams[:2]
             async with ClientSession(read,write) as session:
-                result=await session.initialize();self.assertEqual(result.serverInfo.name,'unity-mcp-light')
+                result=await session.initialize();self.assertEqual(result.model_dump(by_alias=True)['serverInfo']['name'],'unity-mcp-light')
                 tools=await session.list_tools();self.assertIn('manage_scene',{t.name for t in tools.tools})
                 resources=await session.list_resources();self.assertIn('unity_instances',{r.name for r in resources.resources})
     async def test_session_instance_and_group_isolation(self):
@@ -111,6 +112,18 @@ class HTTPContract(unittest.IsolatedAsyncioTestCase):
         names1={t['name'] for t in (await self.rpc('tools/list',sid=one)).json()['result']['tools']}
         names2={t['name'] for t in (await self.rpc('tools/list',sid=two)).json()['result']['tools']}
         self.assertIn('run_tests',names1);self.assertNotIn('run_tests',names2)
+    async def test_animation_group_activation_and_forwarding(self):
+        await self.editor('Animation','a11a11a1')
+        one,two=await self.session(),await self.session()
+        await self.call(one,'set_active_instance',{'instance':'Animation@a11a11a1'})
+        await self.call(one,'manage_tools',{'action':'activate','group':'animation'})
+        names1={t['name'] for t in (await self.rpc('tools/list',sid=one)).json()['result']['tools']}
+        names2={t['name'] for t in (await self.rpc('tools/list',sid=two)).json()['result']['tools']}
+        self.assertIn('manage_animation',names1);self.assertNotIn('manage_animation',names2)
+        properties='{"state_name":"Move","is_default":true}'
+        result=await self.call(one,'manage_animation',{'action':'CONTROLLER_ADD_STATE','controller_path':'Assets/Actor.controller','properties':properties})
+        self.assertEqual(result['data']['wire_command'],'manage_animation')
+        self.assertEqual(result['data']['wire_params'],{'action':'controller_add_state','controllerPath':'Assets/Actor.controller','properties':properties})
     async def test_cancellation_and_session_delete(self):
         editor=await self.editor('Blocked','deadbeef');sid=await self.session();editor.block=True
         pending=asyncio.create_task(self.rpc('tools/call',{'name':'manage_scene','arguments':{'action':'get_hierarchy'}},sid,ident=900))

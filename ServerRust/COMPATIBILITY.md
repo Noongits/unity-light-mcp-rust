@@ -4,7 +4,7 @@
 
 Reference commit: **`b40c07a1c3dfb98f45a05c4e3233d8de138dc6a6`** in the parent Unity MCP Light repository.
 
-Rust embeds the reference's **38 built-in MCP tool definitions** and **25 resource definitions: 19 fixed URIs and six templates**. Names, descriptions, input schemas, annotations, metadata, and resource templates are captured in `contracts/tools.json` and `contracts/resources.json`. Internal grouping/Unity-target fields are removed from public tool definitions. Group visibility means an initial `tools/list` need not contain all 38 tools. The `custom_tools` resource listing is conditional on project-scoped configuration. Editor custom tools may add definitions beyond the 38 built-ins.
+Rust embeds the reference's **39 built-in MCP tool definitions** and **25 resource definitions: 19 fixed URIs and six templates**. Names, descriptions, input schemas, annotations, metadata, and resource templates are captured in `contracts/tools.json` and `contracts/resources.json`. Internal grouping/Unity-target fields are removed from public tool definitions. Group visibility means an initial `tools/list` need not contain all 39 tools. The `custom_tools` resource listing is conditional on project-scoped configuration. Editor custom tools may add definitions beyond the 39 built-ins.
 
 These are API snapshots, not a blanket behavioral-equivalence claim. Native implementations are in `src/protocol.rs`, `src/tools.rs`, `src/scripts.rs`, `src/resources.rs`, `src/scanner.rs`, `src/focus.rs` and `src/transport.rs`. Unit tests, Python-captured fixtures and black-box tests of the executable provide complementary coverage. They do not replace live Unity verification.
 

@@ -24,6 +24,10 @@ pub fn resource_contracts() -> &'static Vec<Value> {
     })
 }
 pub const GROUPS: &[(&str, &str)] = &[
+    (
+        "animation",
+        "Animator control, controllers, blend trees & AnimationClips",
+    ),
     ("asset_gen", "Local 3D model file import and Blender Bridge"),
     (
         "core",
@@ -705,9 +709,9 @@ mod tests {
     #[tokio::test]
     async fn schemas_and_visibility() {
         let s = session(false);
-        assert_eq!(visible_tools(&s).await.len(), 38);
+        assert_eq!(visible_tools(&s).await.len(), contracts().len());
         let s = session(true);
-        assert!(visible_tools(&s).await.len() < 38);
+        assert!(visible_tools(&s).await.len() < contracts().len());
         manage_tools(&s, &json!({"action":"activate","group":"vfx"}))
             .await
             .unwrap();

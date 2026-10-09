@@ -1445,7 +1445,10 @@ mod tests {
         );
         let start = Instant::now();
         for _ in 0..3 {
-            assert_eq!(crate::protocol::visible_tools(&session).await.len(), 38);
+            assert_eq!(
+                crate::protocol::visible_tools(&session).await.len(),
+                crate::protocol::contracts().len()
+            );
         }
         assert!(start.elapsed() < Duration::from_millis(200));
 

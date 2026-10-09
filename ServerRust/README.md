@@ -2,7 +2,7 @@
 
 A Python-free runtime for the MCP server in this repository. The compiled executable speaks MCP over stdio or local HTTP and talks to the existing `MCPForUnity` C# Editor bridge. It does not embed Python, launch `uv`, or import `Server/` at runtime.
 
-The compatibility reference is commit `b40c07a1c3dfb98f45a05c4e3233d8de138dc6a6`. Snapshots cover 38 built-in tool definitions and 25 resource definitions, including six URI templates. Implementations include argument normalization, script editing, reload recovery, session routing, custom tools, resources, and image responses. Schema parity is not proof of complete behavioral parity; see [COMPATIBILITY.md](COMPATIBILITY.md).
+The compatibility reference is commit `b40c07a1c3dfb98f45a05c4e3233d8de138dc6a6`. Snapshots cover 39 built-in tool definitions and 25 resource definitions, including six URI templates. Implementations include argument normalization, script editing, reload recovery, session routing, custom tools, resources, and image responses. Schema parity is not proof of complete behavioral parity; see [COMPATIBILITY.md](COMPATIBILITY.md).
 
 This distribution includes reviewed C# ownership/lifecycle fixes and the retained Python fallback. Native Rust tests and a live Unity Editor session were verified on macOS arm64 with Unity 6000.3.23f1; see [INDEPENDENT_REVIEW.md](../INDEPENDENT_REVIEW.md) for evidence, skips, and remaining platform/rollback limits.
 

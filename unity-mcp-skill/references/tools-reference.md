@@ -6,6 +6,8 @@ Complete reference for all MCP tools. Each tool includes parameters, types, and 
 
 ## Table of Contents
 
+- [Animation Tools](#animation-tools)
+
 - [Infrastructure Tools](#infrastructure-tools)
 - [Scene Tools](#scene-tools)
 - [GameObject Tools](#gameobject-tools)
@@ -1327,3 +1329,20 @@ Optional `asset_gen` group. Connects through Unity to an already-running Blender
 - Diagnose addon checkout: `action="check_updates"`; `sync_addon` copies the configured checkout’s addon.py into Blender’s addons directory.
 
 Imports use the local model pipeline. The bridge does not restore the removed paid asset-generation tools.
+
+
+## Animation Tools
+
+### manage_animation
+
+Restored from CoplayDev/unity-mcp. See [Animation Guide](animation-guide.md) for full workflows.
+
+Parameters: `action` (required), `target`, `search_method` (`by_id`, `by_name`, `by_path`, `by_tag`, `by_layer`), `clip_path`, `controller_path`, `properties` (object or JSON string). Action-specific keys belong in `properties`; snake_case keys are supported by the Unity handler.
+
+| Prefix | Actions |
+| --- | --- |
+| `animator_` | `get_info`, `get_parameter`, `play`, `crossfade`, `set_parameter`, `set_speed`, `set_enabled` |
+| `controller_` | `create`, `add_state`, `add_transition`, `add_parameter`, `get_info`, `assign`, `add_layer`, `remove_layer`, `set_layer_weight`, `create_blend_tree_1d`, `create_blend_tree_2d`, `add_blend_tree_child` |
+| `clip_` | `create`, `get_info`, `add_curve`, `set_curve`, `set_vector_curve`, `create_preset`, `assign`, `add_event`, `remove_event` |
+
+The optional `animation` group is enabled initially over stdio; HTTP clients activate it with `manage_tools(action="activate", group="animation")`. Controller/clip paths must be under `Assets/`. Animator playback requires Play Mode; Edit Mode parameter writes change controller defaults.

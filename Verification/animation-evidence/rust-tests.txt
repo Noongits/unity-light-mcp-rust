@@ -1,0 +1,162 @@
+   Compiling unity-mcp-light v0.1.0 (/Users/reviewer/Documents/GitHub/unity-light-mcp-rust/ServerRust)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s
+     Running unittests src/lib.rs (/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/ServerRust/target/debug/deps/unity_mcp_light-b7bbbc3ef4d96be1)
+
+running 135 tests
+test focus::tests::disable_environment_values_and_positive_durations_match_python_contract ... ok
+test focus::tests::cancelling_waiter_requests_cooperative_cleanup ... ok
+test focus::tests::cancellation_before_start_never_touches_desktop ... ok
+test focus::tests::focus_background_disable_and_recent_progress_gate_nudges ... ok
+test focus::tests::new_bridge_identity_does_not_inherit_terminal_or_attempt_state ... ok
+test focus::tests::budget_is_bounded_and_only_new_progress_resets_it ... ok
+test focus::tests::observations_preserve_newer_focus_and_monotonic_progress ... ok
+test focus::tests::failed_activation_still_restores_original_window ... ok
+test focus::tests::recovered_job_cancels_outstanding_nudge_but_stale_focus_does_not ... ok
+test focus::tests::reservation_rechecks_progress_focus_and_global_desktop_lock ... ok
+test focus::tests::terminal_observation_cancels_worker_and_blocks_late_running_reply ... ok
+test focus::tests::remote_bridge_cannot_track_or_focus_host_desktop ... ok
+test focus::platform::tests::windows_resolution_requires_one_exact_absolute_project_argument ... ok
+test focus::tests::project_resolution_is_unique_absolute_and_strips_legacy_assets_only ... ok
+test protocol::tests::custom_defaults_and_required_match_unity_model ... ok
+test protocol::tests::notifications_have_no_reply ... ok
+test focus::tests::cancellation_interrupts_delay_but_preserves_restoration ... ok
+test protocol::tests::expiry_is_terminal_but_active_work_prevents_it ... ok
+test protocol::tests::late_sync_cannot_overwrite_new_instance_visibility ... ok
+test protocol::tests::selection_is_session_local ... ok
+test protocol::tests::late_registration_cannot_restore_previous_instance_tools ... ok
+test protocol::tests::registered_builtins_cannot_bypass_disabled_group ... ok
+test focus::tests::capacity_never_renews_running_job_budget_and_ttl_retains_live_tasks ... ok
+test resources::tests::extreme_observation_timestamp_saturates_without_panicking ... ok
+test resources::tests::docs_do_not_need_unity ... ok
+test resources::tests::components_routing ... ok
+test protocol::tests::registration_removal_restores_default_visibility ... ok
+test resources::tests::invalid_id_stays_local ... ok
+test resources::tests::readiness_and_staleness ... ok
+test resources::tests::prefab_decodes_path ... ok
+test scanner::tests::cancellation_does_not_release_running_scan_admission ... ok
+test protocol::tests::switching_instance_and_reset_clear_old_restrictions ... ok
+test resources::tests::remote_cannot_scan_filesystem ... ok
+test focus::platform::tests::mac_resolution_does_not_match_project_prefixes_or_ambiguous_instances ... ok
+test scanner::tests::manifest_read_is_bounded ... ok
+test scanner::tests::root_replacement_resets_baseline_and_throttle ... ok
+test scripts::tests::converted_range_rejects_stale_read_before_mutation ... ok
+test scripts::tests::create_encodes_and_read_decodes ... ok
+test scripts::tests::debug_preview_never_writes ... ok
+test scripts::tests::disconnect_changed_sha_does_not_prove_our_edit ... ok
+test protocol::tests::schemas_and_visibility ... ok
+test scripts::tests::disconnect_without_sha_never_claims_applied ... ok
+test scripts::tests::disconnect_create_requires_exact_requested_contents ... ok
+test scripts::tests::disconnect_delete_requires_actual_not_found ... ok
+test scripts::tests::explicit_no_hidden_read ... ok
+test scripts::tests::index_ranges_unicode_and_reverse ... ok
+test scripts::tests::lexer_csharp_strings_and_interpolation ... ok
+test scripts::tests::insertion_does_not_overlap_and_atomic_default ... ok
+test scripts::tests::locator_variants ... ok
+test scripts::tests::method_anchor_upgrade ... ok
+test scripts::tests::lsp_normalization ... ok
+test scripts::tests::minimal_sha ... ok
+test scripts::tests::mixed_intermediate_sha_prevents_false_verification ... ok
+test scripts::tests::mixed_failure_reports_committed_text_phase ... ok
+test scripts::tests::overlap_blocks_write ... ok
+test scripts::tests::mixed_text_first_stops_on_failure ... ok
+test scripts::tests::preview_structured_and_text_never_write ... ok
+test scripts::tests::anchor_prefers_outer_brace ... ok
+test scripts::tests::python_adapter_golden_parity ... ok
+test scripts::tests::rejects_outside_assets_and_bad_extension ... ok
+test scripts::tests::reload_rejection_retries_once ... ok
+test scripts::tests::search_lookaround_unicode_and_cap ... ok
+test scripts::tests::search_string_false_and_invalid_pattern ... ok
+test scripts::tests::strict_rejects_before_send ... ok
+test scripts::tests::structured_aliases_and_defaults ... ok
+test scripts::tests::structured_missing_field ... ok
+test scripts::tests::lexer_nesting_boundary_is_explicit_and_bounded ... ok
+test scripts::tests::unc_outside_assets_and_empty_uri ... ok
+test scripts::tests::uri_variants ... ok
+test scripts::tests::validation_summary ... ok
+test scripts::tests::warns_and_clamps ... ok
+test tools::tests::asset_refresh_states_are_busy ... ok
+test tools::tests::asset_search_safety ... ok
+test tools::tests::batch_routes_single_command_and_rejects_nested_instance ... ok
+test tools::tests::batch_screenshots_and_read_decoding ... ok
+test tools::tests::build_lists_and_booleans ... ok
+test tools::tests::camera_returns_image_blocks ... ok
+test protocol::tests::compact_optional_nulls_accepted ... ok
+test tools::tests::camera_screenshot_parameters ... ok
+test tools::tests::child_vectors_and_required_prefab ... ok
+test tools::tests::colors_preserve_python_ranges ... ok
+test tools::tests::component_actions_do_not_leak_values ... ok
+test tools::tests::console_strips_stacktraces ... ok
+test scripts::tests::text_sha_and_last_regex_match ... ok
+test focus::platform::tests::native_command_output_is_bounded ... ok
+test tools::tests::custom_unknown_never_dispatches ... ok
+test tools::tests::explicit_mapping_and_defaults ... ok
+test tools::tests::gameobjects_accept_loose_vectors_components ... ok
+test tools::tests::captured_python_forwarding_parity ... ok
+test tools::tests::invalid_animation_action_never_reaches_unity ... ok
+test tools::tests::mutation_retries_only_explicit_rejection ... ok
+test tools::tests::normalization_edge_cases ... ok
+test scanner::tests::caps_history_at_1024_instances ... ok
+test tools::tests::refresh_recovers_reload_without_resending ... ok
+test tools::tests::shader_and_ui_contents_encoded ... ok
+test tools::tests::inspect_prefab_returns_plain_text ... ok
+test tools::tests::test_poll_returns_terminal_early ... ok
+test tools::tests::tests_normalize_filters ... ok
+test tools::tests::texture_import_and_pixels ... ok
+test tools::tests::unknown_tool_is_error ... ok
+test transport::tests::bounded_hub_queue_rejects_overflow_and_cleans_pending ... ok
+test transport::tests::bridge_tracking_identity_survives_moves_and_is_never_reused ... ok
+test transport::tests::connection_timeout_validation ... ok
+test transport::tests::custom_tools_filter_built_in_disabled_and_legacy ... ok
+test transport::tests::heartbeat_freshness_and_safe_reload_rules ... ok
+test scanner::tests::baseline_change_and_clear ... ok
+test transport::tests::hub_cancelled_and_reconnected_queued_commands_are_not_sent ... ok
+test transport::tests::hub_outstanding_limit_applies_even_when_socket_queue_drains ... ok
+test scanner::tests::local_packages_and_hidden_paths ... ok
+test transport::tests::hub_readiness_probe_precedes_fast_read ... ok
+test transport::tests::hub_reconnect_and_cancellation_clean_pending ... ok
+test transport::tests::hub_routes_results_only_from_selected_socket ... ok
+test transport::tests::hub_shutdown_closes_registered_and_unregistered_sockets ... ok
+test transport::tests::selection_refuses_ambiguity ... ok
+test transport::tests::stale_reload_heartbeat_does_not_keep_dead_instance ... ok
+test transport::tests::tcp_cancel_discards_stream_before_next_command ... ok
+test transport::tests::tcp_connection_registry_evicts_idle_but_preserves_borrowed_sockets ... ok
+test transport::tests::tcp_custom_tools_cache_refresh_expiry_and_reconnect ... ok
+test transport::tests::tcp_fragmented_handshake_heartbeat_and_response ... ok
+test tools::tests::readiness_deadline_bounds_hung_bridge ... ok
+test transport::tests::tcp_rejects_oversized_and_excess_heartbeat_frames ... ok
+test transport::tests::tcp_listing_no_editor_and_legacy_default_port ... ok
+test transport::tests::timeout_budgets ... ok
+test transport::tests::tcp_tool_cache_is_bounded_and_expires_departed_instances ... ok
+test transport::tests::websocket_clean_close_returns_close_frame ... ok
+test transport::tests::websocket_network_protocol_and_disconnect ... ok
+test scripts::tests::regex_selection_streams_many_matches ... ok
+test protocol::tests::wrapped_tools_conform_to_advertised_output_schema ... ok
+test tools::tests::custom_tools_poll_and_preserve_parameters ... ok
+test scripts::tests::readiness_checks_raw_compilation_state ... ok
+test transport::tests::hub_retries_only_explicit_unexecuted_reload ... ok
+test tools::tests::custom_job_does_not_dispatch_after_poll_deadline ... ok
+test tools::tests::test_job_does_not_dispatch_again_after_wait_deadline ... ok
+test transport::tests::hub_expired_queued_command_and_duplicate_result_are_ignored ... ok
+test transport::tests::websocket_stalled_control_write_has_a_deadline ... ok
+
+test result: ok. 135 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.04s
+
+     Running unittests src/main.rs (/Users/reviewer/Documents/GitHub/hehe/outputs/unity-mcp-independent-review/unity-mcp-light/ServerRust/target/debug/deps/unity_mcp_light-dc9127ad2772f7be)
+
+running 8 tests
+test tests::remote_bridge_disables_host_focus_tracking ... ok
+test tests::origin_rejects_other_websites ... ok
+test tests::session_close_ends_events_with_other_references_alive ... ok
+test tests::closed_session_rejects_late_admission ... ok
+test tests::invalid_initialize_never_allocates_session ... ok
+test tests::dropped_http_request_aborts_and_cleans_job ... ok
+test tests::closing_session_cancels_pending_jobs ... ok
+test tests::cancellation_reserves_id_until_old_task_is_destroyed ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+   Doc-tests unity_mcp_light
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

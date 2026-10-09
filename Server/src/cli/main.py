@@ -261,6 +261,7 @@ def register_commands():
         ("cli.commands.material", "material"),
         ("cli.commands.lighting", "lighting"),
         ("cli.commands.audio", "audio"),
+        ("cli.commands.animation", "animation"),
         ("cli.commands.ui", "ui"),
         ("cli.commands.instance", "instance"),
         ("cli.commands.shader", "shader"),

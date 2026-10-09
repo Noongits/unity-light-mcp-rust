@@ -23,11 +23,11 @@ This fork removes tools that most Unity workflows don't need and trims the defin
 
 | | Upstream | Light |
 |---|---|---|
-| Tools | 49 | **38** |
-| Tool definitions (approx. tokens) | ~30.5k | **~20.2k** |
-| Skill: `SKILL.md`, loaded when the skill triggers (approx. tokens) | ~3.8k | **~4.0k** |
-| Skill: reference docs, read on demand (approx. tokens) | ~41.2k (4 files) | **~32.7k** (3 files) |
-| Skill total (approx. tokens) | ~45.0k | **~36.8k** |
+| Tools | 49 | **39** |
+| Tool definitions (approx. tokens) | ~30.5k | **~19.5k** |
+| Skill: `SKILL.md`, loaded when the skill triggers (approx. tokens) | ~3.8k | **~4.1k** |
+| Skill: reference docs, read on demand (approx. tokens) | ~41.2k (4 files) | **~34.3k** (4 files) |
+| Skill total (approx. tokens) | ~45.0k | **~38.5k** |
 
 The skill drops the ProBuilder guide and every section about removed tools, and adds a short guide to `inspect_prefab`. Token counts are characters ÷ 4.
 
@@ -50,6 +50,10 @@ Everything else — scenes, GameObjects, components, scripts, assets, prefabs, m
 
 The normal path is `manage_prefabs get_info` → `inspect_prefab tree` → `node` or `refs`.
 
+## Animation restored
+
+`manage_animation` is available again in native Rust and the Python fallback: Animator control, controller states/transitions/layers/blend trees, AnimationClip curves/events and 15 presets. See the [animation skill guide](unity-mcp-skill/references/animation-guide.md) and [restoration verification](Verification/ANIMATION_RESTORATION.md). HTTP clients enable the `animation` group; stdio enables it initially.
+
 ## What was removed
 
 | Tool | What it did |
@@ -59,7 +63,6 @@ The normal path is `manage_prefabs get_info` → `inspect_prefab tree` → `node
 | `manage_probuilder` | ProBuilder mesh modeling |
 | `manage_profiler` | Profiler sessions, counters, memory snapshots, Frame Debugger |
 | `manage_vfx` | VFX Graph, particles, line and trail renderers |
-| `manage_animation` | Animator control and AnimationClip creation |
 | `manage_packages` | Package Manager install/remove/search |
 | `unity_docs` | Fetching docs from docs.unity3d.com |
 | `debug_request_context` | Server debugging helper |

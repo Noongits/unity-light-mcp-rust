@@ -203,6 +203,7 @@ uri="file:///full/path/to/file.cs"
 | Category | Key Tools | Use For |
 |----------|-----------|---------|
 | **Scene** | `manage_scene`, `find_gameobjects` | Scene operations, finding objects |
+| **Animation** | `manage_animation` | Animator control, controller states/transitions/parameters/layers/blend trees, AnimationClip curves/events and 15 procedural presets. Over HTTP activate `animation` with `manage_tools`; see [animation guide](references/animation-guide.md). |
 | **Objects** | `manage_gameobject`, `manage_components` | Creating/modifying GameObjects |
 | **Scripts** | `create_script`, `script_apply_edits`, `validate_script` | C# code management (auto-refreshes on create/edit) |
 | **Prefab inspection** | `inspect_prefab` | Read-only prefab reading in compact text: `tree`, `node` (non-default fields), `refs` (references and UnityEvent listeners), `overrides`, `usages`, `problems`. Use instead of `manage_prefabs get_hierarchy`. See [tools-reference.md](references/tools-reference.md#inspect_prefab). |
@@ -297,6 +298,8 @@ set_active_instance(instance="MyProject@abc123")
 | Commands fail silently | Wrong instance | Check `set_active_instance` |
 
 ## Reference Files
+
+- **[animation-guide.md](references/animation-guide.md)**: Animation authoring, controller setup and runtime control
 
 For detailed schemas and examples:
 

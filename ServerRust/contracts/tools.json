@@ -1416,6 +1416,76 @@
     "unity_target": "inspect_prefab"
   },
   {
+    "name": "manage_animation",
+    "title": "Manage Animation",
+    "description": "Manage Unity animation: Animator control and AnimationClip creation. Action prefixes: animator_* (play, crossfade, set parameters, get info), controller_* (create AnimatorControllers, add states/transitions/parameters), clip_* (create clips, add keyframe curves, assign to GameObjects). Action-specific parameters go in `properties` (keys match ManageAnimation.cs).",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Action to perform (prefix: animator_, controller_, clip_).",
+          "type": "string"
+        },
+        "target": {
+          "type": "string",
+          "description": "Target GameObject (name/path/id)."
+        },
+        "search_method": {
+          "enum": [
+            "by_id",
+            "by_name",
+            "by_path",
+            "by_tag",
+            "by_layer"
+          ],
+          "type": "string",
+          "description": "How to find the target GameObject."
+        },
+        "clip_path": {
+          "type": "string",
+          "description": "Asset path for AnimationClip (e.g. 'Assets/Animations/Walk.anim')."
+        },
+        "controller_path": {
+          "type": "string",
+          "description": "Asset path for AnimatorController (e.g. 'Assets/Animators/Player.controller')."
+        },
+        "properties": {
+          "description": "Action-specific parameters (dict or JSON string).",
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "outputSchema": {
+      "additionalProperties": true,
+      "type": "object"
+    },
+    "annotations": {
+      "title": "Manage Animation",
+      "destructiveHint": true
+    },
+    "_meta": {
+      "fastmcp": {
+        "tags": [
+          "group:animation"
+        ]
+      }
+    },
+    "group": "animation",
+    "unity_target": "manage_animation"
+  },
+  {
     "name": "manage_asset",
     "title": "Manage Asset",
     "description": "Performs asset operations (import, create, modify, delete, etc.) in Unity.\n\nTip (payload safety): for `action=\"search\"`, prefer paging (`page_size`, `page_number`) and keep `generate_preview=false` (previews can add large base64 blobs).",
@@ -3733,7 +3803,7 @@
         },
         "group": {
           "type": "string",
-          "description": "Group name (required for activate / deactivate). Valid groups: asset_gen, core, docs, scripting_ext, testing, ui, vfx"
+          "description": "Group name (required for activate / deactivate). Valid groups: animation, asset_gen, core, docs, scripting_ext, testing, ui, vfx"
         }
       },
       "required": [

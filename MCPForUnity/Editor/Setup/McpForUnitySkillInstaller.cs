@@ -36,7 +36,7 @@ namespace MCPForUnity.Editor.Setup
         private void OnEnable()
         {
             var userHome = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            _repoUrl = EditorPrefs.GetString(RepoUrlKey, "https://github.com/Talhasarac/unity-mcp-light");
+            _repoUrl = EditorPrefs.GetString(RepoUrlKey, "https://github.com/Noongits/unity-light-mcp-rust");
             _targetBranch = EditorPrefs.GetString(BranchKey, "main");
             if (!BranchOptions.Contains(_targetBranch))
             {

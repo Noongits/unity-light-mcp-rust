@@ -116,6 +116,15 @@
   "mcpforunity://tool-groups": {
     "groups": [
       {
+        "name": "animation",
+        "description": "Animator control, controllers, blend trees & AnimationClips",
+        "default_enabled": false,
+        "tools": [
+          "manage_animation"
+        ],
+        "tool_count": 1
+      },
+      {
         "name": "asset_gen",
         "description": "Local 3D model file import and Blender Bridge",
         "default_enabled": false,
@@ -207,7 +216,7 @@
         "tool_count": 2
       }
     ],
-    "total_groups": 7,
+    "total_groups": 8,
     "default_enabled": [
       "core"
     ],
