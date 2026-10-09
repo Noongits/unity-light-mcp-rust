@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1088 780" role="img" aria-label="Unity MCP Lite"><title>Unity MCP Lite</title>
+  <g transform="translate(322 27) scale(1.73)"><g fill="none" stroke-width="15" stroke-linejoin="round">
+    <path d="M108 44 L35 86 L35 167" stroke="#E9B08C"/>
+    <path d="M148 44 L221 86 L221 167" stroke="#E66B4C"/>
+    <path d="M128 62 V108" stroke="#E9B08C" stroke-linecap="round"/>
+    <path d="M58 101 L128 142 V212" stroke="#E9B08C" stroke-linecap="round"/>
+    <path d="M128 142 L198 101" stroke="#D7DBDE" stroke-linecap="round"/>
+    <path d="M62 204 L128 242" stroke="#E9B08C"/>
+    <path d="M128 242 L194 204" stroke="#D7DBDE" stroke-linecap="round"/>
+  </g>
+  <circle cx="128" cy="28" r="21" fill="#E66B4C"/>
+  <circle cx="33" cy="194" r="21" fill="#E9B08C"/>
+  <circle cx="223" cy="194" r="21" fill="#D7DBDE"/></g>
+  <text x="544" y="662" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="138" font-weight="600" fill="#D7DBDE">Unity MCP <tspan fill="#E66B4C">Lite</tspan></text>
+  <text x="544" y="742" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" letter-spacing="12" fill="#D7DBDE">CONNECT <tspan fill="#E66B4C">•</tspan> EXTEND <tspan fill="#E66B4C">•</tspan> BUILD LIGHTER</text>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Unity MCP Lite Rust logo"><title>Unity MCP Lite Rust logo</title><g fill="none" stroke-width="15" stroke-linejoin="round">
+    <path d="M108 44 L35 86 L35 167" stroke="#B86B43"/>
+    <path d="M148 44 L221 86 L221 167" stroke="#CE422B"/>
+    <path d="M128 62 V108" stroke="#B86B43" stroke-linecap="round"/>
+    <path d="M58 101 L128 142 V212" stroke="#B86B43" stroke-linecap="round"/>
+    <path d="M128 142 L198 101" stroke="#4B5E6C" stroke-linecap="round"/>
+    <path d="M62 204 L128 242" stroke="#B86B43"/>
+    <path d="M128 242 L194 204" stroke="#4B5E6C" stroke-linecap="round"/>
+  </g>
+  <circle cx="128" cy="28" r="21" fill="#CE422B"/>
+  <circle cx="33" cy="194" r="21" fill="#B86B43"/>
+  <circle cx="223" cy="194" r="21" fill="#4B5E6C"/></svg>
